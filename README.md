@@ -1,4 +1,4 @@
 desqus
 ======
 
-An Open Source alternative to Disqus
+An open source alternative to Disqus
