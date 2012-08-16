@@ -10,7 +10,7 @@ setup(
         install_requires=[
             'flask',
             'sphinx'],
-        author_email='joar+desqus@wandborg.se',
+        author_email='joar@desqus.org',
         url='http://desqus.org',
         long_description=open(READMEFILE).read(),
         classifiers=[
