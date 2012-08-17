@@ -2,7 +2,7 @@
 {% import "bootstrap_wtf.html" as wtf %}
 {% block desqus_body %}
 <div class="page-header">
-    <h1>Login to desqus</h1>
+    <h1>Register</h1>
 </div>
 <div class="row">
     <div class="span6">
@@ -14,8 +14,8 @@
         <div class="well">
             {{ wtf.quick_form(
                     form,
-                    action=url_for('login'),
-                    buttons=[('submit', 'primary', 'Login')]) }}
+                    action=url_for('register'),
+                    buttons=[('submit', 'primary', 'Register')]) }}
         </div>
     </div>
 </div>

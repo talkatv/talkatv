@@ -13,6 +13,7 @@ setup(
             'flask-bootstrap',
             'Flask-WTF',
             'py-bcrypt',
+            'flup',
             'sphinx'],
         author_email='joar@desqus.org',
         url='http://desqus.org',

@@ -1,6 +1,25 @@
 {% extends "desqus/base.html" %}
 {% block desqus_body %}
-<h1>Welcome to desqus!</h1>
-<p>desqus is in the planning phase, follow and join us on <a href="https://github.com/desqus/desqus">https://github.com/desqus/desqus/</a>. Or take a look at the <a href="{{ url_for('static', filename='docs/index.html') }}">documentation</a>.
-</p>
+<div class="page-header">
+    <h1>Welcome to desqus!</h1>
+</div>
+<div class="row">
+    <div class="span6">
+        <p>desqus is in the planning phase, follow and join us on <a href="https://github.com/desqus/desqus">https://github.com/desqus/desqus/</a>. Or take a look at the <a href="{{ url_for('static', filename='docs/index.html') }}">documentation</a>.</p>
+    </div>
+    <div class="span6">
+        <div class="well">
+            Well
+            <div class="well">
+                well
+                <div class="well">
+                    well
+                    <div class="well">
+                        what do we have here?
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
