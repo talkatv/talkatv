@@ -15,6 +15,7 @@ Primarily, desqus will provide a way for people to embed comments on static page
    :maxdepth: 2
 
    initial-plans
+   hacking
 
 
 Indices and tables
