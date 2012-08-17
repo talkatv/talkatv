@@ -21,7 +21,7 @@ To install desqus, run::
 
 To run desqus::
 
-    python app.py
+    python run.py
 
 
 ----------
