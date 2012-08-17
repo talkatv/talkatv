@@ -1,3 +1,38 @@
+{% extends "bootstrap_responsive.html" %}
+{% block body_content %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="row messages">
+                    <div class="span12">
+                        {% for message in messages %}
+                            <div class="alert alert-info">
+                                <button class="close" data-dismiss="alert">&times;</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+    
+        {% block desqus_body %}
+        {% endblock %}
+    </div>
+{% endblock %}
+{#
 <!DOCTYPE html>
 <html xmlns="http://w3.org/1999/xhtml">
     <head>
@@ -8,3 +43,4 @@
         {% endblock %}
     </body>
 </html>
+#}

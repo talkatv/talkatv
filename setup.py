@@ -9,6 +9,10 @@ setup(
         packages=find_packages(),
         install_requires=[
             'flask',
+            'Flask-SQLAlchemy',
+            'flask-bootstrap',
+            'Flask-WTF',
+            'py-bcrypt',
             'sphinx'],
         author_email='joar@desqus.org',
         url='http://desqus.org',

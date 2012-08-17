@@ -1,12 +1,7 @@
 import os
 import subprocess
-import logging
 
-from desqus.views import app
-
-_log = logging.getLogger(__name__)
-_log.setLevel(logging.DEBUG)
-logging.basicConfig()
+from desqus import app
 
 
 DOCS_DIR = os.path.join(
@@ -16,10 +11,10 @@ DOCS_DIR = os.path.join(
 
 def build_docs():
     try:
-        _log.info('Building docs')
+        app.logger.info('Building docs')
         subprocess.check_call(['make', 'html'], cwd=DOCS_DIR)
     except subprocess.CalledProcessError:
-        _log.warn('Couldn\'t build docs')
+        app.logger.warn('Couldn\'t build docs')
 
 
 if not os.path.isdir(os.path.join(DOCS_DIR, 'build', 'html')):

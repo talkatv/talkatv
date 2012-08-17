@@ -1,0 +1,14 @@
+{% extends "desqus/base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+{% block desqus_body %}
+<form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_errors(form, "only") }}
+    {{ wtf.horizontal_field(form.username) }}
+    {{ wtf.horizontal_field(form.password) }}
+    <div class="form-actions">
+        <button name="action_save" type="submit" class="btn btn-primary">Login
+        </button>
+    </div>
+</form>
+{% endblock %}
