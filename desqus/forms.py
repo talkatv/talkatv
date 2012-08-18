@@ -1,5 +1,6 @@
 from flask.ext.wtf import Form, html5, TextField, PasswordField, validators
-from desqus.db import User
+from desqus.db import User, Item, Comment
+from desqus.tools.redirect import RedirectForm
 
 
 class RegistrationForm(Form):
@@ -23,7 +24,28 @@ class RegistrationForm(Form):
         return True
 
 
-class LoginForm(Form):
+class ItemForm(Form):
+    url = TextField('Page URL', [validators.Required()])
+    title = TextField('Page title', [validators.Required()])
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        self.item = None
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        item = Item.query.filter_by(url=self.url.data).first()
+
+        if item is not None:
+            self.url.errors.append('That URL already exists')
+            return False
+
+        return True
+
+
+class LoginForm(RedirectForm):
     username = TextField('Username', [validators.Required()])
     password = PasswordField('Password', [validators.Required()])
 

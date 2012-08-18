@@ -1,4 +1,5 @@
 {% extends "bootstrap_responsive.html" %}
+{% block title %}desqus{% endblock %}
 {% block body_content %}
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -17,14 +18,14 @@
     </div>
 
     <div class="container">
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
             {% if messages %}
                 <div class="row messages">
                     <div class="span12">
-                        {% for message in messages %}
-                            <div class="alert alert-info">
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
                                 <button class="close" data-dismiss="alert">&times;</button>
-                                {{ message }}
+                                {{ message|safe }}
                             </div>
                         {% endfor %}
                     </div>

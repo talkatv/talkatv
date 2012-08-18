@@ -1,0 +1,6 @@
+{% extends "desqus/base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+{% block desqus_body %}
+
+{{ wtf.quick_form(form, action="") }}
+{% endblock %}

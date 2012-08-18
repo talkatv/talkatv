@@ -7,13 +7,11 @@ app = Flask(__name__)
 
 app.debug = True
 
+app.config.from_pyfile('../config.py')
 
 if os.path.exists('config_local.py'):
     # Flask uses a different path than os.path.exist()
     app.config.from_pyfile('../config_local.py')
-    app.logger.info(app.config)
-else:
-    app.config.from_pyfile('../config.py')
     app.logger.info(app.config)
 
 Bootstrap(app)
