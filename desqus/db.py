@@ -1,16 +1,16 @@
 # desqus - Commenting backend for static pages
 # Copyright (C) 2012  desqus contributors, see AUTHORS
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -57,8 +57,10 @@ class Item(db.Model):
     owner = db.relationship('User',
             backref=db.backref('items', lazy='dynamic'))
 
-    def __init__(self, owner, title, url, created=None):
-        self.owner = owner
+    def __init__(self, url, title, owner=None, created=None):
+        if owner:
+            self.owner = owner
+
         self.title = title
         self.url = url
 
@@ -66,6 +68,17 @@ class Item(db.Model):
             self.created = datetime.utcnow()
         else:
             self.created = created
+
+    def as_dict(self):
+        me = {
+                'id': self.id,
+                'title': self.title,
+                'url': self.url,
+                'created': self.created.isoformat()}
+        if self.owner:
+            me.update({'owner': self.owner.id})
+
+        return me
 
 
 class Comment(db.Model):
@@ -90,3 +103,12 @@ class Comment(db.Model):
             self.created = datetime.utcnow()
         else:
             self.created = created
+
+    def as_dict(self):
+        me = {
+                'item': self.item.id,
+                'user_id': self.user.id,
+                'username': self.user.username,
+                'text': self.text,
+                'created': self.created.isoformat()}
+        return me
