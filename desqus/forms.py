@@ -14,15 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask.ext.wtf import Form, html5, TextField, PasswordField, validators
-from desqus.db import User, Item, Comment
+from flask.ext.wtf import Form, html5, TextField, PasswordField, HiddenField, \
+        validators
+from desqus.models import User, Item, Comment, OpenID
 from desqus.tools.redirect import RedirectForm
 
 
 class RegistrationForm(Form):
     username = TextField('Username', [validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
+    password = PasswordField('Password', [validators.Optional()])
     email = html5.EmailField('Email', [validators.Required()])
+    openid = html5.URLField('OpenID', [validators.Optional()])
 
     def __init__(self, *args, **kw):
         Form.__init__(self, *args, **kw)
@@ -30,6 +32,11 @@ class RegistrationForm(Form):
 
     def validate(self):
         if not Form.validate(self):
+            return False
+
+        if not self.password.data and not self.openid.data:
+            self.errors.append(
+                    'You must include either password or an OpenID URL')
             return False
 
         user = User.query.filter_by(username=self.username.data).first()
@@ -62,8 +69,9 @@ class ItemForm(Form):
 
 
 class LoginForm(RedirectForm):
-    username = TextField('Username', [validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
+    username = TextField('Username', [validators.Optional()])
+    password = PasswordField('Password', [validators.Optional()])
+    openid = html5.URLField('OpenID', [validators.Optional()])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -74,15 +82,26 @@ class LoginForm(RedirectForm):
         if not Form.validate(self):
             return False
 
-        user = User.query.filter_by(username=self.username.data).first()
+        user = None
 
-        if user is None:
-            self.username.errors.append('Unknown username')
-            return False
+        if self.openid.data:
+            openid = OpenID.query.filter_by(url=self.openid.data).first()
 
-        if not user.check_password(self.password.data):
-            self.password.errors.append('Invalid password')
-            return False
+            if not openid:
+                self.openid.errors.append('Unknown OpenID URL')
+            else:
+                user = openid.user
 
-        self.user = user
-        return True
+        if self.username.data and self.password.data:
+            user = User.query.filter_by(username=self.username.data).first()
+
+            if user is None:
+                self.username.errors.append('Unknown username')
+            elif not user.check_password(self.password.data):
+                self.password.errors.append('Invalid password')
+
+        if user:
+            self.user = user
+            return True
+
+        return False

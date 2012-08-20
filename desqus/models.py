@@ -18,10 +18,7 @@ import bcrypt
 
 from datetime import datetime
 
-from flask.ext.sqlalchemy import SQLAlchemy
-from desqus import app
-
-db = SQLAlchemy(app)
+from desqus import db
 
 
 class User(db.Model):
@@ -30,12 +27,15 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(60))
 
-    def __init__(self, username, email, password=None):
+    def __init__(self, username, email, password=None, openid=None):
         self.username = username
         self.email = email
 
         if password:
             self.set_password(password)
+
+        if openid:
+            self.openid = openid
 
     def __repr__(self):
         return '<User {0}>'.format(self.username)
@@ -45,6 +45,21 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.hashpw(password, self.password) == self.password
+
+
+class OpenID(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String())
+    created = db.Column(db.DateTime)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User',
+            backref=db.backref('openids', lazy='dynamic'))
+
+    def __init__(self, user, url):
+        self.created = datetime.utcnow()
+        self.user = user
+        self.url = url
 
 
 class Item(db.Model):
@@ -106,6 +121,7 @@ class Comment(db.Model):
 
     def as_dict(self):
         me = {
+                'id': self.id,
                 'item': self.item.id,
                 'user_id': self.user.id,
                 'username': self.user.username,

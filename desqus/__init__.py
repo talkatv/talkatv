@@ -18,6 +18,8 @@ import os
 
 from flask import Flask
 from flask.ext.bootstrap import Bootstrap
+from flask.ext.openid import OpenID
+from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -30,5 +32,7 @@ if os.path.exists('config_local.py'):
     app.config.from_pyfile('../config_local.py')
 
 Bootstrap(app)
+oid = OpenID(app)
+db = SQLAlchemy(app)
 
 import desqus.views

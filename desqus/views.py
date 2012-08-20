@@ -14,13 +14,27 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from desqus import app
+from desqus import app, oid, db
+
 from flask import render_template, flash, session, url_for, redirect, Markup, \
-        request, json, abort
+        request, json, abort, g
 
 from desqus.forms import LoginForm, RegistrationForm, ItemForm
-from desqus.db import db, User, Item, Comment
+from desqus.models import User, Item, Comment, OpenID
 from desqus.tools.cors import jsonify
+from desqus.decorators  import require_active_login
+
+
+@app.before_request
+def lookup_current_user():
+    g.user = None
+    if 'user_id' in session:
+        user = User.query.filter_by(id=session['user_id']).first()
+
+        if user is None:
+            del session['user_id']
+
+        g.user = user
 
 
 @app.route('/')
@@ -29,27 +43,66 @@ def index():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@oid.loginhandler
 def login():
+    if g.user is not None:
+        app.logger.debug('g.user is not None, redirecting to {0}'.format(
+            oid.get_next_url()))
+        return redirect(url_for('index'))
+
     form = LoginForm()
 
     if form.validate_on_submit():
         flash(u'Logged in as {0}'.format(form.user.username), 'info')
         session['user_id'] = form.user.id
         return form.redirect('index')
+    elif form.openid.data:
+        return oid.try_login(form.openid.data, ask_for=['email', 'nickname'])
 
     return render_template('desqus/login.html', form=form)
+
+
+@oid.after_login
+def openid_postlogin(resp):
+    openid = OpenID.query.filter_by(url=resp.identity_url).first()
+
+    if openid is not None:
+        # Assume that an OpenID is always connected to a user
+        user = openid.user
+
+        flash(u'Welcome, {0}!'.format(user.username), 'info')
+
+        session['user_id'] = user.id
+        g.user = user
+
+        return redirect(oid.get_next_url())
+
+    flash(u'Please confirm your profile details', 'success')
+
+    return redirect(url_for('register', next=oid.get_next_url(),
+        username=resp.nickname,
+        email=resp.email,
+        openid=resp.identity_url))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
 
+    form.username.data = request.args.get('username', form.username.data)
+    form.email.data = request.args.get('email', form.email.data)
+    form.openid.data = request.args.get('openid', form.openid.data)
+
     if form.validate_on_submit():
         user = User(form.username.data, form.email.data, form.password.data)
+
+        openid = OpenID(user, form.openid.data)
         db.session.add(user)
+        db.session.add(openid)
         db.session.commit()
 
         session['user_id'] = user.id
+        g.user = user
 
         flash(u'Welcome, {0}!'.format(user.username), 'success')
 
@@ -77,7 +130,8 @@ def item(item_id=None):
         return render_template('desqus/item/form.html', form=form)
 
 
-@app.route('/api/comments', methods=['GET', 'POST'])
+@app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
+@require_active_login(['POST'])
 def api_comments():
     if request.method == 'POST':
         post_data = json.loads(request.data)

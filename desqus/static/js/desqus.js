@@ -33,10 +33,15 @@ var desqus = new Object();
     dq.render = function () {
         dq.container = document.getElementById('desqus-comments-container');
 
-        dq.formContainer = document.createElement('div');
+        dq.container.innerHTML = '';
+
+        dq.formContainer = dq.makeElement('div', {
+            class: 'desqus-form'});
         dq.container.appendChild(dq.formContainer);
 
-        dq.commentContainer = document.createElement('ul');
+        dq.commentContainer = dq.makeElement('ul', {
+            class: 'comment-list'});
+
         dq.container.appendChild(dq.commentContainer);
 
         dq.request('/check-login', function (res, status) {
@@ -62,10 +67,36 @@ var desqus = new Object();
             dq.jsonData = JSON.parse(res);
             dq.log(res);
             dq.renderComments(dq.jsonData.comments);
-
         }, {
             item_url: document.baseURI,
             item_title: document.title});
+    };
+
+    dq.makeElement = function (type, o, children) {
+        em = document.createElement(type);
+
+        if (o) {
+            if (o.class)
+                em.className = o.class;
+            if (o.id)
+                em.id = o.id;
+            if (o.text)
+                em.textContent = o.text;
+            if (o.html)
+                em.innerHTML = o.html;
+            if (o.placeholder)
+                em.placeholder = o.placeholder;
+            if (o.name)
+                em.name = o.name;
+        }
+
+        if (children && ! children.length)
+            em.appendChild(children);
+        else
+            for (i in children)
+                em.appendChild(children[i]);
+
+        return em;
     };
 
     dq.renderComments = function (comments) {
@@ -73,11 +104,20 @@ var desqus = new Object();
         dq.log(comments);
         for (comment in comments) {
             var comment = comments[comment];
-            var container = document.createElement('li');
-            var text = document.createElement('p');
-            text.textContent = comment.text
-                + ' at ' + comment.created + ' by ' + comment.username;
-            container.appendChild(text);
+            var container = dq.makeElement('li');
+
+            container.appendChild(
+                    dq.makeElement('p', {
+                        text: comment.text,
+                        class: 'comment-text'}));
+            container.appendChild(
+                    dq.makeElement('span', {
+                        text: comment.created,
+                        class: 'comment-created'}));
+            container.appendChild(
+                    dq.makeElement('span', {
+                        text: comment.username,
+                        class: 'comment-username'}));
             dq.commentContainer.appendChild(container);
         }
     };
@@ -85,11 +125,13 @@ var desqus = new Object();
     dq.onCommentSubmit = function (e) {
         e.preventDefault();
         dq.submitButton.disabled = true;
+        dq.commentField.disabled = true;
 
         callback = function (res, status) {
             dq.log(res);
             dq.log(status);
             dq.submitButton.disabled = false;
+            dq.commentField.disabled = false;
             dq.commentField.value = '';
             dq.getComments();
         };
@@ -108,15 +150,22 @@ var desqus = new Object();
     };
 
     dq.renderForm = function () {
-        dq.form = document.createElement('form');
+        dq.form = dq.makeElement('form', {
+            id: 'desqus-comment-form'});
 
-        dq.commentField = document.createElement('textarea');
-        dq.form.appendChild(dq.commentField);
+        dq.form.appendChild(
+            dq.makeElement('div', {
+                id: 'comment-field-wrapper'},
+                dq.commentField = dq.makeElement('textarea', {
+                    name: 'comment',
+                    id: 'comment',
+                    placeholder: 'Write a comment...'})));
 
-        dq.submitButton = document.createElement('button');
-        dq.submitButton.textContent = 'Post comment';
-        dq.submitButton.onclick = dq.onCommentSubmit;
-        dq.form.appendChild(dq.submitButton);
+        dq.form.appendChild(
+            dq.submitButton = dq.makeElement('button', {
+                text: 'Post comment'}));
+
+        dq.form.onsubmit = dq.onCommentSubmit;
 
         dq.formContainer.appendChild(dq.form);
     };
@@ -149,6 +198,7 @@ var desqus = new Object();
             switch (this.readyState) {
                 case this.DONE:
                     callback(this.response, this.status);
+                    delete client;
                     break;
                 default:
                     dq.log(['readyState: ', this.readyState]);
@@ -167,6 +217,6 @@ var desqus = new Object();
     }
 })(desqus);
 
-$(document).ready(function () {
+//$(document).ready(function () {
     desqus.render();
-});
+//});

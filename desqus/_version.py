@@ -14,24 +14,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import subprocess
-
-from desqus import app
-
-
-DOCS_DIR = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        'docs')
-
-
-def build_docs():
-    try:
-        app.logger.info('Building docs')
-        subprocess.check_call(['make', 'html'], cwd=DOCS_DIR)
-    except subprocess.CalledProcessError:
-        app.logger.warn('Couldn\'t build docs')
-
-if __name__ == '__main__':
-    app.debug = True
-    app.run(port=4547)
+__version__ = '0.0.1.dev'

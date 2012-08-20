@@ -2,6 +2,9 @@
 desqus.db
 /*_local*
 
+# Sphinx apidoc
+/docs/source/api
+
 # Virtualenv
 /local
 /include

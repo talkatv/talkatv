@@ -14,24 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import subprocess
-
-from desqus import app
+from flask import g, abort, request
+from functools import wraps
 
 
-DOCS_DIR = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        'docs')
+class require_active_login(object):
+    def __init__(self, methods):
+        self.methods = methods
 
+    def __call__(self, controller):
+        @wraps(controller)
+        def wrapper(*args, **kw):
+            if g.user is None:
+                if not self.methods or request.method in self.methods:
+                    return abort(403)
 
-def build_docs():
-    try:
-        app.logger.info('Building docs')
-        subprocess.check_call(['make', 'html'], cwd=DOCS_DIR)
-    except subprocess.CalledProcessError:
-        app.logger.warn('Couldn\'t build docs')
+            return controller(*args, **kw)
 
-if __name__ == '__main__':
-    app.debug = True
-    app.run(port=4547)
+        return wrapper

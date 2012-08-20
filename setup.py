@@ -1,41 +1,64 @@
 # desqus - Commenting backend for static pages
 # Copyright (C) 2012  desqus contributors, see AUTHORS
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import re
+import os
 
 from setuptools import setup, find_packages
 
 READMEFILE = 'README.rst'
+VERSIONFILE = os.path.join('desqus', '_version.py')
+VSRE = r'^__version__ = [\'"]([^\'"]*)[\'"]'
 
 
-setup(
-        name='desqus',
-        version='0.1-dev',
-        packages=find_packages(),
-        install_requires=[
-            'flask',
-            'Flask-SQLAlchemy',
-            'flask-bootstrap',
-            'Flask-WTF',
-            'py-bcrypt',
-            'flup',
-            'sphinx'],
-        author_email='joar@desqus.org',
-        url='http://desqus.org',
-        long_description=open(READMEFILE).read(),
-        classifiers=[
-            'Development Status :: 3 - Alpha',
-            'Environment :: Web Environment',
-            'Programming Language :: Python'],
-        )
+def get_version():
+    '''
+    Author: GNU MediaGoblin contributors
+    '''
+    verstrline = open(VERSIONFILE, "rt").read()
+    mo = re.search(VSRE, verstrline, re.M)
+
+    if mo:
+        return mo.group(1)
+    else:
+        raise RuntimeError("Unable to find version string in %s." %
+                           VERSIONFILE)
+
+
+if __name__ == '__main__':
+    setup(
+            name='desqus',
+            version=get_version(),
+            packages=find_packages(),
+            install_requires=[
+                'flask',
+                'Flask-SQLAlchemy',
+                'flask-bootstrap',
+                'Flask-WTF',
+                'Flask-OpenID',
+                'py-bcrypt',
+                'flup',
+                'sphinx'],
+            author_email='joar@desqus.org',
+            license='AGPLv3',
+            url='http://desqus.org',
+            long_description=open(READMEFILE).read(),
+            classifiers=[
+                'Development Status :: 3 - Alpha',
+                'Licesnse :: OSI Approved :: GNU Affero General Public License',
+                'Environment :: Web Environment',
+                'Programming Language :: Python'],
+            )
