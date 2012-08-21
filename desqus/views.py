@@ -21,7 +21,7 @@ from flask import render_template, flash, session, url_for, redirect, Markup, \
 
 from desqus.forms import LoginForm, RegistrationForm, ItemForm
 from desqus.models import User, Item, Comment, OpenID
-from desqus.tools.cors import jsonify
+from desqus.tools.cors import jsonify, allow_all_origins
 from desqus.decorators  import require_active_login
 
 
@@ -152,7 +152,7 @@ def api_comments():
 
         app.logger.debug(request.data)
 
-        return jsonify(status='OK')
+        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
     else:
         item = Item.query.filter_by(url=request.args.get('item_url')).first()
 
@@ -174,16 +174,15 @@ def api_comments():
 
         app.logger.debug(return_data)
 
-        return jsonify(**return_data)
+        return jsonify(_allow_origin_cb=allow_all_origins,
+                **return_data)
 
 
 @app.route('/api/check-login')
 def check_login():
     if session.get('user_id'):
-        app.logger.debug('check-login: Logged in')
         return jsonify(status='OK')
     else:
-        app.logger.debug('check-login: Not logged in')
         return jsonify(status=False)
 
 

@@ -14,12 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from urlparse import urlparse, urlunparse
+
 import flask
+
 from flask import request
 from desqus import app
 
 
-def jsonify(**kw):
+def jsonify(_allow_origin_cb=None, **kw):
     response = flask.jsonify(**kw)
 
     callback = request.args.get('callback')
@@ -28,8 +31,13 @@ def jsonify(**kw):
         response.response.insert(0, '{0}('.format(callback))
         response.response.append(');')
 
-    response.headers['Access-Control-Allow-Origin'] = \
-            app.config['CORS_ALLOW_ORIGIN']
+    if _allow_origin_cb:
+        response.headers['Access-Control-Allow-Origin'] = \
+                _allow_origin_cb(request.headers['Origin'])
+    else:
+        response.headers['Access-Control-Allow-Origin'] = \
+                app.config['CORS_ALLOW_ORIGIN']
+
     response.headers['Access-Control-Allow-Credentials'] = \
             app.config['CORS_ALLOW_CREDENTIALS']
     response.headers['Access-Control-Max-Age'] = \
@@ -40,3 +48,15 @@ def jsonify(**kw):
             app.config['CORS_ALLOW_METHODS']
 
     return response
+
+
+def allow_all_origins(origin):
+    '''
+    This can be used to allow all origins, since * is prohibited if you use
+    CORS with withCreadentials = true;
+
+    Example:
+        desqus.tools.cors.jsonify(_allow_origin_cb=allow_all_origins, **data)
+    '''
+    app.logger.debug(origin)
+    return origin

@@ -45,7 +45,7 @@ var desqus = new Object();
         dq.container.appendChild(dq.commentContainer);
 
         dq.request('/check-login', function (res, status) {
-            data = JSON.parse(res);
+            data = res;
             dq.log(['check-login', data]);
             if (! 'OK' == data.status) {
                 dq.renderRegister();
@@ -64,7 +64,7 @@ var desqus = new Object();
 
     dq.getComments = function () {
         dq.request('/comments', function (res, status) {
-            dq.jsonData = JSON.parse(res);
+            dq.jsonData = res;
             dq.log(res);
             dq.renderComments(dq.jsonData.comments);
         }, {
@@ -197,7 +197,15 @@ var desqus = new Object();
         client.onreadystatechange = function () {
             switch (this.readyState) {
                 case this.DONE:
-                    callback(this.response, this.status);
+                    data = null;
+
+                    try {
+                        data = JSON.parse(this.response)
+                    } catch (e) {
+                        dq.log(e);
+                    }
+
+                    callback(data || this.response, this.status);
                     delete client;
                     break;
                 default:
@@ -212,11 +220,7 @@ var desqus = new Object();
         }
     };
 
-    dq.log = function(msg) {
-        console.log(msg);
-    }
+    dq.log = console.log;
 })(desqus);
 
-//$(document).ready(function () {
-    desqus.render();
-//});
+desqus.render();
