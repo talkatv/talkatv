@@ -19,17 +19,34 @@
 var desqus = new Object();
 
 (function (dq){
+    /**
+     * getCLient - Helper for `new XMLHttpRequest();`
+     *
+     * Returns a fresh XMLHttpRequest object
+     */
     dq.getClient = function () {
          return new XMLHttpRequest();
     };
 
+    /**
+     * DEPRECATED
+     */
     dq.client = new XMLHttpRequest();
 
     if ( ! desqus_home ) {
         alert('Can\'t find desqus_home');
     }
+
+    /**
+     * Holds the desqus application URL, this should be defined in a script tag
+     * on the page before this script is included.
+     */
     dq.home = desqus_home;
 
+    /**
+     * render - Injects the comment form/login-register links and comments into
+     * the DOM
+     */
     dq.render = function () {
         dq.container = document.getElementById('desqus-comments-container');
 
@@ -56,12 +73,24 @@ var desqus = new Object();
         dq.getComments();
     };
 
+    /**
+     * renderRegister - Render login/registration text
+     *
+     * Called when the check-login reports that the user is logged out. Displays
+     * links to desqus login and register forms.
+     */
     dq.renderRegister =  function () {
         dq.formContainer.innerHTML = '<p>You need to <a href="'
             + dq.home + '/login?next=' + encodeURIComponent(document.baseURI) + '">login</a> or <a href="' + dq.home
             + '/register">register</a> to post a comment.</p>';
     };
 
+    /**
+     * getComments - Get comments from desqus
+     *
+     * GETs /api/comments/?item_url={url}&item_title={title} and calls
+     * renderComments to inject the comments into the DOM
+     */
     dq.getComments = function () {
         dq.request('/comments', function (res, status) {
             dq.jsonData = res;
@@ -72,6 +101,22 @@ var desqus = new Object();
             item_title: document.title});
     };
 
+    /**
+     * makeElement - Create a new DOM element
+     *
+     * Arguments
+     *  - type: Elment 'type', or 'tag', e.g. script/p/div
+     *  - o: Elment options, generally attributes, available attributes:
+     *     - class: element className
+     *     - id: element id
+     *     - text: element textContent
+     *     - html: element innerHTML
+     *     - name: element name
+     *  - children: an Array() of DOM elements or a single DOM element that should
+     *    be appended to the new element
+     *
+     *  Returns a DOM element
+     */
     dq.makeElement = function (type, o, children) {
         em = document.createElement(type);
 
@@ -99,6 +144,12 @@ var desqus = new Object();
         return em;
     };
 
+    /**
+     * renderComments - Render comments from an array
+     *
+     * Arguments:
+     *  - comments: an array of comment objects returned by desqus
+     */
     dq.renderComments = function (comments) {
         dq.commentContainer.innerHTML = '';
         dq.log(comments);
@@ -122,6 +173,12 @@ var desqus = new Object();
         }
     };
 
+    /**
+     * onCommentSubmit - Event handler for comment form submit
+     *
+     * Disables the input fields and sends a POST request with the comment and
+     * item id to desqus.
+     */
     dq.onCommentSubmit = function (e) {
         e.preventDefault();
         dq.submitButton.disabled = true;
@@ -149,6 +206,11 @@ var desqus = new Object();
                 headers);
     };
 
+    /**
+     * renderForm - Render the comment form
+     *
+     * Depends on dq.formContainer being set to the appropriate DOM element.
+     */
     dq.renderForm = function () {
         dq.form = dq.makeElement('form', {
             id: 'desqus-comment-form'});
@@ -170,6 +232,22 @@ var desqus = new Object();
         dq.formContainer.appendChild(dq.form);
     };
 
+    /**
+     * request - Helper function for CORS XMLHttpRequest requests
+     *
+     * Arguments:
+     *  - uri: The uri the request should be sent to, dq.home and '/api' will
+     *    automatically be prepended
+     *  - callback: XMLHttpRequest.DONE request callback, should accept 
+     *    (response, status) where response may be either raw data or an object
+     *    parsed from a JSON response
+     *  - params: GET parameters used for get requests
+     *  - method: POST/GET
+     *  - headers: Headers used in a POST request
+     *
+     *  TODO
+     *  Refractor params, method, headers into single "options" object arg.
+     */
     dq.request = function (uri, callback, params, method, headers) {
         client = dq.getClient();
         //$.getJSON(dq.home + '/api' + uri, callback);
@@ -220,7 +298,13 @@ var desqus = new Object();
         }
     };
 
+    /**
+     * log - Shortcut/wrapper for console.log
+     */
     dq.log = console.log;
 })(desqus);
 
+/**
+ * Start her up!
+ */
 desqus.render();
