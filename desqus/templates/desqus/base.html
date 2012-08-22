@@ -24,7 +24,7 @@
             <div class="container">
                 <ul class="nav">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('item_list') }}">Itemss</a></li>
+                    <li><a href="{{ url_for('item_list') }}">Items</a></li>
                     {% if not session.user_id %}
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         <li><a href="{{ url_for('register') }}">Register</a></li>
