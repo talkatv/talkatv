@@ -81,8 +81,16 @@ var desqus = new Object();
      */
     dq.renderRegister =  function () {
         dq.formContainer.innerHTML = '<p>You need to <a href="'
-            + dq.home + '/login?next=' + encodeURIComponent(document.baseURI) + '">login</a> or <a href="' + dq.home
+            + dq.home + '/login?next=' + encodeURIComponent(dq.getCurrentURL()) + '">login</a> or <a href="' + dq.home
             + '/register">register</a> to post a comment.</p>';
+    };
+
+    /**
+     * getCurrentURL - Get currnt URL without URL fragment/'hash'
+     */
+    dq.getCurrentURL = function () {
+        return window.location.protocol + '//' + window.location.host
+            + window.location.pathname;
     };
 
     /**
@@ -97,7 +105,7 @@ var desqus = new Object();
             dq.log(res);
             dq.renderComments(dq.jsonData.comments);
         }, {
-            item_url: document.baseURI,
+            item_url: dq.getCurrentURL(),
             item_title: document.title});
     };
 
@@ -300,8 +308,15 @@ var desqus = new Object();
 
     /**
      * log - Shortcut/wrapper for console.log
+     *
+     * Implemented according to <http://stackoverflow.com/a/2654006/202522>
      */
-    dq.log = console.log;
+    if (window.console && typeof console.log === "function"){
+        // use apply to preserve context and invocations with multiple arguments
+        dq.log = function () { console.log.apply(console, arguments); };
+    } else {
+        dq.log = function() { return; }
+    }
 })(desqus);
 
 /**
