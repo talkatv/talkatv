@@ -188,9 +188,9 @@ def api_comments():
 @app.route('/api/check-login')
 def check_login():
     if session.get('user_id'):
-        return jsonify(status='OK')
+        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
     else:
-        return jsonify(status=False)
+        return jsonify(status=False, _allow_origin_cb=allow_all_origins)
 
 
 @app.route('/logout')
