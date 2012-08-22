@@ -31,7 +31,7 @@ def jsonify(_allow_origin_cb=None, **kw):
         response.response.insert(0, '{0}('.format(callback))
         response.response.append(');')
 
-    if _allow_origin_cb:
+    if _allow_origin_cb and 'Origin' in request.headers:
         response.headers['Access-Control-Allow-Origin'] = \
                 _allow_origin_cb(request.headers['Origin'])
     else:
