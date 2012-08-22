@@ -130,6 +130,13 @@ def item(item_id=None):
         return render_template('desqus/item/form.html', form=form)
 
 
+@app.route('/item/list')
+def item_list():
+    items = Item.query.all()
+
+    return render_template('desqus/item-list.html', items=items)
+
+
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
 @require_active_login(['POST'])
 def api_comments():

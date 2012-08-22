@@ -17,26 +17,35 @@
  #}
 
 {% extends "desqus/base.html" %}
+
 {% block desqus_body %}
 <div class="page-header">
-    <h1>Welcome!</h1>
+    <h1>Items</h1>
 </div>
 <div class="row">
-    <div class="span6">
-        <p>desqus is in the planning phase, follow and join us on <a href="https://github.com/desqus/desqus">https://github.com/desqus/desqus/</a>. Or take a look at the <a href="http://desqus.org/docs/">documentation</a>.</p>
+    <div class="span8">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td><a href="{{ item.url }}">{{ item.url }}</a></td>
+                    <td>{{ item.comments.count() }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div class="span6">
+    <div class="span4">
         <div class="well">
-            Well
-            <div class="well">
-                well
-                <div class="well">
-                    well
-                    <div class="well">
-                        what do we have here?
-                    </div>
-                </div>
-            </div>
+            Lorem ipsum
         </div>
     </div>
 </div>
