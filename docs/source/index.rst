@@ -16,6 +16,7 @@ Primarily, desqus will provide a way for people to embed comments on static page
 
    initial-plans
    hacking
+   deployment
    api/index
 
 
