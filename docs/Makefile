@@ -18,7 +18,7 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  apidoc     to generate the desqus API source files"
+	@echo "  apidoc     to generate the talkatv API source files"
 	@echo "  html       to make standalone HTML files"
 	@echo "  dirhtml    to make HTML files named index.html in directories"
 	@echo "  singlehtml to make a single large HTML file"
@@ -81,17 +81,17 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/desqus.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/talkatv.qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/desqus.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/talkatv.qhc"
 
 devhelp:
 	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
 	@echo
 	@echo "Build finished."
 	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/desqus"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/desqus"
+	@echo "# mkdir -p $$HOME/.local/share/devhelp/talkatv"
+	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/talkatv"
 	@echo "# devhelp"
 
 epub:

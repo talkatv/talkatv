@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from flup.server.fcgi import WSGIServer
-from desqus import app
+from talkatv import app
 
 app.debug = True
 

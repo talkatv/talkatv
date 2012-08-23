@@ -1,5 +1,5 @@
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -16,8 +16,8 @@
 
 from flask.ext.wtf import Form, html5, TextField, PasswordField, HiddenField, \
         validators
-from desqus.models import User, Item, Comment, OpenID
-from desqus.tools.redirect import RedirectForm
+from talkatv.models import User, Item, Comment, OpenID
+from talkatv.tools.redirect import RedirectForm
 
 
 class RegistrationForm(Form):
@@ -66,6 +66,11 @@ class ItemForm(Form):
             return False
 
         return True
+
+
+class SiteForm(Form):
+    url = html5.URLField('URL', [validators.Required()])
+    name = TextField('Name', [validators.Optional()])
 
 
 class LoginForm(RedirectForm):

@@ -1,5 +1,5 @@
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -14,15 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from desqus import app, oid, db
+from talkatv import app, oid, db
 
 from flask import render_template, flash, session, url_for, redirect, Markup, \
         request, json, abort, g
 
-from desqus.forms import LoginForm, RegistrationForm, ItemForm
-from desqus.models import User, Item, Comment, OpenID
-from desqus.tools.cors import jsonify, allow_all_origins
-from desqus.decorators  import require_active_login
+from talkatv.forms import LoginForm, RegistrationForm, ItemForm
+from talkatv.models import User, Item, Comment, OpenID
+from talkatv.tools.cors import jsonify, allow_all_origins
+from talkatv.decorators  import require_active_login
 
 
 @app.before_request
@@ -39,7 +39,7 @@ def lookup_current_user():
 
 @app.route('/')
 def index():
-    return render_template('desqus/index.html')
+    return render_template('talkatv/index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,7 +59,7 @@ def login():
     elif form.openid.data:
         return oid.try_login(form.openid.data, ask_for=['email', 'nickname'])
 
-    return render_template('desqus/login.html', form=form)
+    return render_template('talkatv/login.html', form=form)
 
 
 @oid.after_login
@@ -108,7 +108,7 @@ def register():
 
         return redirect(url_for('index'))
 
-    return render_template('desqus/register.html', form=form)
+    return render_template('talkatv/register.html', form=form)
 
 
 @app.route('/item', methods=['GET', 'POST'])
@@ -127,14 +127,15 @@ def item(item_id=None):
                 (item.url, item.title),
                 'success')
 
-        return render_template('desqus/item/form.html', form=form)
+        return render_template('talkatv/item/form.html', form=form)
 
 
 @app.route('/item/list')
-def item_list():
-    items = Item.query.all()
+@app.route('/item/list/page/<int:page>')
+def item_list(page=1):
+    page = Item.query.order_by(Item.created.desc()).paginate(page, 5)
 
-    return render_template('desqus/item-list.html', items=items)
+    return render_template('talkatv/item-list.html', items_page=page)
 
 
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
@@ -160,29 +161,29 @@ def api_comments():
         app.logger.debug(request.data)
 
         return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
-    else:
-        item = Item.query.filter_by(url=request.args.get('item_url')).first()
 
-        if not item:
-            title = request.args.get('item_title')
-            url = request.args.get('item_url')
+    item = Item.query.filter_by(url=request.args.get('item_url')).first()
 
-            item = Item(url, title)
-            db.session.add(item)
-            db.session.commit()
+    if not item:
+        title = request.args.get('item_title')
+        url = request.args.get('item_url')
 
-        return_data = {
-                'item': item.as_dict(),
-                'comments': [i.as_dict() for i in item.comments.all()]}
+        item = Item(url, title)
+        db.session.add(item)
+        db.session.commit()
 
-        user = User.query.filter_by(id=session.get('user_id')).first()
-        if user:
-            return_data.update({'logged_in_as': user.username})
+    return_data = {
+            'item': item.as_dict(),
+            'comments': [i.as_dict() for i in item.comments.all()]}
 
-        app.logger.debug(return_data)
+    user = User.query.filter_by(id=session.get('user_id')).first()
+    if user:
+        return_data.update({'logged_in_as': user.username})
 
-        return jsonify(_allow_origin_cb=allow_all_origins,
-                **return_data)
+    app.logger.debug(return_data)
+
+    return jsonify(_allow_origin_cb=allow_all_origins,
+            **return_data)
 
 
 @app.route('/api/check-login')

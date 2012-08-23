@@ -1,5 +1,5 @@
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -14,25 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+from flask import g, abort, request
+from functools import wraps
 
-from flask import Flask
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.openid import OpenID
-from flask.ext.sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+class require_active_login(object):
+    def __init__(self, methods):
+        self.methods = methods
 
-app.debug = True
+    def __call__(self, controller):
+        @wraps(controller)
+        def wrapper(*args, **kw):
+            if g.user is None:
+                if not self.methods or request.method in self.methods:
+                    return abort(403)
 
-app.config.from_pyfile('../config.py')
+            return controller(*args, **kw)
 
-if os.path.exists('config_local.py'):
-    # Flask uses a different path than os.path.exist()
-    app.config.from_pyfile('../config_local.py')
-
-Bootstrap(app)
-oid = OpenID(app)
-db = SQLAlchemy(app)
-
-import desqus.views
+        return wrapper

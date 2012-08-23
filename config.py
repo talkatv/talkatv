@@ -16,14 +16,14 @@ REPO_ROOT = os.path.dirname(__file__)
 # SECRET_KEY = 'your-own-custom-secret-salt'
 SECRET_KEY = bcrypt.gensalt()
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}/desqus.db'.format(
+SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}/talkatv.db'.format(
         REPO_ROOT)
 
 OPENID_FS_STORE_PATH = os.path.join(REPO_ROOT, 'openid-data')
 
 WSGI_BIND_ADDR = '127.0.0.1', 45474
 
-CORS_ALLOW_ORIGIN = 'http://80.joar.pagekite.me'
+CORS_ALLOW_ORIGIN = '*'
 CORS_MAX_AGE = 3600
 CORS_ALLOW_HEADERS = 'Accept, Content-Type, Connection, Cookie'
 CORS_ALLOW_METHODS = 'GET, POST'

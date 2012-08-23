@@ -1,42 +1,40 @@
 {#
- # desqus - Commenting backend for static pages
- # Copyright (C) 2012  desqus contributors, see AUTHORS
- #
+ # talkatv - Commenting backend for static pages
+ # Copyright (C) 2012  talkatv contributors, see AUTHORS
+ # 
  # This program is free software: you can redistribute it and/or modify
  # it under the terms of the GNU Affero General Public License as
  # published by the Free Software Foundation, either version 3 of the
  # License, or (at your option) any later version.
- #
+ # 
  # This program is distributed in the hope that it will be useful,
  # but WITHOUT ANY WARRANTY; without even the implied warranty of
  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  # GNU Affero General Public License for more details.
- #
+ # 
  # You should have received a copy of the GNU Affero General Public License
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  #}
 
 {% extends "desqus/base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+{% block title %}Log in - desqus{% endblock %}
 {% block desqus_body %}
 <div class="page-header">
-    <h1>Welcome!</h1>
+    <h1>Login</h1>
 </div>
 <div class="row">
     <div class="span6">
-        <p>desqus is in the planning phase, follow and join us on <a href="https://github.com/desqus/desqus">https://github.com/desqus/desqus/</a>. Or take a look at the <a href="http://desqus.org/docs/">documentation</a>.</p>
+        <p>
+        Quisque condimentum turpis in leo posuere eleifend. Ut consectetur leo quis orci feugiat pellentesque. Integer odio enim, tristique commodo sodales in, ullamcorper eget lacus. Maecenas ante arcu, suscipit aliquam posuere vel, suscipit eu neque. Aenean tellus turpis, commodo ornare ullamcorper at, tincidunt sit amet tortor. Cras pharetra elementum egestas.
+        </p>
     </div>
     <div class="span6">
         <div class="well">
-            Well
-            <div class="well">
-                well
-                <div class="well">
-                    well
-                    <div class="well">
-                        what do we have here?
-                    </div>
-                </div>
-            </div>
+            {{ wtf.quick_form(
+                    form,
+                    action=url_for('login'),
+                    buttons=[('submit', 'primary', 'Login')]) }}
         </div>
     </div>
 </div>

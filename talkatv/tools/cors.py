@@ -1,5 +1,5 @@
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,7 +19,7 @@ from urlparse import urlparse, urlunparse
 import flask
 
 from flask import request
-from desqus import app
+from talkatv import app
 
 
 def jsonify(_allow_origin_cb=None, **kw):
