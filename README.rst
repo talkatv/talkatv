@@ -1,25 +1,25 @@
------------------------
-What may desqus become?
------------------------
+------------------------
+What may talkatv become?
+------------------------
 
-Primarily, desqus will provide a way for people to embed comments on static pages. Secondarily, desqus will investigate the possibilities to federate the comments via e.g. OStatus or XMPP.
+Primarily, talkatv will provide a way for people to embed comments on static pages. Secondarily, talkatv will investigate the possibilities to federate the comments via e.g. OStatus or XMPP.
 
 ------------
 Installation
 ------------
 
-To install desqus, run::
+To install talkatv, run::
 
     # Clone the repository
-    git clone git://github.com/desqus/desqus.git
-    # cd into the desqus repository and create a new virtualenv
-    cd desqus && (virtualenv --system-site-packages . || virtualenv .)
+    git clone git://github.com/talkatv/talkatv.git
+    # cd into the talkatv repository and create a new virtualenv
+    cd talkatv && (virtualenv --system-site-packages . || virtualenv .)
     # Activate the virtualenv
     . bin/activate
     # Install the required dependencies into the virtualenv
     python setup.py develop
 
-To run desqus::
+To run talkatv::
 
     python run.py
 
@@ -28,6 +28,6 @@ To run desqus::
 Contribute
 ----------
 
-Send a pull request on `<https://github.com/desqus/desqus>`_ or join us in `#desqus`_ on Freenode!
+Send a pull request on `<https://github.com/talkatv/talkatv>`_ or join us in `#talka.tv`_ on Freenode!
 
-.. _`#desqus`: http://webchat.freenode.net/?channels=desqus
+.. _`#talka.tv`: http://webchat.freenode.net/?channels=talka.tv

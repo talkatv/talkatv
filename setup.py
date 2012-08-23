@@ -1,5 +1,5 @@
-# desqus - Commenting backend for static pages
-# Copyright (C) 2012  desqus contributors, see AUTHORS
+# talkatv - Commenting backend for static pages
+# Copyright (C) 2012  talkatv contributors, see AUTHORS
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@ import os
 from setuptools import setup, find_packages
 
 READMEFILE = 'README.rst'
-VERSIONFILE = os.path.join('desqus', '_version.py')
+VERSIONFILE = os.path.join('talkatv', '_version.py')
 VSRE = r'^__version__ = [\'"]([^\'"]*)[\'"]'
 
 
@@ -40,7 +40,7 @@ def get_version():
 
 if __name__ == '__main__':
     setup(
-            name='desqus',
+            name='talkatv',
             version=get_version(),
             packages=find_packages(),
             install_requires=[
@@ -52,9 +52,9 @@ if __name__ == '__main__':
                 'py-bcrypt',
                 'flup',
                 'sphinx'],
-            author_email='joar@desqus.org',
+            author_email='joar@talka.tv',
             license='AGPLv3',
-            url='http://desqus.org',
+            url='http://talka.tv',
             long_description=open(READMEFILE).read(),
             classifiers=[
                 'Development Status :: 3 - Alpha',

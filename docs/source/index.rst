@@ -2,7 +2,7 @@
 Welcome to talkatv's documentation!
 ==================================
 
-desqus development is in the planning stage.
+talkatv development is in the planning stage.
 
 
 ------------------------

@@ -1,5 +1,5 @@
 =================
-Hacking on desqus
+Hacking on talkatv
 =================
 
 
@@ -7,31 +7,31 @@ Hacking on desqus
 Installation
 ------------
 
-You will need Python and git to be able to install desqus.
+You will need Python and git to be able to install talkatv.
 
 On Debianoid systems, run::
 
     sudo apt-get install python python-setuptools python-virtualenv git-core 
 
 
-Set up desqus
--------------
+Set up talkatv
+--------------
 
 Clone the git repository::
 
-    git clone git://github.com/desqus/desqus.git
+    git clone git://github.com/talkatv/talkatv.git
 
-cd into the desqus git repository and create a new virtualenv::
+cd into the talkatv git repository and create a new virtualenv::
 
-    cd desqus && (virtualenv --system-site-packages . || virtualenv .)
+    cd talkatv && (virtualenv --system-site-packages . || virtualenv .)
 
 fetch all the dependencies and install them in the virtualenv::
 
     ./bin/python setup.py develop
 
-----------
-Run desqus
-----------
+-----------
+Run talkatv
+-----------
 
 If you have activated the virtualenv, you may just ron::
 

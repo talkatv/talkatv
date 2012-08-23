@@ -1,6 +1,6 @@
-================
-Deploying desqus
-================
+=================
+Deploying talkatv
+=================
 
 .. todo::
     Provide a more elaborate description
@@ -32,15 +32,15 @@ nginx.conf::
       gzip_types text/plain text/html application/x-javascript text/javascript text/xml text/css;
     
       # The DNS name that this config should be a vhost for.
-      server_name = desqus.org;
+      server_name = talka.tv;
     
       # Add shortcut for desqus.js
       location /desqus.js {
-        alias /srv/desqus.org/desqus/desqus/static/js/desqus.js;
+        alias /srv/talka.tv/talkatv/talkatv/static/js/desqus.js;
       }
       
       # Forward requests via FCGI to the running wsgi.py server script
-      # that is provided with desqus.
+      # that is provided with talkatv.
       location / {
         fastcgi_pass 127.0.0.1:45474;
         include fastcgi_params;
