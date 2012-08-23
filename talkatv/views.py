@@ -111,29 +111,12 @@ def register():
     return render_template('talkatv/register.html', form=form)
 
 
-@app.route('/item', methods=['GET', 'POST'])
-@app.route('/item/<int:item_id>')
-def item(item_id=None):
-    if not item_id:
-        form = ItemForm()
-
-        if form.validate_on_submit():
-            user = User.query.filter_by(id=session['user_id']).first()
-            item = Item(user, form.title.data, form.url.data)
-            db.session.add(item)
-            db.session.commit()
-
-            flash(Markup('Item <a href="%s">%s</a> has been created!') %
-                (item.url, item.title),
-                'success')
-
-        return render_template('talkatv/item/form.html', form=form)
-
-
 @app.route('/item/list')
 @app.route('/item/list/page/<int:page>')
 def item_list(page=1):
-    page = Item.query.order_by(Item.created.desc()).paginate(page, 5)
+    page = Item.query.order_by(Item.created.desc()).paginate(
+            page,
+            app.config.get('ITEMS_PER_PAGE', 20))
 
     return render_template('talkatv/item-list.html', items_page=page)
 

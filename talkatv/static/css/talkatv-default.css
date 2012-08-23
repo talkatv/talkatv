@@ -1,0 +1,17 @@
+#talkatv-comments form textarea {
+    width: 100%;
+}
+
+#talkatv-comments .comment-username {
+    float: right;
+}
+
+#talkatv-comments li {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: thin solid #ccc;
+}
+
+#talkatv-comments li p {
+    margin-bottom: .5em;
+}

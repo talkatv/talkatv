@@ -23,21 +23,26 @@
 </div>
 <div class="row">
     <div class="span6">
+        <p class="lead">
+            <dl class="dl-horizontal">
+                <dt>talkatv</dt>
+                <dd>noun /ˈtôkətiv/<br />
+                An open source comment service for static pages licensed under the GNU Affero General Public License v3 or later.
+                </dd>
+            </dl>
+        </p>
         <p>talkatv is in the planning phase, follow and join us on <a href="https://github.com/talkatv/talkatv">https://github.com/talkatv/talkatv/</a>. Or take a look at the <a href="http://talka.tv/docs/">documentation</a>.</p>
     </div>
     <div class="span6">
-        <div class="well">
-            Well
-            <div class="well">
-                well
-                <div class="well">
-                    well
-                    <div class="well">
-                        what do we have here?
-                    </div>
-                </div>
-            </div>
+        <h2>Try it out!</h2>
+
+        <div id="talkatv-comments">
         </div>
+        <script>
+            var talkatv_home = 'http://talka.tv';
+            var talkatv_ordered = true;
+        </script>
+        <script src="http://talka.tv/talkatv.js"></script>
     </div>
 </div>
 {% endblock %}

@@ -18,6 +18,8 @@
 
 {% extends "talkatv/base.html" %}
 
+{% block title %}List items - {{ super() }}{% endblock %}
+
 {% block talkatv_body %}
 <div class="page-header">
     <h1>Items</h1>
@@ -42,7 +44,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class=pagination>
+        <div class="pagination pagination-centered">
             <ul>
                 {%- if not items_page.has_prev %}
                 <li class="disabled">
@@ -52,7 +54,7 @@
                 {% if items_page.has_prev %}
                 <a href="{{ url_for('item_list', page=items_page.prev_num) }}">Prev</a>
                 {% else %}
-                Prev
+                <a href="">Prev</a>
                 {%- endif -%}
                 </li>
                     
@@ -65,6 +67,17 @@
                         <span class=ellipsis>…</span>
                     {% endif %}
                 {%- endfor %}
+                {%- if not items_page.has_next %}
+                <li class="disabled">
+                {%- else -%}
+                <li>
+                {%- endif %}
+                {% if items_page.has_next %}
+                <a href="{{ url_for('item_list', page=items_page.next_num) }}">Next</a>
+                {% else %}
+                <a href="">Next</a>
+                {%- endif -%}
+                </li>
             </ul>
         </div>
     </div>
