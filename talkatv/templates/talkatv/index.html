@@ -23,21 +23,49 @@
 </div>
 <div class="row">
     <div class="span6">
-        <p class="lead">
-            <dl class="dl-horizontal">
-                <dt>talkatv</dt>
-                <dd>noun /ˈtôkətiv/<br />
-                An open source comment service for static pages licensed under the GNU Affero General Public License v3 or later.
-                </dd>
-            </dl>
-        </p>
-        <p>talkatv is in the planning phase, follow and join us on <a href="https://github.com/talkatv/talkatv">https://github.com/talkatv/talkatv/</a>. Or take a look at the <a href="http://talka.tv/docs/">documentation</a>.</p>
+        <dl class="dl-horizontal">
+            <dt>talkatv</dt>
+            <dd>noun /ˈtôkətiv/<br />
+            An open source comment service for static pages licensed under the GNU Affero General Public License v3 or later.
+            </dd>
+        </dl>
+
+        <p>talkatv development is currently in <code>0.0.1-dev</code>.</p>
+
+        <p>You can download it from our <a href="https://github.com/talkatv/talkatv/">git repostitory</a> or try it out with the <a href="http://talka.tv">talka.tv</a> public instance.</p>
+
+        <p>The current features are:</p>
+
+        <ul>
+            <li>OpenID support (in addition to user/pass)</li>
+            <li>Embeddable comments via <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a></li>
+        </ul>
+
+        <p>And there are <a href="https://github.com/talkatv/talkatv/issues">more features on their way</a>.</p>
+
+        <h2>Join us</h2>
+
+        <ul>
+            <li>Catch up to code changes or submit your own contributions on <a href="https://github.com/talkatv/talkatv">talkatv's GitHub repository</a>.</li>
+            <li>Documentation is <a href="http://talka.tv/docs/">→ this way</a></li>
+            <li>Chat with us, suggest features or get help in <a href="http://webchat.freenode.net/?channels=talka.tv">#talka.tv</a> on Freenode IRC</li>
+        </ul>
+
+
+        <h2>Embed it</h2>
+        <p>Put this snippet in the location you want the comments rendered. The comments and form will all be injected into the DOM instide the div#talkatv-comments element.</p>
+        <pre>&lt;div id="talkatv-comments"&gt;&lt;/div&gt;
+&lt;script&gt;
+    talkatv_home = 'http://talka.tv'; // The comment service's public URL
+    talkatv_ordered = false; // set to true to use an ordered list
+&lt;/script&gt;
+&lt;script src="http://talka.tv/talkatv.js"&gt;&lt;/script&gt;</pre>
     </div>
     <div class="span6">
         <h2>Try it out!</h2>
+        <p>This is a showcase of the embedded comments.</p>
 
-        <div id="talkatv-comments">
-        </div>
+        <div id="talkatv-comments"></div>
         <script>
             var talkatv_home = 'http://talka.tv';
             var talkatv_ordered = true;
