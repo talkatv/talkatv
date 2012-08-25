@@ -21,6 +21,8 @@
 {% block style %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/talkatv-default.css') }}" />
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/talkatv-16.png') }}" />
+<link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='img/talkatv-128.png') }}" />
 {% endblock %}
 {% block body_content %}
     <div class="navbar navbar-inverse navbar-fixed-top">
