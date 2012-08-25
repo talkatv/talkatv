@@ -15,3 +15,11 @@
 #talkatv-comments li p {
     margin-bottom: .5em;
 }
+
+.navbar .navbar-inner {
+    height: 65px;
+}
+
+.navbar .nav {
+    padding: 1em 0;
+}
