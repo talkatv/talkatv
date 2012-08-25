@@ -12,6 +12,9 @@ To install talkatv, run::
 
     # Clone the repository
     git clone git://github.com/talkatv/talkatv.git
+    # Install the dependencies
+    sudo apt-get install python-dev python-virtualenv
+    pip install Flask sqlalchemy wtforms
     # cd into the talkatv repository and create a new virtualenv
     cd talkatv && (virtualenv --system-site-packages . || virtualenv .)
     # Activate the virtualenv
