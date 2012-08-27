@@ -108,6 +108,16 @@ var desqus = new Object();
     };
 
     /**
+     * convertDateTime - Create a date object from a python iso format
+     * datetime string.
+     */
+    dq.convertDateTimeRegExp = /\.[^.]*$/;
+    dq.convertDateTime = function(python_datetime) {
+        return new Date(
+                python_datetime.replace(dq.convertDateTimeRegExp, 'Z'))
+    }
+
+    /**
      * makeElement - Create a new DOM element
      *
      * Arguments
@@ -169,7 +179,7 @@ var desqus = new Object();
                         class: 'comment-text'}));
             container.appendChild(
                     dq.makeElement('span', {
-                        text: comment.created,
+                        text: dq.convertDateTime(comment.created).toString(),
                         class: 'comment-created'}));
             container.appendChild(
                     dq.makeElement('span', {
