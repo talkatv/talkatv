@@ -34,9 +34,9 @@ nginx.conf::
       # The DNS name that this config should be a vhost for.
       server_name = talka.tv;
     
-      # Add shortcut for desqus.js
-      location /desqus.js {
-        alias /srv/talka.tv/talkatv/talkatv/static/js/desqus.js;
+      # Add shortcut for talkatv.js
+      location /talkatv.js {
+        alias /srv/talka.tv/talkatv/talkatv/static/js/talkatv.js;
       }
       
       # Forward requests via FCGI to the running wsgi.py server script
