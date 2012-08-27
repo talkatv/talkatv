@@ -24,7 +24,6 @@ class RegistrationForm(Form):
     username = TextField('Username', [validators.Required()])
     password = PasswordField('Password', [validators.Optional()])
     email = html5.EmailField('Email', [validators.Required()])
-    openid = html5.URLField('OpenID', [validators.Optional()])
 
     def __init__(self, *args, **kw):
         Form.__init__(self, *args, **kw)
@@ -45,6 +44,15 @@ class RegistrationForm(Form):
             self.username.errors.append('User already exists.')
 
         return True
+
+
+class ProfileForm(Form):
+    username = TextField('Username', [validators.Required()])
+    current_password = PasswordField('Current password',
+            [validators.Optional()])
+    password = PasswordField('New password', [validators.Optional()])
+    email = html5.EmailField('Email', [validators.Required()])
+    openid = html5.URLField('OpenID', [validators.Optional()])
 
 
 class ItemForm(Form):

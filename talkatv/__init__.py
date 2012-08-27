@@ -23,8 +23,6 @@ from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.debug = True
-
 app.config.from_pyfile('../config.py')
 
 if os.path.exists('config_local.py'):

@@ -17,10 +17,14 @@
  #}
 
 {% extends "bootstrap_responsive.html" %}
+
+{% set active_page = active_page|default('index') %}
+
 {% block title %}talkatv{% endblock %}
 {% block style %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/talkatv-default.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/talkatv-website.css') }}" />
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/talkatv-16.png') }}" />
 <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='img/talkatv-128.png') }}" />
 {% endblock %}
@@ -29,21 +33,33 @@
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/talkatv-128-cropped.png') }}" /></a>
-                <button type="button" class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                <a  class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
+                </a>
                 <div style="height: 0px;" class="nav-collapse collapse">
                     <ul class="nav">
-                        <li><a href="{{ url_for('item_list') }}">Items</a></li>
-                        {% if not session.user_id %}
-                            <li><a href="{{ url_for('login') }}">Login</a></li>
-                            <li><a href="{{ url_for('register') }}">Register</a></li>
-                        {% else %}
-                            <li><a href="{{ url_for('logout') }}">Log out</a></li>
-                        {% endif %}
+                        <li class="{% if "index" == active_page %} active{% endif %}"><a href="{{ url_for('index') }}">Home</a></li>
+                        <li class="{% if "item_list" == active_page %} active{% endif %}"><a href="{{ url_for('item_list') }}">Pages</a></li>
                     </ul>
+                    <ul class="nav pull-right">
+                        {% if not g.user %}
+                            <li class="{% if 'login' == active_page %} active{% endif %}"><a href="{{ url_for('login') }}">Login</a></li>
+                            <li class="{% if 'register' == active_page %} active{% endif %}"><a href="{{ url_for('register') }}">Register</a></li>
+                        {% else %}
+                            <li class="{% if active_page in ['edit_profile'] %} active{% endif %}"><a href="#"
+                                class="dropdown-toggle"
+                                data-toggle="dropdown">
+                                {{ g.user.username }}
+                                <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li class="{% if 'edit_profile' == active_page %} active{% endif %}"><a href="{{ url_for('edit_profile') }}">
+                                        Edit profile</a></li>
+                                    <li class="{% if 'logout' == active_page %} active{% endif %}"><a href="{{ url_for('logout') }}">Log out</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
                 </div>
             </div>
         </div>

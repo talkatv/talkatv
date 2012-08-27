@@ -16,13 +16,14 @@
 
 from talkatv import app, oid, db
 
-from flask import render_template, flash, session, url_for, redirect, Markup, \
+from flask import render_template, flash, session, url_for, redirect, \
         request, json, abort, g
 
-from talkatv.forms import LoginForm, RegistrationForm, ItemForm
+from talkatv.forms import LoginForm, RegistrationForm, ProfileForm
 from talkatv.models import User, Item, Comment, OpenID
 from talkatv.tools.cors import jsonify, allow_all_origins
-from talkatv.decorators  import require_active_login
+from talkatv.tools.auth import set_active_user
+from talkatv.decorators import require_active_login
 
 
 @app.before_request
@@ -33,8 +34,8 @@ def lookup_current_user():
 
         if user is None:
             del session['user_id']
-
-        g.user = user
+        else:
+            set_active_user(user)
 
 
 @app.route('/')
@@ -46,8 +47,6 @@ def index():
 @oid.loginhandler
 def login():
     if g.user is not None:
-        app.logger.debug('g.user is not None, redirecting to {0}'.format(
-            oid.get_next_url()))
         return redirect(url_for('index'))
 
     form = LoginForm()
@@ -72,37 +71,98 @@ def openid_postlogin(resp):
 
         flash(u'Welcome, {0}!'.format(user.username), 'info')
 
-        session['user_id'] = user.id
-        g.user = user
+        set_active_user(user)
 
         return redirect(oid.get_next_url())
 
+    registered_users = User.query.count()
+    tmp_user_handle = 'user{0}'.format(registered_users + 1)
+
+    user = User(tmp_user_handle,
+           '{0}@localhost'.format(tmp_user_handle))
+    openid = OpenID(user, resp.identity_url)
+
+    db.session.add(user)
+    db.session.add(openid)
+    db.session.commit()
+
     flash(u'Please confirm your profile details', 'success')
 
-    return redirect(url_for('register', next=oid.get_next_url(),
+    set_active_user(user)
+
+    return redirect(url_for('edit_profile', next=oid.get_next_url(),
         username=resp.nickname,
         email=resp.email,
         openid=resp.identity_url))
 
 
+@app.route('/profile/edit', methods=['GET', 'POST'])
+@require_active_login()
+def edit_profile():
+    '''
+    Edit profile
+
+    - Save profile data
+    - Add OpenID
+    '''
+    form = ProfileForm()
+
+    if form.validate_on_submit():
+        openid = OpenID.query.filter_by(url=form.openid.data).first()
+
+        if not openid and form.openid.data:
+            openid = OpenID(g.user, form.openid.data)
+
+        if form.username.data and not form.username.data == g.user.username:
+            g.user.username = form.username.data
+            flash('Your username has been changed to {0}'.format(
+                form.username.data),
+                    'info')
+
+        if form.email.data and not form.email.data == g.user.email:
+            g.user.email = form.email.data
+            flash('Your email has been changed to {0}'.format(form.email.data), 'info')
+
+        app.logger.debug(g.user)
+
+        db.session.commit()
+        return redirect(url_for('edit_profile'))
+
+    else:
+        form.username.data = request.args.get('username',
+                getattr(g.user, 'username', form.username.data))
+        form.email.data = request.args.get('email',
+                getattr(g.user, 'email', form.email.data))
+
+        if not g.user.openids.count():
+            form.openid.data = request.args.get('openid', form.openid.data)
+        else:
+            form.openid.data = request.args.get('openid',
+                g.user.openids.first().url)
+
+    return render_template('talkatv/profile/edit.html', form=form)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    '''
+    Regular user/password registration
+    '''
+    if g.user:
+        return redirect(url_for('index'))
+
     form = RegistrationForm()
 
     form.username.data = request.args.get('username', form.username.data)
     form.email.data = request.args.get('email', form.email.data)
-    form.openid.data = request.args.get('openid', form.openid.data)
 
     if form.validate_on_submit():
         user = User(form.username.data, form.email.data, form.password.data)
 
-        openid = OpenID(user, form.openid.data)
         db.session.add(user)
-        db.session.add(openid)
         db.session.commit()
 
-        session['user_id'] = user.id
-        g.user = user
+        set_active_user(user)
 
         flash(u'Welcome, {0}!'.format(user.username), 'success')
 

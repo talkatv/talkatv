@@ -19,14 +19,14 @@ from functools import wraps
 
 
 class require_active_login(object):
-    def __init__(self, methods):
+    def __init__(self, methods=[]):
         self.methods = methods
 
     def __call__(self, controller):
         @wraps(controller)
         def wrapper(*args, **kw):
             if g.user is None:
-                if not self.methods or request.method in self.methods:
+                if not len(self.methods) or request.method in self.methods:
                     return abort(403)
 
             return controller(*args, **kw)

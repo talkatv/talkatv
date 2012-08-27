@@ -17,26 +17,36 @@
  #}
 
 {% extends "talkatv/base.html" %}
-{% set active_page = 'register' %}
 {% import "bootstrap_wtf.html" as wtf %}
 {% block title %}Register - desqus{% endblock %}
+{% set active_page = 'edit_profile' %}
 {% block talkatv_body %}
 <div class="page-header">
-    <h1>Register</h1>
+    <h1>Edit profile</h1>
 </div>
 <div class="row">
-    <div class="span6">
-        <p>
-        Quisque condimentum turpis in leo posuere eleifend. Ut consectetur leo quis orci feugiat pellentesque. Integer odio enim, tristique commodo sodales in, ullamcorper eget lacus. Maecenas ante arcu, suscipit aliquam posuere vel, suscipit eu neque. Aenean tellus turpis, commodo ornare ullamcorper at, tincidunt sit amet tortor. Cras pharetra elementum egestas.
-        </p>
-    </div>
-    <div class="span6">
+    <div class="span8">
         <div class="well">
             {{ wtf.quick_form(
                     form,
-                    action=url_for('register'),
-                    buttons=[('submit', 'primary', 'Register')]) }}
+                    action=url_for('edit_profile'),
+                    buttons=[('submit', 'primary', 'Save')]) }}
         </div>
+    </div>
+    <div class="span4">
+        <h2>Help</h2>
+        <dl class="dl-horizontal">
+            <dt>Username</dt>
+            <dd>Your username</dd>
+            <dt>Password</dt>
+            <dd><em>optional</em> Your current password</dd>
+            <dt>New password</dt>
+            <dd><em>optional</em> Your new password</dd>
+            <dt>Email</dt>
+            <dd>Your email address</dt>
+            <dt>OpenID</dt>
+            <dd><em>optional</em> Your OpenID identifier</dd>
+        </dl>
     </div>
 </div>
 {% endblock %}

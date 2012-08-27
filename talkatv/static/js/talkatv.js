@@ -149,6 +149,8 @@ var desqus = new Object();
                 em.placeholder = o.placeholder;
             if (o.name)
                 em.name = o.name;
+            if (o.title)
+                em.title = o.title;
         }
 
         if (children && ! children.length)
@@ -180,6 +182,7 @@ var desqus = new Object();
             container.appendChild(
                     dq.makeElement('span', {
                         text: dq.convertDateTime(comment.created).toString(),
+                        title: comment.created,
                         class: 'comment-created'}));
             container.appendChild(
                     dq.makeElement('span', {

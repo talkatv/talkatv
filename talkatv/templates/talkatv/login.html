@@ -17,6 +17,7 @@
  #}
 
 {% extends "talkatv/base.html" %}
+{% set active_page = 'login' %}
 {% import "bootstrap_wtf.html" as wtf %}
 {% block title %}Log in - desqus{% endblock %}
 {% block talkatv_body %}
@@ -24,12 +25,12 @@
     <h1>Login</h1>
 </div>
 <div class="row">
-    <div class="span6">
+    <div class="span4">
         <p>
         Quisque condimentum turpis in leo posuere eleifend. Ut consectetur leo quis orci feugiat pellentesque. Integer odio enim, tristique commodo sodales in, ullamcorper eget lacus. Maecenas ante arcu, suscipit aliquam posuere vel, suscipit eu neque. Aenean tellus turpis, commodo ornare ullamcorper at, tincidunt sit amet tortor. Cras pharetra elementum egestas.
         </p>
     </div>
-    <div class="span6">
+    <div class="span8">
         <div class="well">
             {{ wtf.quick_form(
                     form,

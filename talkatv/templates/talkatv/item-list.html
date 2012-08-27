@@ -17,12 +17,13 @@
  #}
 
 {% extends "talkatv/base.html" %}
+{% set active_page = 'item_list' %} 
 
 {% block title %}List items - {{ super() }}{% endblock %}
 
 {% block talkatv_body %}
 <div class="page-header">
-    <h1>Items</h1>
+    <h1>Pages</h1>
 </div>
 <div class="row">
     <div class="span8">

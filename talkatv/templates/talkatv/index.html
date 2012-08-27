@@ -17,6 +17,7 @@
  #}
 
 {% extends "talkatv/base.html" %}
+{% set active_page = "index" %}
 {% block talkatv_body %}
 <div class="page-header">
     <h1>Welcome!</h1>
@@ -26,7 +27,7 @@
         <dl class="dl-horizontal">
             <dt>talkatv</dt>
             <dd>noun /ˈtôkətiv/<br />
-            An open source comment service for static pages. Licensed under the GNU Affero General Public License v3 or later.
+            An open source comment service. Licensed under the GNU Affero General Public License v3 or later.
             </dd>
         </dl>
 
@@ -37,8 +38,8 @@
         <p>The current features are:</p>
 
         <ul>
-            <li>OpenID support (in addition to user/pass)</li>
-            <li>Embeddable comments via <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a></li>
+            <li>OpenID login/registration(in addition to user/pass).</li>
+            <li>Embed comments using <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing">CORS</a>.</li>
         </ul>
 
         <p>And there are <a href="https://github.com/talkatv/talkatv/issues">more features on their way</a>.</p>

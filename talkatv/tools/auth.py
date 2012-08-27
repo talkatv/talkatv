@@ -14,23 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import subprocess
-
-from talkatv import app
+from flask import g, session
 
 
-DOCS_DIR = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        'docs')
-
-
-def build_docs():
-    try:
-        app.logger.info('Building docs')
-        subprocess.check_call(['make', 'html'], cwd=DOCS_DIR)
-    except subprocess.CalledProcessError:
-        app.logger.warn('Couldn\'t build docs')
-
-if __name__ == '__main__':
-    app.run(port=4547)
+def set_active_user(user):
+    '''
+    Set the active user
+    '''
+    g.user = user
+    session['user_id'] = user.id
+    return True
