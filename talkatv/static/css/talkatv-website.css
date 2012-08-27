@@ -1,0 +1,13 @@
+.navbar .navbar-inner {
+    height: 65px;
+}
+
+@media (max-width: 979px) {
+    .navbar .navbar-inner {
+        height: auto;
+    }
+}
+
+.navbar .nav {
+    padding: 1em 0;
+}
