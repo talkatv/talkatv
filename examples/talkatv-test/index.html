@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -29,16 +30,25 @@
                 <div class="span4">
                     <h2>Comments</h2>
                     <div id="desqus-comments-container">
-                        <p>Loading comments.</p>
+                        <p>Loading comments...</p>
                     </div>
                     <script>
                         var talkatv_home = 'http://talkatv.joar.pagekite.me';
+
+                        /* Include talkatv.js */
+                        document.write(unescape('%3Cscript src="'
+                        + talkatv_home + (window.talkatv_shortcut
+                        ? '/talkatv.js' : '/static/js/talkatv.js')
+                        + '" type="text/javascript"%3E%3C/script%3E'));
                     </script>
-                    <script src="http://talkatv.joar.pagekite.me/static/js/talkatv.js">
-                        <noscript>
-                            <p>You must have JavaScript enabled to view these comments as they utilize CORS and depend on an external service.</p>
-                        </noscript>
-                    </script>
+                    <noscript>
+                        <p>Currently you will need JavaScript to read and post
+                        comments to this page, but
+                        <a href="https://github.com/talkatv/talkatv/issues/8">
+                            a fix</a>
+                        for this has been proposed, and if you want to, you
+                        could speed up the development by implementing it.</p>
+                    </noscript>
                 </div>
             </div>
         </div>
