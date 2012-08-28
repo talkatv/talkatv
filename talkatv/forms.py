@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from flask import g
+
 from flask.ext.wtf import Form, html5, TextField, PasswordField, HiddenField, \
         validators
 from talkatv.models import User, Item, Comment, OpenID
@@ -47,12 +49,60 @@ class RegistrationForm(Form):
 
 
 class ProfileForm(Form):
+    '''
+    Edit user profile form
+    '''
     username = TextField('Username', [validators.Required()])
-    current_password = PasswordField('Current password',
-            [validators.Optional()])
-    password = PasswordField('New password', [validators.Optional()])
     email = html5.EmailField('Email', [validators.Required()])
     openid = html5.URLField('OpenID', [validators.Optional()])
+
+    def __init__(self, *args, **kw):
+        Form.__init__(self, *args, **kw)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        user_exists = User.query.filter(
+                User.username==self.username.data).filter(
+                        User.email!=g.user.email).count()
+
+        if user_exists:
+            self.username.errors.append(
+                    'The username "{0}" is already taken'.format(
+                        self.username.data))
+            return False
+
+        email_exists = User.query.filter(
+                User.email==self.email.data).filter(
+                        User.username!=g.user.username).count()
+
+        if email_exists:
+            self.email.errors.append(
+                    'The email "{0}" is already taken'.format(
+                        self.email.data))
+            return False
+
+        return True
+
+
+class ChangePasswordForm(Form):
+    password = PasswordField('Password',
+            [validators.Optional()])
+    new_password = PasswordField('New password', [validators.Required()])
+
+    def __init__(self, *args, **kw):
+        Form.__init__(self, *args, **kw)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        if g.user.password is not None:
+            if not g.user.check_password(self.password.data):
+                self.password.errors.append('Invalid password')
+
+        return True
 
 
 class ItemForm(Form):

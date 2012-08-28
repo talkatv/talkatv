@@ -55,12 +55,28 @@
 
         <h2>Embed it</h2>
         <p>Put this snippet in the location you want the comments rendered. The comments and form will all be injected into the DOM instide the div#talkatv-comments element.</p>
-        <pre>&lt;div id="talkatv-comments"&gt;&lt;/div&gt;
+        <pre class="pre-scrollable">&lt;div id="talkatv-comments"&gt;&lt;/div&gt;
 &lt;script&gt;
-    talkatv_home = 'http://talka.tv'; // The comment service's public URL
-    talkatv_ordered = false; // set to true to use an ordered list
-&lt;/script&gt;
-&lt;script src="http://talka.tv/talkatv.js"&gt;&lt;/script&gt;</pre>
+    var talkatv_home = 'http://talka.tv';
+    // use /talkatv.js instead of /static/js...
+    var talkatv_shortcut = true;
+
+    document.write(unescape('%3Cscript src="'
+    + talkatv_home + (window.talkatv_shortcut
+    ? '/talkatv.js' : '/static/js/talkatv.js')
+    + '" type="text/javascript"%3E%3C/script%3E'));
+&lt;/script&gt;</pre>
+        <p>If you want to account for non-js-enabled browsers too you may add this <code>&lt;noscript&gt;</code> tag right after the <code>&lt;script&gt;</code> tag.</p>
+        <pre class="pre-scrollable">&lt;noscript&gt;
+    &lt;p&gt;
+    Currently you will need JavaScript to read and post
+    comments to this page, but
+    &lt;a href="https://github.com/talkatv/talkatv/issues/8"&gt;
+        a fix&lt;/a&gt;
+    for this has been proposed, and if you want to, you
+    could speed up the development by implementing it.
+    &lt;/p&gt;
+&lt;/noscript&gt;</pre>
     </div>
     <div class="span6">
         <h2>Try it out!</h2>
@@ -70,8 +86,21 @@
         <script>
             var talkatv_home = 'http://talka.tv';
             var talkatv_ordered = true;
+            var talkatv_shortcut = true;
+
+            document.write(unescape('%3Cscript src="'
+            + talkatv_home + (window.talkatv_shortcut
+            ? '/talkatv.js' : '/static/js/talkatv.js')
+            + '" type="text/javascript"%3E%3C/script%3E'));
         </script>
-        <script src="http://talka.tv/talkatv.js"></script>
+        <noscript>
+            <p>Currently you will need JavaScript to read and post
+            comments to this page, but
+            <a href="https://github.com/talkatv/talkatv/issues/8">
+                a fix</a>
+            for this has been proposed, and if you want to, you
+            could speed up the development by implementing it. </p>
+        </noscript>
     </div>
 </div>
 {% endblock %}

@@ -29,7 +29,7 @@ var desqus = new Object();
     };
 
 
-    if ( ! window.desqus_home && window.talkatv_home ) {
+    if ( ! window.desqus_home && ! window.talkatv_home ) {
         console.error('talkatv_home is not set');
     }
 
@@ -50,12 +50,13 @@ var desqus = new Object();
         dq.container.innerHTML = '';
 
         dq.formContainer = dq.makeElement('div', {
-            class: 'desqus-form'});
+            class: 'talkatv-form'});
         dq.container.appendChild(dq.formContainer);
 
         dq.commentContainer = dq.makeElement(
                 dq.ordered ? 'ol' : 'ul', {
-            class: 'comment-list'});
+            class: 'comment-list',
+            reversed: true});
 
         dq.container.appendChild(dq.commentContainer);
 
@@ -140,17 +141,24 @@ var desqus = new Object();
             if (o.class)
                 em.className = o.class;
             if (o.id)
-                em.id = o.id;
+                em.setAttribute('id', o.id);
             if (o.text)
                 em.textContent = o.text;
             if (o.html)
                 em.innerHTML = o.html;
             if (o.placeholder)
-                em.placeholder = o.placeholder;
+                em.setAttribute('placeholder', o.placeholder);
             if (o.name)
-                em.name = o.name;
+                em.setAttribute('name', o.name);
             if (o.title)
-                em.title = o.title;
+                em.setAttribute('title', o.title);
+
+            if (o.reversed)
+                em.setAttribute('reversed', o.reversed)
+        }
+
+        dq.browserSupportsReversedList = function () {
+             return 'reversed' in document.createElement('ol');
         }
 
         if (children && ! children.length)
@@ -190,6 +198,7 @@ var desqus = new Object();
                         class: 'comment-username'}));
             dq.commentContainer.appendChild(container);
         }
+        dq.reversedListsPolyfill();
     };
 
     /**
@@ -328,6 +337,57 @@ var desqus = new Object();
     } else {
         dq.log = function() { return; }
     }
+
+    dq.reversedListsPolyfill = function () {
+        //a polyfill for the ordered-list reversed attribute
+        // http://www.whatwg.org/specs/web-apps/current-work/multipage/grouping-content.html#the-ol-element
+        // http://www.whatwg.org/specs/web-apps/current-work/multipage/grouping-content.html#dom-li-value
+
+        //uses these awesomeness:
+        // Array.prototype.forEach
+        // Element.prototype.children
+        //if you want support for older browsers *cough*IE8-*cough*, then use the other
+        // file provided
+        //
+        // from https://gist.github.com/1671548
+        (function () {
+        "use strict";
+
+            if ( 'reversed' in document.createElement('ol') ) {
+                return;
+            }
+
+            [].forEach.call( document.getElementsByTagName('ol'), function ( list ) {
+                if ( list.getAttribute( 'reversed' ) !== null ) {
+                    reverseList( list );
+                }
+            });
+
+            function reverseList ( list ) {
+                var children = list.children, count = list.getAttribute('start');
+
+                //check to see if a start attribute is provided
+                if ( count !== null ) {
+                    count = Number( count );
+
+                    if ( isNaN(count) ) {
+                        count = null;
+                    }
+                }
+
+                //no, this isn't duplication - start will be set to null
+                // in the previous if statement if an invalid start attribute
+                // is provided
+                if ( count === null ) {
+                    count = children.length;
+                }
+
+                [].forEach.call( children, function ( child ) {
+                    child.value = count--;
+                });
+            }
+        }());
+    };
 })(desqus);
 
 /**

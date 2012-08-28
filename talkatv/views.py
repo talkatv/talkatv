@@ -96,53 +96,6 @@ def openid_postlogin(resp):
         openid=resp.identity_url))
 
 
-@app.route('/profile/edit', methods=['GET', 'POST'])
-@require_active_login()
-def edit_profile():
-    '''
-    Edit profile
-
-    - Save profile data
-    - Add OpenID
-    '''
-    form = ProfileForm()
-
-    if form.validate_on_submit():
-        openid = OpenID.query.filter_by(url=form.openid.data).first()
-
-        if not openid and form.openid.data:
-            openid = OpenID(g.user, form.openid.data)
-
-        if form.username.data and not form.username.data == g.user.username:
-            g.user.username = form.username.data
-            flash('Your username has been changed to {0}'.format(
-                form.username.data),
-                    'info')
-
-        if form.email.data and not form.email.data == g.user.email:
-            g.user.email = form.email.data
-            flash('Your email has been changed to {0}'.format(form.email.data), 'info')
-
-        app.logger.debug(g.user)
-
-        db.session.commit()
-        return redirect(url_for('edit_profile'))
-
-    else:
-        form.username.data = request.args.get('username',
-                getattr(g.user, 'username', form.username.data))
-        form.email.data = request.args.get('email',
-                getattr(g.user, 'email', form.email.data))
-
-        if not g.user.openids.count():
-            form.openid.data = request.args.get('openid', form.openid.data)
-        else:
-            form.openid.data = request.args.get('openid',
-                g.user.openids.first().url)
-
-    return render_template('talkatv/profile/edit.html', form=form)
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     '''
@@ -179,62 +132,6 @@ def item_list(page=1):
             app.config.get('ITEMS_PER_PAGE', 20))
 
     return render_template('talkatv/item-list.html', items_page=page)
-
-
-@app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
-@require_active_login(['POST'])
-def api_comments():
-    if request.method == 'POST':
-        post_data = json.loads(request.data)
-
-        item = Item.query.filter_by(id=post_data['item']).first()
-
-        if not item:
-            return abort(404)
-
-        user = User.query.filter_by(id=session['user_id']).first()
-
-        if not user:
-            return abort(400)
-
-        comment = Comment(item, user, post_data['comment'])
-        db.session.add(comment)
-        db.session.commit()
-
-        app.logger.debug(request.data)
-
-        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
-
-    item = Item.query.filter_by(url=request.args.get('item_url')).first()
-
-    if not item:
-        title = request.args.get('item_title')
-        url = request.args.get('item_url')
-
-        item = Item(url, title)
-        db.session.add(item)
-        db.session.commit()
-
-    return_data = {
-            'item': item.as_dict(),
-            'comments': [i.as_dict() for i in item.comments.all()]}
-
-    user = User.query.filter_by(id=session.get('user_id')).first()
-    if user:
-        return_data.update({'logged_in_as': user.username})
-
-    app.logger.debug(return_data)
-
-    return jsonify(_allow_origin_cb=allow_all_origins,
-            **return_data)
-
-
-@app.route('/api/check-login')
-def check_login():
-    if session.get('user_id'):
-        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
-    else:
-        return jsonify(status=False, _allow_origin_cb=allow_all_origins)
 
 
 @app.route('/logout')

@@ -33,4 +33,7 @@ Bootstrap(app)
 oid = OpenID(app)
 db = SQLAlchemy(app)
 
+# Let's begin the circular imports!
 import talkatv.views
+import talkatv.profile.views
+import talkatv.api.views
