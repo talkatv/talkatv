@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from pywebfinger import finger
+
 from flask import g
 
 from flask.ext.wtf import Form, html5, TextField, PasswordField, HiddenField, \
@@ -134,7 +136,9 @@ class SiteForm(Form):
 class LoginForm(RedirectForm):
     username = TextField('Username', [validators.Optional()])
     password = PasswordField('Password', [validators.Optional()])
-    openid = html5.URLField('OpenID', [validators.Optional()])
+    openid = html5.URLField('OpenID (URL)', [validators.Optional()])
+    webfinger = html5.EmailField('OpenID (webfinger)',
+            [validators.Optional()])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -147,7 +151,21 @@ class LoginForm(RedirectForm):
 
         user = None
 
-        if self.openid.data:
+        openid_identifier = None
+
+        if self.webfinger.data:
+            webfinger = finger(self.webfinger.data)
+
+            if not webfinger.open_id:
+                self.webfinger.errors.append(
+                        'Can\'t find any OpenID identifier for {0}'.format(
+                            self.webfinger.data))
+            else:
+                openid_identifier = webfinger.open_id
+
+        self.openid.data = self.openid.data or openid_identifier
+
+        if openid_identifier or self.openid.data:
             openid = OpenID.query.filter_by(url=self.openid.data).first()
 
             if not openid:
