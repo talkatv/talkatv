@@ -44,6 +44,8 @@
                         <li class="{% if "item_list" == active_page %} active{% endif %}"><a href="{{ url_for('item_list') }}">Pages</a></li>
                     </ul>
                     <ul class="nav pull-right">
+                        <li><a href="http://flattr.com/thing/862587/talkatv-Open-source-comment-service" target="_blank">
+                            <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></li>
                         {% if not g.user %}
                             <li class="{% if 'login' == active_page %} active{% endif %}"><a href="{{ url_for('login') }}">Login</a></li>
                             <li class="{% if 'register' == active_page %} active{% endif %}"><a href="{{ url_for('register') }}">Register</a></li>
