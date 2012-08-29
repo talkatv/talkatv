@@ -53,7 +53,7 @@
         </ul>
 
 
-        <h2>Embed it</h2>
+        <h2 id="embed-it">Embed it</h2>
         <p>Put this snippet in the location you want the comments rendered. The comments and form will all be injected into the DOM instide the div#talkatv-comments element.</p>
         <pre class="pre-scrollable">&lt;div id="talkatv-comments"&gt;&lt;/div&gt;
 &lt;script&gt;
@@ -69,14 +69,21 @@
         <p>If you want to account for non-js-enabled browsers too you may add this <code>&lt;noscript&gt;</code> tag right after the <code>&lt;script&gt;</code> tag.</p>
         <pre class="pre-scrollable">&lt;noscript&gt;
     &lt;p&gt;
-    Currently you will need JavaScript to read and post
-    comments to this page, but
-    &lt;a href="https://github.com/talkatv/talkatv/issues/8"&gt;
-        a fix&lt;/a&gt;
-    for this has been proposed, and if you want to, you
-    could speed up the development by implementing it.
+        You don't seem to have JavaScript enabled!
+        Head over to &lt;a href="http://talka.tv/comment/list/"&gt;
+        the static comment page&lt;/a&gt; to read and post comments.
     &lt;/p&gt;
 &lt;/noscript&gt;</pre>
+        <p>Naturally you will have the edit the <code>&lt;a href="..."&gt;</code> tag to point to your self-hosted instance if you are not using talka.tv</p>
+        <p><span class="label label-important">Warning!</span>
+        This method alone is not a foolproof way of making your
+        comments accessible since it relies on the HTTP <tt>Referer</tt> header.
+        To make it accessible to user agents that do not use the
+        <tt>Referer</tt> header, you might change the URI in the
+        <code>&lt;a href="..."&gt;</code>to</p>
+        <pre>http://talka.tv/comment/list/?url={% raw %}{{ page.url }}{% endraw %}</pre>
+        <p>for example:</p>
+        <pre>http://talka.tv/comment/list/?url=http%3A%2F%2Fwandborg.se%2F2012%2F08%2F22%2Fdesqus-enabled.html</pre>
     </div>
     <div class="span6">
         <h2>Try it out!</h2>
@@ -94,12 +101,12 @@
             + '" type="text/javascript"%3E%3C/script%3E'));
         </script>
         <noscript>
-            <p>Currently you will need JavaScript to read and post
-            comments to this page, but
-            <a href="https://github.com/talkatv/talkatv/issues/8">
-                a fix</a>
-            for this has been proposed, and if you want to, you
-            could speed up the development by implementing it. </p>
+            <p>
+                You don't seem to have JavaScript enabled!
+                Head over to
+                <a href="http://talka.tv/comment/list/?url={{ request.url|urlencode }}">
+                the static comment page</a> to read and post comments.
+            </p>
         </noscript>
     </div>
 </div>

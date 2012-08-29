@@ -14,29 +14,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+import urllib
 
-from flask import Flask
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.openid import OpenID
-from flask.ext.sqlalchemy import SQLAlchemy
+from jinja2 import Markup
 
-app = Flask(__name__)
+from talkatv import app
 
-app.config.from_pyfile('../config.py')
 
-if os.path.exists('config_local.py'):
-    # Flask uses a different path than os.path.exist()
-    app.config.from_pyfile('../config_local.py')
-
-Bootstrap(app)
-oid = OpenID(app)
-db = SQLAlchemy(app)
-
-# Let's begin the circular imports!
-import talkatv.filters
-
-import talkatv.views
-import talkatv.profile.views
-import talkatv.api.views
-import talkatv.comment.views
+@app.template_filter('urlencode')
+def urlencode_filter(s):
+    if type(s) == 'Markup':
+        s = s.unescape()
+    s = s.encode('utf8')
+    s = urllib.quote_plus(s)
+    return Markup(s)

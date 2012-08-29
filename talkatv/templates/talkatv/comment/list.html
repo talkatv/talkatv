@@ -73,30 +73,28 @@
 {% endblock %}
 
 {% block talkatv_body %}
-<div class="container">
-    <div id="page-header">
-        <h1>Comments for <a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></h1>
-    </div>
-    <div class="row">
-        <div class="span8">
-            <div id="talkatv-comments">
-                <div class="talkatv-form">
-                    <form>
-                        <!-- TODO -->
-                    </form>
-                </div>
-                {% if comments %}
-                <ol reversed="reversed" class="comment-list">
-                    {% for comment in comments %}
-                    <li>
-                    <p class="comment-text">{{ comment.text }}</p>
-                    <span class="comment-created" data-source-time="{{ comment.created }}">{{ comment.created }}</span>
-                    <span class="comment-username">{{ comment.user.username }}</span>
-                    </li>
-                    {% endfor %}
-                </ol>
-                {% endif %}
+<div class="page-header">
+    <h1>Comments for <a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></h1>
+</div>
+<div class="row">
+    <div class="span8">
+        <div id="talkatv-comments">
+            <div class="talkatv-form">
+                <form>
+                    <!-- TODO -->
+                </form>
             </div>
+            {% if comments %}
+            <ol reversed="reversed" class="comment-list">
+                {% for comment in comments %}
+                <li>
+                <p class="comment-text">{{ comment.text }}</p>
+                <span class="comment-created" data-source-time="{{ comment.created }}">{{ comment.created }}</span>
+                <span class="comment-username">{{ comment.user.username }}</span>
+                </li>
+                {% endfor %}
+            </ol>
+            {% endif %}
         </div>
     </div>
 </div>
