@@ -2,34 +2,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example - desqus</title>
+        <title>Example - talkatv</title>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.js"></script>
-        <link rel="stylesheet" href="http://desqus.org/static/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="http://desqus.org/static/bootstrap/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" href="http://talka.tv/static/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="http://talka.tv/static/bootstrap/css/bootstrap-responsive.min.css" />
     </head>
     <body>
         <div class="container">
             <div class="page-header">
-                <h1>desqus test</h1>
+                <h1>talkatv test</h1>
             </div>
             <div class="row">
                 <div class="span8">
-                    <p>Lorem ipsum dolor sit amet consecteteuer adipisicing elit.</p>
-                    <p>
-                        Morbi in leo eget nibh pellentesque mollis. Nunc tincidunt, eros at fermentum egestas, velit justo facilisis dui, faucibus porta orci lacus ut ipsum. Etiam dapibus blandit mauris, vitae porta arcu consectetur at. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies mattis purus, non malesuada elit pulvinar sed. Nulla fringilla accumsan hendrerit! Maecenas gravida sem quis turpis viverra a pretium tellus interdum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum lectus velit, volutpat a ultrices sit amet, aliquam in libero. Nam tellus mauris, tincidunt in mollis id, adipiscing eget lacus. Suspendisse id nulla nibh. In hac habitasse platea dictumst. Nunc quis nunc vel odio tincidunt tempus. Morbi malesuada ipsum vel mi consectetur hendrerit. Morbi dapibus tristique erat, et adipiscing lorem aliquet ac.
-                    </p>
-
-                    <p>
-                        Morbi in leo tortor. Donec laoreet, nisi in pretium sagittis, diam est interdum nunc, non porttitor massa neque a urna. Nullam volutpat nunc ut metus rutrum sodales. Cras dolor magna, aliquam vel molestie eget, aliquam eget erat. Vivamus ut enim velit; vitae varius libero. Mauris nec tristique velit. Etiam dapibus consectetur eros, quis congue odio convallis eu!
-                    </p>
-
-                    <p>
-                        Suspendisse potenti. Sed placerat luctus enim at placerat. Pellentesque imperdiet tellus eget erat varius posuere. Suspendisse potenti. Duis rhoncus quam molestie odio iaculis elementum. Sed et felis eget nisl posuere interdum. Curabitur id erat orci, a varius tortor. Donec turpis tellus, dictum sed aliquet ac, vulputate sit amet diam. Nam risus mauris, vehicula ac dictum eget, cursus eu ipsum? Nulla facilisi. Etiam vitae tortor vel velit dictum rhoncus et quis turpis. Aliquam erat volutpat. Nam dictum orci at nunc congue mattis interdum felis adipiscing. Sed tempus augue eget diam ultricies eget pretium odio semper. Vivamus nec libero sed tortor elementum accumsan. Mauris fermentum vehicula lacinia.
-                    </p>
+                    <h2>Even works with &lt;iframe&gt;!</h2>
+<pre>&lt;iframe width="100%"
+        height="500px"
+        src="http://talkatv.joar.pagekite.me/comment/list/"&gt;
+&lt;/iframe&gt;</pre>
+                    <p>or if you want to support browsers not supporting HTTP Referer too:
+<pre>&lt;iframe width="100%"
+        height="500px"
+        src="http://talkatv.joar.pagekite.me/comment/list/?url={{ page.url }}"&gt;
+&lt;/iframe&gt;</pre>
+                    <iframe width="100%" height="500px" src="http://talkatv.joar.pagekite.me/comment/list/"></iframe>
                 </div>
                 <div class="span4">
                     <h2>Comments</h2>
-                    <div id="desqus-comments-container">
+                    <div id="talkatv-comments">
                         <p>Loading comments...</p>
                     </div>
                     <script>

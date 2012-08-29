@@ -241,7 +241,7 @@ var desqus = new Object();
      */
     dq.renderForm = function () {
         dq.form = dq.makeElement('form', {
-            id: 'desqus-comment-form'});
+            id: 'talkatv-comment-form'});
 
         dq.form.appendChild(
             dq.makeElement('div', {

@@ -37,3 +37,4 @@ db = SQLAlchemy(app)
 import talkatv.views
 import talkatv.profile.views
 import talkatv.api.views
+import talkatv.comment.views

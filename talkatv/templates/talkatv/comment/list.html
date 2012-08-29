@@ -1,0 +1,103 @@
+{#
+ # talkatv - Commenting backend for static pages
+ # Copyright (C) 2012  talkatv contributors, see AUTHORS
+ # 
+ # This program is free software: you can redistribute it and/or modify
+ # it under the terms of the GNU Affero General Public License as
+ # published by the Free Software Foundation, either version 3 of the
+ # License, or (at your option) any later version.
+ # 
+ # This program is distributed in the hope that it will be useful,
+ # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ # GNU Affero General Public License for more details.
+ # 
+ # You should have received a copy of the GNU Affero General Public License
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #}
+
+{% extends 'talkatv/base.html' %}
+{% set active_page = 'comment_list' %}
+{% block bootstrap_js_bottom %}
+{{ super() }}
+<script>
+//a polyfill for the ordered-list reversed attribute
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/grouping-content.html#the-ol-element
+// http://www.whatwg.org/specs/web-apps/current-work/multipage/grouping-content.html#dom-li-value
+
+//uses these awesomeness:
+// Array.prototype.forEach
+// Element.prototype.children
+//if you want support for older browsers *cough*IE8-*cough*, then use the other
+// file provided
+//
+// from https://gist.github.com/1671548
+(function () {
+"use strict";
+
+    if ( 'reversed' in document.createElement('ol') ) {
+        return;
+    }
+
+    [].forEach.call( document.getElementsByTagName('ol'), function ( list ) {
+        if ( list.getAttribute( 'reversed' ) !== null ) {
+            reverseList( list );
+        }
+    });
+
+    function reverseList ( list ) {
+        var children = list.children, count = list.getAttribute('start');
+
+        //check to see if a start attribute is provided
+        if ( count !== null ) {
+            count = Number( count );
+
+            if ( isNaN(count) ) {
+                count = null;
+            }
+        }
+
+        //no, this isn't duplication - start will be set to null
+        // in the previous if statement if an invalid start attribute
+        // is provided
+        if ( count === null ) {
+            count = children.length;
+        }
+
+        [].forEach.call( children, function ( child ) {
+            child.value = count--;
+        });
+    }
+}());
+</script>
+{% endblock %}
+
+{% block talkatv_body %}
+<div class="container">
+    <div id="page-header">
+        <h1>Comments for <a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></h1>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <div id="talkatv-comments">
+                <div class="talkatv-form">
+                    <form>
+                        <!-- TODO -->
+                    </form>
+                </div>
+                {% if comments %}
+                <ol reversed="reversed" class="comment-list">
+                    {% for comment in comments %}
+                    <li>
+                    <p class="comment-text">{{ comment.text }}</p>
+                    <span class="comment-created" data-source-time="{{ comment.created }}">{{ comment.created }}</span>
+                    <span class="comment-username">{{ comment.user.username }}</span>
+                    </li>
+                    {% endfor %}
+                </ol>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
