@@ -48,6 +48,9 @@ def comment_list(item_id=None):
             else:
                 return abort(404)
 
+    if item is None:
+        return abort(404)
+
     comments = None
 
     if item.comments.count():
