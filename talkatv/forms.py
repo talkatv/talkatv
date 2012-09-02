@@ -136,7 +136,8 @@ class SiteForm(Form):
 class LoginForm(RedirectForm):
     username = TextField('Username', [validators.Optional()])
     password = PasswordField('Password', [validators.Optional()])
-    openid = TextField('OpenID', [validators.Optional()])
+    openid = TextField('OpenID', [validators.Optional()],
+            description=u'An OpenID URL or a webfinger identity')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -171,6 +172,7 @@ class LoginForm(RedirectForm):
             if not openid:
                 self.openid.errors.append('Unknown OpenID URL {0}'.format(
                     self.openid.data))
+                return False
             else:
                 user = openid.user
 

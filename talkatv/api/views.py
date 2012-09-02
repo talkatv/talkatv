@@ -20,6 +20,7 @@ from talkatv import app, db
 from talkatv.decorators import require_active_login
 from talkatv.models import Item, Comment, User
 from talkatv.tools.cors import jsonify, allow_all_origins
+from talkatv.notification import send_comment_notification
 
 
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
@@ -41,6 +42,24 @@ def api_comments():
         comment = Comment(item, user, post_data['comment'])
         db.session.add(comment)
         db.session.commit()
+
+        emails = []
+
+        for comment in item.comments.all():
+            emails.append(comment.user.email)
+
+        if item.site:
+            emails.append(item.site.owner.email)
+
+        emails = set(emails)
+
+        for email in emails:
+            # Send comment notification to users that posted on the page
+            send_comment_notification(
+                    email,
+                    g.user,
+                    comment,
+                    item)
 
         app.logger.debug(request.data)
 

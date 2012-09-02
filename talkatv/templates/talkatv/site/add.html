@@ -19,21 +19,17 @@
 {% extends "talkatv/base.html" %}
 {% set active_page = 'login' %}
 {% import "bootstrap_wtf.html" as wtf %}
-{% block title %}Log in - talkatv{% endblock %}
+{% block title %}Add site - talkatv{% endblock %}
 {% block talkatv_body %}
 <div class="page-header">
-    <h1>Login</h1>
+    <h1>Add site</h1>
 </div>
 <div class="row">
-    <div class="span4">
-    </div>
     <div class="span8">
-        <div class="well">
             {{ wtf.quick_form(
                     form,
-                    action=url_for('login'),
+                    action=url_for('add_site'),
                     buttons=[('submit', 'primary', 'Login')]) }}
-        </div>
     </div>
 </div>
 {% endblock %}

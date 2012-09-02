@@ -68,21 +68,18 @@ class Item(db.Model):
     url = db.Column(db.String(), unique=True)
     created = db.Column(db.DateTime)
 
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    owner = db.relationship('User',
+    site_id = db.Column(db.Integer, db.ForeignKey('site.id'))
+    site = db.relationship('Site',
             backref=db.backref('items', lazy='dynamic'))
 
-    def __init__(self, url, title, owner=None, created=None):
-        if owner:
-            self.owner = owner
+    def __init__(self, url, title, site=None):
+        if site:
+            self.site = site
 
         self.title = title
         self.url = url
 
-        if not created:
-            self.created = datetime.utcnow()
-        else:
-            self.created = created
+        self.created = datetime.utcnow()
 
     def as_dict(self):
         me = {
@@ -90,10 +87,26 @@ class Item(db.Model):
                 'title': self.title,
                 'url': self.url,
                 'created': self.created.isoformat()}
-        if self.owner:
-            me.update({'owner': self.owner.id})
+        if self.site.owner:
+            me.update({'owner': self.site.owner.id})
 
         return me
+
+
+class Site(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime)
+    domain = db.Column(db.String)
+
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.relationship('User',
+            backref=db.backref('sites', lazy='dynamic'))
+
+    def __init__(self, owner, domain):
+        self.owner = owner
+        self.domain = domain
+
+        self.created = datetime.utcnow()
 
 
 class Comment(db.Model):
@@ -109,15 +122,12 @@ class Comment(db.Model):
     user = db.relationship('User',
             backref=db.backref('comments', lazy='dynamic'))
 
-    def __init__(self, item, user, text, created=None):
+    def __init__(self, item, user, text):
         self.item = item
         self.user = user
         self.text = text
 
-        if not created:
-            self.created = datetime.utcnow()
-        else:
-            self.created = created
+        self.created = datetime.utcnow()
 
     def as_dict(self):
         me = {
