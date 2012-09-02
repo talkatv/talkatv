@@ -16,20 +16,17 @@
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  #}
 
-{% extends "talkatv/base.html" %}
-{% set active_page = 'add_site' %}
-{% import "bootstrap_wtf.html" as wtf %}
-{% block title %}Add site - talkatv{% endblock %}
+{% extends 'talkatv/base.html' %}
+{% set active_page = 'list_sites' %}
 {% block talkatv_body %}
 <div class="page-header">
-    <h1>Add site</h1>
+    <h1>Your sites</h1>
 </div>
 <div class="row">
     <div class="span8">
-            {{ wtf.quick_form(
-                    form,
-                    action=url_for('add_site'),
-                    buttons=[('submit', 'primary', 'Login')]) }}
+        {% for site in sites %}
+        <li>{{ site }}</li>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

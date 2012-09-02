@@ -21,6 +21,7 @@
 {% set active_page = active_page|default('index') %}
 
 {% block title %}talkatv{% endblock %}
+
 {% block style %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/talkatv-default.css') }}" />
@@ -28,6 +29,7 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='img/talkatv-16.png') }}" />
 <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='img/talkatv-128.png') }}" />
 {% endblock %}
+
 {% block body_content %}
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -42,6 +44,17 @@
                     <ul class="nav">
                         <li class="{% if "index" == active_page %} active{% endif %}"><a href="{{ url_for('index') }}">Home</a></li>
                         <li class="{% if "item_list" == active_page %} active{% endif %}"><a href="{{ url_for('item_list') }}">Pages</a></li>
+                        {% if g.user %}
+                        <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Sites
+                            <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                <a href="{{ url_for('add_site') }}">Claim site</a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% endif %}
                     </ul>
                     <ul class="nav pull-right">
                         <li><a href="http://flattr.com/thing/862587/talkatv-Open-source-comment-service" target="_blank">
@@ -50,7 +63,8 @@
                             <li class="{% if 'login' == active_page %} active{% endif %}"><a href="{{ url_for('login') }}">Login</a></li>
                             <li class="{% if 'register' == active_page %} active{% endif %}"><a href="{{ url_for('register') }}">Register</a></li>
                         {% else %}
-                            <li class="{% if active_page in ['edit_profile'] %} active{% endif %}"><a href="#"
+                        <li class="{% if active_page in ['edit_profile', 'change_password'] %}
+                        active{% endif %}"><a href="#"
                                 class="dropdown-toggle"
                                 data-toggle="dropdown">
                                 {{ g.user.username }}

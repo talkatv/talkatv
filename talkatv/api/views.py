@@ -21,6 +21,7 @@ from talkatv.decorators import require_active_login
 from talkatv.models import Item, Comment, User
 from talkatv.tools.cors import jsonify, allow_all_origins
 from talkatv.notification import send_comment_notification
+from talkatv.item import get_or_add_item
 
 
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
@@ -65,15 +66,12 @@ def api_comments():
 
         return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
 
-    item = Item.query.filter_by(url=request.args.get('item_url')).first()
+    if not request.args.get('item_url'):
+        return abort(400)
 
-    if not item:
-        title = request.args.get('item_title')
-        url = request.args.get('item_url')
-
-        item = Item(url, title)
-        db.session.add(item)
-        db.session.commit()
+    item = get_or_add_item(
+            request.args.get('item_url'),
+            request.args.get('item_title'))
 
     return_data = {
             'item': item.as_dict(),
@@ -85,8 +83,6 @@ def api_comments():
 
     if g.user:
         return_data.update({'logged_in_as': g.user.username})
-
-    app.logger.debug(return_data)
 
     return jsonify(_allow_origin_cb=allow_all_origins,
             **return_data)

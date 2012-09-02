@@ -81,13 +81,18 @@ class Item(db.Model):
 
         self.created = datetime.utcnow()
 
+    def __repr__(self):
+        return '<Item {0} ({1})>'.format(
+                self.url,
+                self.site.owner.username if self.site else None)
+
     def as_dict(self):
         me = {
                 'id': self.id,
                 'title': self.title,
                 'url': self.url,
                 'created': self.created.isoformat()}
-        if self.site.owner:
+        if self.site:
             me.update({'owner': self.site.owner.id})
 
         return me
@@ -107,6 +112,11 @@ class Site(db.Model):
         self.domain = domain
 
         self.created = datetime.utcnow()
+
+    def __repr__(self):
+        return '<Site {0} ({1})>'.format(
+                self.domain,
+                self.owner.username)
 
 
 class Comment(db.Model):
@@ -128,6 +138,11 @@ class Comment(db.Model):
         self.text = text
 
         self.created = datetime.utcnow()
+
+    def __repr__(self):
+        return '<Comment {0} ({1})>'.format(
+                self.text[:25] + ('...' if len(self.text) > 25 else ''),
+                self.user.username)
 
     def as_dict(self):
         me = {

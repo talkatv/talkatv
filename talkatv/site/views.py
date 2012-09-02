@@ -44,3 +44,10 @@ def add_site():
         db.session.commit()
 
     return render_template('talkatv/site/add.html', form=form)
+
+@app.route('/site/list')
+@require_active_login()
+def list_sites():
+    sites = Site.query.filter(Site.owner==g.user).all()
+
+    return render_template('talkatv/site/list.html', sites=sites)
