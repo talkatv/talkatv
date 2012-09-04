@@ -52,3 +52,20 @@ def item_add_site_id(db_conn):
     site_id_col.create(item_table)
 
     db_conn.commit()
+
+
+@RegisterMigration(3, MIGRATIONS)
+def add_site_created_remove_item_owner(db_conn):
+    metadata = MetaData(bind=db_conn.bind)
+
+    site_table = Table('site', metadata, autoload=True)
+
+    created_col = Column('created', DateTime)
+
+    created_col.create(site_table)
+
+    item_table = Table('item', metadata, autoload=True)
+
+    item_table.columns['owner_id'].drop()
+
+    db_conn.commit()

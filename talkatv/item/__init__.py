@@ -48,7 +48,7 @@ def get_or_add_item(url, title=None):
 
         # Try to find a registered site for this item. Step through the URL
         for i in range(start, stop):
-            site = Site.query.filter(Site.domain == netloc_split[i:].join('.'))\
+            site = Site.query.filter(Site.domain == '.'.join(netloc_split[i:]))\
                     .first()
 
             if site is not None:
