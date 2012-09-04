@@ -18,6 +18,8 @@ import bcrypt
 
 from datetime import datetime
 
+from migrate import changeset
+
 from talkatv import db
 
 
@@ -153,3 +155,10 @@ class Comment(db.Model):
                 'text': self.text,
                 'created': self.created.isoformat()}
         return me
+
+MODELS = [
+        User,
+        Comment,
+        Item,
+        OpenID,
+        Site]

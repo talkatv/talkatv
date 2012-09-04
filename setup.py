@@ -51,6 +51,7 @@ if __name__ == '__main__':
                 'Flask-OpenID',
                 'py-bcrypt',
                 'python-webfinger',
+                'mig',
                 'flup',
                 'sphinx'],
             author_email='joar@talka.tv',
