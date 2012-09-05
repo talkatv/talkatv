@@ -46,13 +46,17 @@ def api_comments():
 
         emails = []
 
-        for comment in item.comments.all():
-            emails.append(comment.user.email)
+        for c in item.comments.all():
+            emails.append(c.user.email)
 
         if item.site:
             emails.append(item.site.owner.email)
 
         emails = set(emails)
+
+        app.logger.debug('Sending notification about {0} to {1}'.format(
+            comment.text,
+            ', '.join(emails)))
 
         for email in emails:
             # Send comment notification to users that posted on the page

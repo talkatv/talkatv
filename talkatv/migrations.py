@@ -69,3 +69,15 @@ def add_site_created_remove_item_owner(db_conn):
     item_table.columns['owner_id'].drop()
 
     db_conn.commit()
+
+
+@RegisterMigration(4, MIGRATIONS)
+def comment_add_reply_to_id(db):
+    metadata = MetaData(bind=db.bind)
+
+    comment_table = Table('comment', metadata, autoload=True)
+    reply_to_column = Column('reply_to_id', Integer, ForeignKey('comment.id'))
+
+    reply_to_column.create(comment_table)
+
+    db.commit()

@@ -19,6 +19,7 @@ import bcrypt
 from datetime import datetime
 
 from migrate import changeset
+assert changeset  # silence code analysers
 
 from talkatv import db
 
@@ -133,6 +134,10 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User',
             backref=db.backref('comments', lazy='dynamic'))
+
+    reply_to_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    reply_to = db.relationship('Comment', remote_side=[id],
+            backref=db.backref('replies', lazy='dynamic'))
 
     def __init__(self, item, user, text):
         self.item = item

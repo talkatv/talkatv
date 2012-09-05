@@ -84,6 +84,11 @@ def send_comment_notification(email, user, comment, item):
                 url=item.url,
                 text=comment.text))
 
-    if not mail_result:
-        app.logger.error('Couldn\'t send mail: {0}'.format(
+    if mail_result is None:
+        app.logger.error('{0} couldn\'t send mail: {1}'.format(
+                email,
                 mail_result))
+    else:
+        app.logger.error('{0} comment nofication send result: {1}'.format(
+            email,
+            mail_result))

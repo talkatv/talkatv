@@ -158,10 +158,6 @@ var desqus = new Object();
                 em.setAttribute('reversed', o.reversed)
         }
 
-        dq.browserSupportsReversedList = function () {
-             return 'reversed' in document.createElement('ol');
-        }
-
         if (children && ! children.length)
             em.appendChild(children);
         else
