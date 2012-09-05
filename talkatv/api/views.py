@@ -71,7 +71,7 @@ def api_comments():
         return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
 
     if not request.args.get('item_url'):
-        return abort(400)
+        return jsonify(error='Item not found', _allow_origin_cb=allow_all_origins)
 
     item = get_or_add_item(
             request.args.get('item_url'),
