@@ -92,7 +92,7 @@ def api_comments():
             **return_data)
 
 
-@app.route('/api/check-login')
+@app.route('/api/check-login', methods=['GET', 'OPTIONS'])
 def check_login():
     if g.user:
         return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
