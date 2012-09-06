@@ -52,6 +52,8 @@ var desqus = new Object();
      */
     dq.home = window.talkatv_home || window.desqus_home;
     dq.ordered = window.talkatv_ordered === undefined ? true : talkatv_ordered;
+    dq.powered_by = window.talkatv_powered_by === undefined ? 
+        true : talkatv_powered_by;
 
     /**
      * render - Injects the comment form/login-register links and comments into
@@ -80,6 +82,16 @@ var desqus = new Object();
             reversed: true});
         dq.container.appendChild(dq.commentContainer);
 
+        if (dq.powered_by) {
+            // Create powered by container element
+            dq.poweredByContainer = dq.makeElement('div', {
+                class: 'talkatv-powered-by'});
+            dq.container.appendChild(dq.poweredByContainer);
+
+            // Render powered by notice
+            dq.renderPoweredBy();
+        }
+
         // Decide to return form or not
         dq.request('/check-login',
             dq.requestCallbackHelper(function (response, error) {
@@ -98,6 +110,16 @@ var desqus = new Object();
             }));
 
         dq.getComments();
+    };
+
+    /**
+     * renderPoweredBy - Render powered by notice
+     */
+    dq.renderPoweredBy = function () {
+        dq.poweredBy = dq.makeElement('p', {
+            html: 'Comments powered by <a href="' + dq.home + '">'
+            + dq.home + '</a>.'});
+        dq.poweredByContainer.appendChild(dq.poweredBy);
     };
 
     /**
