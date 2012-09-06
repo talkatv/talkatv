@@ -15,12 +15,17 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 from flup.server.fcgi import WSGIServer
 from talkatv import app
 
-app.debug = True
+app.debug = False
 
 if __name__ == '__main__':
+    app.logger.addHandler(logging.StreamHandler())
+    app.logger.setLevel(logging.DEBUG)
+
     app.logger.info('Starting WSGI server on {0}'.format(
         app.config['WSGI_BIND_ADDR']))
     WSGIServer(app, bindAddress=app.config['WSGI_BIND_ADDR']).run()
