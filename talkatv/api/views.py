@@ -27,6 +27,10 @@ from talkatv.item import get_or_add_item
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
 @require_active_login(['POST'])
 def api_comments():
+    if request.method == 'OPTIONS':
+        # We're dealing with a pre-flight request
+        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
+
     if request.method == 'POST':
         post_data = json.loads(request.data)
 
@@ -71,7 +75,7 @@ def api_comments():
         return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
 
     if not request.args.get('item_url'):
-        return jsonify(error='Item not found', _allow_origin_cb=allow_all_origins)
+        return abort(404)
 
     item = get_or_add_item(
             request.args.get('item_url'),
