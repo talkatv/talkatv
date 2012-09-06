@@ -20,10 +20,15 @@ import logging
 from flup.server.fcgi import WSGIServer
 from talkatv import app
 
+# Explicitly set app.debug to false, otherwise flask will swallow any exceptions
+# that are raised from the app.
 app.debug = False
 
 if __name__ == '__main__':
-    app.logger.addHandler(logging.StreamHandler())
+    # Set up logging, even though app.debug is off we'll probably want the logs.
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter(app.debug_log_format))
+    app.logger.addHandler(handler)
     app.logger.setLevel(logging.DEBUG)
 
     app.logger.info('Starting WSGI server on {0}'.format(
