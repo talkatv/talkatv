@@ -29,6 +29,18 @@ var desqus = new Object();
          return new XMLHttpRequest();
     };
 
+    dq.last = new Array();
+
+    /**
+     * Convenience function
+     */
+    dq.last.get = function (key) {
+        try {
+            return this[key];
+        } catch (e) {}
+        return null;
+    };
+
 
     if ( ! window.desqus_home && ! window.talkatv_home ) {
         console.error('talkatv_home is not set');
@@ -39,7 +51,7 @@ var desqus = new Object();
      * on the page before this script is included.
      */
     dq.home = window.talkatv_home || window.desqus_home;
-    dq.ordered = window.talkatv_ordered || false;
+    dq.ordered = window.talkatv_ordered === undefined ? true : talkatv_ordered;
 
     /**
      * render - Injects the comment form/login-register links and comments into
@@ -50,26 +62,41 @@ var desqus = new Object();
 
         dq.container.innerHTML = '';
 
+        // Create the flash message container element
+        dq.messageContainer = dq.makeElement(
+                'div', {
+                    class: 'talkatv-messages'});
+        dq.container.appendChild(dq.messageContainer);
+
+        // Create the form container element
         dq.formContainer = dq.makeElement('div', {
             class: 'talkatv-form'});
         dq.container.appendChild(dq.formContainer);
 
+        // Create the comment container element
         dq.commentContainer = dq.makeElement(
                 dq.ordered ? 'ol' : 'ul', {
             class: 'comment-list',
             reversed: true});
-
         dq.container.appendChild(dq.commentContainer);
 
-        dq.request('/check-login', function (res, status) {
-            data = res;
-            dq.log(['check-login', data]);
-            if (! 'OK' == data.status) {
-                dq.renderRegister();
-            } else {
-                dq.renderForm();
-            }
-        });
+        // Decide to return form or not
+        dq.request('/check-login',
+            dq.requestCallbackHelper(function (response, error) {
+                if (error)
+                    return;
+
+                dq.last['/check-login'] = response;
+
+                console.log(['check-login', response]);
+
+                if (! 'OK' == response.status) {
+                    dq.renderRegister();
+                } else {
+                    dq.renderForm();
+                }
+            }));
+
         dq.getComments();
     };
 
@@ -100,13 +127,52 @@ var desqus = new Object();
      * renderComments to inject the comments into the DOM
      */
     dq.getComments = function () {
-        dq.request('/comments', function (res, status) {
-            dq.jsonData = res;
-            dq.log(res);
-            dq.renderComments(dq.jsonData.comments);
-        }, {
+        dq.request('/comments', dq.requestCallbackHelper(function (response, error) {
+            if (error)
+                return;
+
+            dq.last['/comments'] = response;
+
+            dq.renderComments(response.comments);
+        }), {
             item_url: dq.getCurrentURL(),
             item_title: document.title});
+    };
+
+    /**
+     */
+    dq.requestCallbackHelper = function (callback) {
+        return function (response, code) {
+            var json, error = [];
+
+            console.log('request callback helper - response: ', response);
+            console.log('request callback helper - http_status: ', code);
+
+            try {
+                json = JSON.parse(response);
+            } catch (e) {
+                console.log(this, e);
+            }
+
+            if (! 200 == code) {
+                dq.flash('Communication error with the talkatv server: ' + code,
+                        'error');
+                error.push('Communication error.');
+            }
+
+            if (! error.length)
+                error = false;
+
+            callback(json || response, error);
+        };
+    };
+
+    dq.flash = function (message, type='message') {
+        dq.messageContainer.appendChild(dq.makeElement('div', {
+            class: 'talkatv-alert alert alert-' + type,
+            text: message}));
+
+        console.log(message, type);
     };
 
     /**
@@ -175,7 +241,7 @@ var desqus = new Object();
      */
     dq.renderComments = function (comments) {
         dq.commentContainer.innerHTML = '';
-        dq.log(comments);
+        console.log(comments);
         for (comment in comments) {
             var comment = comments[comment];
             var container = dq.makeElement('li');
@@ -209,26 +275,33 @@ var desqus = new Object();
         dq.submitButton.disabled = true;
         dq.commentField.disabled = true;
 
-        callback = function (res, status) {
-            dq.log(res);
-            dq.log(status);
-            dq.submitButton.disabled = false;
-            dq.commentField.disabled = false;
-            dq.commentField.value = '';
-            dq.getComments();
-        };
-
         body = JSON.stringify({
             comment: dq.commentField.value,
-            item: dq.jsonData.item.id});
+            item: dq.getActiveItemId()});
 
         headers = {'Content-Type': 'application/json'};
 
         dq.request('/comments',
-                callback,
+                dq.requestCallbackHelper(dq.onAfterCommentSubmit),
                 body,
                 'POST',
                 headers);
+    };
+    
+    dq.onAfterCommentSubmit = function (res, status) {
+        console.log(res);
+        console.log(status);
+        dq.submitButton.disabled = false;
+        dq.commentField.disabled = false;
+        dq.commentField.value = '';
+        dq.getComments();
+    };
+
+    /**
+     */
+    dq.getActiveItemId = function () {
+        if (dq.last.get('/comments'))
+            return dq.last.get('/comments').item.id;
     };
 
     /**
@@ -287,7 +360,7 @@ var desqus = new Object();
             for (header in headers) {
             }
         }
-        dq.log(method + ' ' + uri);
+        console.log(method + ' ' + uri);
 
         uri = dq.home + '/api' + uri;
         if (queryString.length) {
@@ -300,19 +373,11 @@ var desqus = new Object();
         client.onreadystatechange = function () {
             switch (this.readyState) {
                 case this.DONE:
-                    data = null;
-
-                    try {
-                        data = JSON.parse(this.response)
-                    } catch (e) {
-                        dq.log(e);
-                    }
-
-                    callback(data || this.response, this.status);
-                    delete client;
+                    console.log('readyStatue: ', 'DONE');
+                    callback(this.response, this.status);
                     break;
                 default:
-                    dq.log(['readyState: ', this.readyState]);
+                    console.log(['readyState: ', this.readyState]);
             }
         };
 
@@ -324,22 +389,18 @@ var desqus = new Object();
     };
 
     /**
-     * log - Shortcut/wrapper for console.log
-     *
-     * Implemented according to <http://stackoverflow.com/a/2654006/202522>
+     * console.{log,error} polyfill
      */
-    if (window.console && typeof console.log === "function"){
-        // use apply to preserve context and invocations with multiple arguments
-        dq.log = function () { console.log.apply(console, arguments); };
-    } else {
-        dq.log = function() { return; }
+    if (!(window.console && typeof console.log === "function")){
+        console.log = function() { return; }
+        console.error = function() { return; }
     }
 
     /**
      * reversedListsPolyfill - Support refveresed lists in non-supported 
      * browsers
      *
-     * License of inner login of this function is unknown. The origin
+     * License of this function is unknown. The origin
      * seems to be <https://gist.github.com/1671548>
      */
     dq.reversedListsPolyfill = function () {
