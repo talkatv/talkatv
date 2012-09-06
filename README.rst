@@ -22,9 +22,16 @@ To install talkatv, run::
     # Install the required dependencies into the virtualenv
     python setup.py develop
 
+Then initiate the database::
+
+    ./dbupdate.py
+
 To run talkatv::
 
     python run.py
+
+.. warning::
+    You have to run both dbupdate and run.py from within your virtualenv.
 
 
 ----------
