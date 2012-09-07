@@ -21,6 +21,8 @@ from flask.ext.bootstrap import Bootstrap
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
+from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
 
 app = Flask(__name__)
 
@@ -36,6 +38,9 @@ db = SQLAlchemy(app)
 
 if 'SENTRY_DSN' in app.config or 'SENTRY_DSN' in os.environ:
     sentry = Sentry(app)
+    handler = SentryHandler(sentry.client)
+    setup_logging(handler)
+
 
 # Let's begin the circular imports!
 import talkatv.filters
