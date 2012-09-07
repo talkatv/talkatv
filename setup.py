@@ -53,6 +53,8 @@ if __name__ == '__main__':
                 'python-webfinger',
                 'mig',
                 'flup',
+                'raven',
+                'blinker',
                 'sphinx'],
             author_email='joar@talka.tv',
             license='AGPLv3',

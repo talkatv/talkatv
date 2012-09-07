@@ -20,6 +20,7 @@ from flask import Flask
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.openid import OpenID
 from flask.ext.sqlalchemy import SQLAlchemy
+from raven.contrib.flask import Sentry
 
 app = Flask(__name__)
 
@@ -32,6 +33,9 @@ if os.path.exists('config_local.py'):
 Bootstrap(app)
 oid = OpenID(app)
 db = SQLAlchemy(app)
+
+if 'SENTRY_DSN' in app.config or 'SENTRY_DSN' in os.environ:
+    sentry = Sentry(app)
 
 # Let's begin the circular imports!
 import talkatv.filters
