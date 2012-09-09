@@ -32,8 +32,9 @@ def jsonify(_allow_origin_cb=None, **kw):
         response.response.append(');')
 
     if _allow_origin_cb and 'Origin' in request.headers:
-        response.headers['Access-Control-Allow-Origin'] = \
-                _allow_origin_cb(request.headers['Origin'])
+        origin = _allow_origin_cb(request.headers['Origin'])
+        if origin:
+            response.headers['Access-Control-Allow-Origin'] = origin
     else:
         response.headers['Access-Control-Allow-Origin'] = \
                 app.config['CORS_ALLOW_ORIGIN']
@@ -58,5 +59,5 @@ def allow_all_origins(origin):
     Example:
         desqus.tools.cors.jsonify(_allow_origin_cb=allow_all_origins, **data)
     '''
-    app.logger.debug(origin)
+    app.logger.debug('Allowing origin {0}'.format(origin))
     return origin

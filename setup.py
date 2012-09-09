@@ -55,6 +55,7 @@ if __name__ == '__main__':
                 'flup',
                 'raven',
                 'blinker',
+                'Markdown',
                 'sphinx'],
             author_email='joar@talka.tv',
             license='AGPLv3',

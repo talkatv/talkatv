@@ -14,16 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+
 from talkatv import app, oid, db
 
 from flask import render_template, flash, session, url_for, redirect, \
-        request, json, abort, g
+        request, g
 
-from talkatv.forms import LoginForm, RegistrationForm, ProfileForm
-from talkatv.models import User, Item, Comment, OpenID
-from talkatv.tools.cors import jsonify, allow_all_origins
+from talkatv.forms import LoginForm, RegistrationForm
+from talkatv.models import User, Item, OpenID
 from talkatv.tools.auth import set_active_user
-from talkatv.decorators import require_active_login
 
 
 @app.before_request
@@ -41,6 +41,26 @@ def lookup_current_user():
 @app.route('/')
 def index():
     return render_template('talkatv/index.html')
+
+
+if 'SENTRY_PUBLIC_DSN' in app.config:
+    from flask import Response
+
+    @app.route('/talkatv.js')
+    @app.route('/static/js/talkatv.js')
+    def include_raven_js():
+        # TODO this is an ugly solution.
+        #zepto = open('extlib/zepto/zepto.js').read()
+        jquery = open('extlib/jquery/jquery-1.8.1.js').read()
+        raven = open('extlib/raven/raven-0.5.2.js').read()
+        raven_config = 'Raven.config(\'{0}\');'.format(
+                app.config['SENTRY_PUBLIC_DSN'])
+        talkatv = open('extlib/talkatv-client/talkatv.js').read()
+
+        response = Response('\n/* -- DIVIDER -- */\n'.join([
+            jquery, raven, raven_config, talkatv]))
+        response.mimetype = 'application/javascript'
+        return response
 
 
 @app.route('/login', methods=['GET', 'POST'])

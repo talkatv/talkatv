@@ -14,23 +14,9 @@
                 <h1>talkatv test</h1>
             </div>
             <div class="row">
-                <div class="span8">
-                    <h2>Even works with &lt;iframe&gt;!</h2>
-<pre>&lt;iframe width="100%"
-        height="500px"
-        src="http://talkatv.joar.pagekite.me/comment/list/"&gt;
-&lt;/iframe&gt;</pre>
-                    <p>or if you want to support browsers not supporting HTTP Referer too:
-<pre>&lt;iframe width="100%"
-        height="500px"
-        src="http://talkatv.joar.pagekite.me/comment/list/?url={{ page.url }}"&gt;
-&lt;/iframe&gt;</pre>
-                    <iframe width="100%" height="500px" src="http://talkatv.joar.pagekite.me/comment/list/"></iframe>
-                </div>
-                <div class="span4">
+                <div class="span6">
                     <h2>Comments</h2>
                     <div id="talkatv-comments">
-                        <p>Loading comments...</p>
                     </div>
                     <script>
                         var talkatv_home = 'http://talkatv.joar.pagekite.me';
@@ -50,6 +36,19 @@
                         for this has been proposed, and if you want to, you
                         could speed up the development by implementing it.</p>
                     </noscript>
+                </div>
+                <div class="span6">
+                    <h2>Even works with &lt;iframe&gt;!</h2>
+<pre>&lt;iframe width="100%"
+        height="500px"
+        src="http://talkatv.joar.pagekite.me/comment/list/"&gt;
+&lt;/iframe&gt;</pre>
+                    <p>or if you want to support browsers not supporting HTTP Referer too:
+<pre>&lt;iframe width="100%"
+        height="500px"
+        src="http://talkatv.joar.pagekite.me/comment/list/?url={{ page.url }}"&gt;
+&lt;/iframe&gt;</pre>
+                    <iframe width="100%" height="500px" src="http://talkatv.joar.pagekite.me/comment/list/"></iframe>
                 </div>
             </div>
         </div>

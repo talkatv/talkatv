@@ -16,12 +16,12 @@
 
 from flask import request, json, abort, g
 
-from talkatv import app, db
+from talkatv import app
 from talkatv.decorators import require_active_login
-from talkatv.models import Item, Comment, User
+from talkatv.models import Item
 from talkatv.tools.cors import jsonify, allow_all_origins
-from talkatv.notification import send_comment_notification
 from talkatv.item import get_or_add_item
+from talkatv.api import get_context, post_comment
 
 
 @app.route('/api/comments', methods=['GET', 'POST', 'OPTIONS'])
@@ -39,40 +39,12 @@ def api_comments():
         if not item:
             return abort(404)
 
-        user = User.query.filter_by(id=g.user.id).first()
+        comment = post_comment(item, post_data, g.user)
 
-        if not user:
-            return abort(400)
-
-        comment = Comment(item, user, post_data['comment'])
-        db.session.add(comment)
-        db.session.commit()
-
-        emails = []
-
-        for c in item.comments.all():
-            emails.append(c.user.email)
-
-        if item.site:
-            emails.append(item.site.owner.email)
-
-        emails = set(emails)
-
-        app.logger.debug('Sending notification about {0} to {1}'.format(
-            comment.text,
-            ', '.join(emails)))
-
-        for email in emails:
-            # Send comment notification to users that posted on the page
-            send_comment_notification(
-                    email,
-                    g.user,
-                    comment,
-                    item)
-
-        app.logger.debug(request.data)
-
-        return jsonify(status='OK', _allow_origin_cb=allow_all_origins)
+        return jsonify(
+                comment=comment.as_dict(),
+                status='OK',
+                _allow_origin_cb=allow_all_origins)
 
     if not request.args.get('item_url'):
         return abort(404)
@@ -81,16 +53,7 @@ def api_comments():
             request.args.get('item_url'),
             request.args.get('item_title'))
 
-    return_data = {
-            'item': item.as_dict(),
-            'comments': [
-                i.as_dict() for i in \
-                        item.comments.order_by(
-                            Comment.created.desc()).all()],
-            'comment_count': item.comments.count()}
-
-    if g.user:
-        return_data.update({'logged_in_as': g.user.username})
+    return_data = get_context(item)
 
     return jsonify(_allow_origin_cb=allow_all_origins,
             **return_data)

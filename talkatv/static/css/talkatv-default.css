@@ -6,12 +6,17 @@
     float: right;
 }
 
-#talkatv-comments li {
+#talkatv-comments li div.comment-inner {
     margin-bottom: 1em;
     padding-bottom: 1em;
     border-bottom: thin solid #ccc;
+    position: relative;
 }
 
 #talkatv-comments li p {
     margin-bottom: .5em;
+}
+
+#talkatv-comments a.comment-reply-link {
+    margin: 0 10px;
 }

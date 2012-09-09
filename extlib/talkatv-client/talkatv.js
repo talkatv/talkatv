@@ -51,18 +51,56 @@ var desqus = new Object();
      * on the page before this script is included.
      */
     dq.home = window.talkatv_home || window.desqus_home;
+    /**
+     * Use ordered list for comment rendering, defaults to true
+     */
     dq.ordered = window.talkatv_ordered === undefined ? true : talkatv_ordered;
+    /**
+     * Show powered by notice, defaults to true
+     */
     dq.powered_by = window.talkatv_powered_by === undefined ? 
         true : talkatv_powered_by;
+
+    /**
+     * init
+     */
+    dq.init = function () {
+        if (! ('withCredentials' in dq.getClient())) {
+            /* Browser does not support CORS */
+            dq.renderCorsIncompatibilityNotice();
+        } else {
+            dq.render();
+        }
+    };
+
+    /**
+     * renderCorsIncompatibilityNotice
+     */
+    dq.renderCorsIncompatibilityNotice = function () {
+        container = dq.getContainer();
+        dq.flash('Your browser does not support CORS', 'error');
+    };
+
+    /**
+     * getContainer - Return the talkatv container element
+     */
+    dq.getContainer = function () {
+        return document.getElementById('talkatv-comments')
+            || document.getElementById('desqus-comments-container');
+    };
 
     /**
      * render - Injects the comment form/login-register links and comments into
      * the DOM
      */
     dq.render = function () {
-        dq.container = document.getElementById('talkatv-comments') || document.getElementById('desqus-comments-container');
-
+        dq.container = dq.getContainer();
         dq.container.innerHTML = '';
+
+        // Create the status container element
+        dq.container.appendChild(
+                dq.statusContainer = dq.makeElement('div', {
+                    class: 'talkatv-status'}));
 
         // Create the flash message container element
         dq.messageContainer = dq.makeElement(
@@ -77,9 +115,9 @@ var desqus = new Object();
 
         // Create the comment container element
         dq.commentContainer = dq.makeElement(
-                dq.ordered ? 'ol' : 'ul', {
-            class: 'comment-list',
-            reversed: true});
+            'div', {
+            class: 'talkatv-comment-list-wrapper',
+            });
         dq.container.appendChild(dq.commentContainer);
 
         if (dq.powered_by) {
@@ -155,6 +193,7 @@ var desqus = new Object();
 
             dq.last['/comments'] = response;
 
+            dq.commentContainer.innerHTML = '';
             dq.renderComments(response.comments);
         }), {
             item_url: dq.getCurrentURL(),
@@ -185,11 +224,18 @@ var desqus = new Object();
             if (! error.length)
                 error = false;
 
-            callback(json || response, error);
+            if ('callback' in callback) {
+                callback.callback(json || response, error);
+            } else {
+                callback(json || response, error);
+            }
         };
     };
 
-    dq.flash = function (message, type='message') {
+    dq.flash = function (message, type) {
+        if (! type)
+            type = 'message';
+
         dq.messageContainer.appendChild(dq.makeElement('div', {
             class: 'talkatv-alert alert alert-' + type,
             text: message}));
@@ -241,7 +287,12 @@ var desqus = new Object();
                 em.setAttribute('name', o.name);
             if (o.title)
                 em.setAttribute('title', o.title);
-
+            if (o.href)
+                em.setAttribute('href', o.href);
+            if (o.type)
+                em.setAttribute('type', o.type);
+            if (o.value)
+                em.setAttribute('value', o.value);
             if (o.reversed)
                 em.setAttribute('reversed', o.reversed)
         }
@@ -261,29 +312,71 @@ var desqus = new Object();
      * Arguments:
      *  - comments: an array of comment objects returned by desqus
      */
-    dq.renderComments = function (comments) {
-        dq.commentContainer.innerHTML = '';
+    dq.renderComments = function (comments, parentEm) {
+        if (! parentEm)
+            parentEm = dq.commentContainer;
+        else
+            console.log('parentEm: ', parentEm);
+
         console.log(comments);
+
+        var listElement = dq.makeElement('ol', {
+            class: 'comment-list',
+            reversed: true});
+        parentEm.appendChild(listElement);
+
         for (comment in comments) {
             var comment = comments[comment];
             var container = dq.makeElement('li');
+            var inner = dq.makeElement('div', {
+                class: 'comment-inner'});
+            container.appendChild(inner);
 
-            container.appendChild(
+            inner.setAttribute('data-id', comment.id);
+
+            inner.appendChild(
                     dq.makeElement('p', {
-                        text: comment.text,
+                        html: comment.html,
                         class: 'comment-text'}));
-            container.appendChild(
+            inner.appendChild(
                     dq.makeElement('span', {
                         text: dq.convertDateTime(comment.created).toString(),
                         title: comment.created,
                         class: 'comment-created'}));
-            container.appendChild(
+            inner.appendChild(
                     dq.makeElement('span', {
                         text: comment.username,
                         class: 'comment-username'}));
-            dq.commentContainer.appendChild(container);
+
+            var context = dq.last.get('/check-login')
+
+            if (context && context.status == 'OK') {
+                var replyLink = dq.makeElement('a', {
+                            text: 'Reply',
+                            class: 'comment-reply-link',
+                            href: '#'});
+                replyLink.onclick = dq.onReplyLinkClick;
+                inner.appendChild(replyLink);
+            }
+
+
+            listElement.appendChild(container);
+            if (comment.replies) {
+                dq.renderComments(comment.replies, container);
+            }
         }
         dq.reversedListsPolyfill();
+    };
+
+    /**
+     * onReplyLinkClick
+     */
+    dq.onReplyLinkClick = function (e) {
+        e.preventDefault();
+        console.log('reply link clicked', this);
+
+        var reply_to_em = this.parentElement;
+        dq.renderForm(reply_to_em, reply_to_em.getAttribute('data-id'));
     };
 
     /**
@@ -294,29 +387,67 @@ var desqus = new Object();
      */
     dq.onCommentSubmit = function (e) {
         e.preventDefault();
-        dq.submitButton.disabled = true;
-        dq.commentField.disabled = true;
+        this.submit.disabled = true;
+        this.comment.disabled = true;
 
-        body = JSON.stringify({
-            comment: dq.commentField.value,
-            item: dq.getActiveItemId()});
+        request_data = {
+            comment: this.comment.value,
+            item: dq.getActiveItemId()};
+
+        if (this.reply_to)
+            request_data['reply_to'] = this.reply_to.value;
+
+        console.log('request data: ', request_data);
+
+        body = JSON.stringify(request_data);
 
         headers = {'Content-Type': 'application/json'};
 
+        console.log('musbeaform: ', this);
+
         dq.request('/comments',
-                dq.requestCallbackHelper(dq.onAfterCommentSubmit),
+                dq.requestCallbackHelper(
+                    new dq.onAfterCommentSubmitFactory(this)),
                 body,
                 'POST',
                 headers);
     };
     
-    dq.onAfterCommentSubmit = function (res, status) {
+    dq.onAfterCommentSubmitFactory = function(form) {
+        this.form = form;
+        console.log('this.form: ', this.form);
+    };
+
+    dq.onAfterCommentSubmitFactory.prototype.callback = function (res, err) {
         console.log(res);
-        console.log(status);
-        dq.submitButton.disabled = false;
-        dq.commentField.disabled = false;
-        dq.commentField.value = '';
-        dq.getComments();
+        console.log(err);
+        console.log(this.form);
+        if (err) {
+            dq.resetForm(this.form, false);
+            dq.flash('Failed to post comment', 'error');
+        } else {
+            if (this.form.reply_to)
+                this.form.parentElement.removeChild(this.form);
+            else
+                dq.resetForm(this.form);
+
+            dq.flash('Your comment has been posted!', 'success');
+            dq.getComments();
+        }
+    };
+
+    /**
+     * resetForm - reset a comment form
+     */
+    dq.resetForm = function (form, erase) {
+        if (undefined === erase)
+            erase = true;
+
+        if (erase)
+            form.comment.value = '';
+
+        form.submit.disabled = false;
+        form.comment.disabled = false;
     };
 
     /**
@@ -331,7 +462,7 @@ var desqus = new Object();
      *
      * Depends on dq.formContainer being set to the appropriate DOM element.
      */
-    dq.renderForm = function () {
+    dq.renderForm = function (em, reply_to_id) {
         dq.form = dq.makeElement('form', {
             id: 'talkatv-comment-form'});
 
@@ -343,13 +474,26 @@ var desqus = new Object();
                     id: 'comment',
                     placeholder: 'Write a comment...'})));
 
+        if (reply_to_id) {
+            dq.form.appendChild(
+                dq.makeElement('input', {
+                    name: 'reply_to',
+                    type: 'hidden',
+                    value: reply_to_id}));
+        }
+
         dq.form.appendChild(
-            dq.submitButton = dq.makeElement('button', {
-                text: 'Post comment'}));
+            dq.submitButton = dq.makeElement('input', {
+                type: 'submit',
+                name: 'submit',
+                value: 'Post comment'}));
 
         dq.form.onsubmit = dq.onCommentSubmit;
 
-        dq.formContainer.appendChild(dq.form);
+        if (em)
+            em.appendChild(dq.form);
+        else
+            dq.formContainer.appendChild(dq.form);
     };
 
     /**
@@ -475,7 +619,18 @@ var desqus = new Object();
     };
 })(desqus);
 
+if (window.Raven)
+    window.onerror = Raven.process;
+
 /**
  * Start her up!
  */
-desqus.render();
+if (window.Raven) {
+    try {
+        desqus.render();
+    } catch (err) {
+        Raven.captureException(err);
+    }
+} else {
+    desqus.render();
+}

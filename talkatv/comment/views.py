@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from flask import g, render_template, abort, request, redirect, url_for
+from flask import render_template, abort, request, redirect, url_for
 
 from talkatv import app
-from talkatv.models import Item, Comment
+from talkatv.models import Item
+from talkatv.api import get_context
 
 
 @app.route('/comment/list/<int:item_id>')
@@ -51,12 +52,7 @@ def comment_list(item_id=None):
     if item is None:
         return abort(404)
 
-    comments = None
-
-    if item.comments.count():
-        comments = Comment.query.filter(Comment.item == item)\
-                .order_by(Comment.created.desc())
+    comment_context = get_context(item)
 
     return render_template('talkatv/comment/list.html',
-            item=item,
-            comments=comments)
+            comment_context=comment_context)

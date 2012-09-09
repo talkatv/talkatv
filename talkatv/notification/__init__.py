@@ -62,12 +62,21 @@ def send_mail(from_addr, to_addrs, subject, body):
     :param string body: message body
     :rtype: SMTP.sendmail() return data
     '''
+    global SERVER
+
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     message['From'] = from_addr
     message['To'] = ', '.join(to_addrs)
     message['Subject'] = subject.encode('utf-8')
 
-    return SERVER.sendmail(from_addr, to_addrs, message.as_string())
+    try:
+        return SERVER.sendmail(from_addr, to_addrs, message.as_string())
+    except smtplib.SMTPException as exc:
+        app.logger.error('Failed to send mail: {0}'.format(exc))
+
+        app.logger.info('Trying to send mail again...')
+        SERVER = get_smtp_connection()
+        SERVER.sendmail(from_addr, to_addrs, message.as_string())
 
 
 def send_comment_notification(email, user, comment, item):

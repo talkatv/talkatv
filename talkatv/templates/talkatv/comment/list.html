@@ -72,9 +72,11 @@
 </script>
 {% endblock %}
 
+{% block title %}Comments for {{ comment_context.item.title }} - talkatv{% endblock %}
+
 {% block talkatv_body %}
 <div class="page-header">
-    <h1>Comments for <a href="{{ item.url }}" rel="nofollow">{{ item.title }}</a></h1>
+    <h1>Comments for <a href="{{ comment_context.item.url }}" rel="nofollow">{{ comment_context.item.title }}</a></h1>
 </div>
 <div class="row">
     <div class="span8">
@@ -84,14 +86,10 @@
                     <!-- TODO -->
                 </form>
             </div>
-            {% if comments %}
+            {% if comment_context %}
             <ol reversed="reversed" class="comment-list">
-                {% for comment in comments %}
-                <li>
-                <p class="comment-text">{{ comment.text }}</p>
-                <span class="comment-created" data-source-time="{{ comment.created }}">{{ comment.created }}</span>
-                <span class="comment-username">{{ comment.user.username }}</span>
-                </li>
+                {% for comment in comment_context.comments %}
+                {{ render_comment(comment) }}
                 {% endfor %}
             </ol>
             {% endif %}
@@ -99,3 +97,19 @@
     </div>
 </div>
 {% endblock %}
+{% macro render_comment(comment) %}
+                <li>
+                    <div class="comment-inner">
+                        <p class="comment-text">{{ comment.text }}</p>
+                        <span class="comment-created" data-source-time="{{ comment.created }}">{{ comment.created }}</span>
+                        <span class="comment-username">{{ comment.username }}</span>
+                    </div>
+                    {% if comment.replies %}
+                    <ol reversed>
+                        {% for reply in comment.replies %}
+                        {{ render_comment(reply) }}
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </li>
+{% endmacro %}

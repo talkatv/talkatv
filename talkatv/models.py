@@ -22,6 +22,7 @@ from migrate import changeset
 assert changeset  # silence code analysers
 
 from talkatv import db
+from talkatv.comment import parse_comment
 
 
 class User(db.Model):
@@ -139,10 +140,16 @@ class Comment(db.Model):
     reply_to = db.relationship('Comment', remote_side=[id],
             backref=db.backref('replies', lazy='dynamic'))
 
-    def __init__(self, item, user, text):
+    def __init__(self, item, user, text, reply_to=None):
         self.item = item
         self.user = user
         self.text = text
+
+        if reply_to:
+            if reply_to is int:
+                self.reply_to_id = reply_to
+            else:
+                self.reply_to = reply_to
 
         self.created = datetime.utcnow()
 
@@ -158,6 +165,8 @@ class Comment(db.Model):
                 'user_id': self.user.id,
                 'username': self.user.username,
                 'text': self.text,
+                'html': parse_comment(self.text),
+                'reply_to': self.reply_to_id,
                 'created': self.created.isoformat()}
         return me
 
