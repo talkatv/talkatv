@@ -1,22 +1,32 @@
 #talkatv-comments form textarea {
+    /* Make the textarea be as wide as possible */
     width: 100%;
 }
 
 #talkatv-comments .comment-username {
+    /* Put the username on on the right-hand side */
     float: right;
 }
 
+#talkatv-comments .comment-created {
+    /* Fade out the date a bit */
+    opacity: .7;
+}
+
 #talkatv-comments li div.comment-inner {
+    /* Add some spacing between the comments */
     margin-bottom: 1em;
     padding-bottom: 1em;
+    /* Add a delimiter at the bottom of the comment, for readability */
     border-bottom: thin solid #ccc;
-    position: relative;
 }
 
 #talkatv-comments li p {
+    /* Add some spacing after the comment text */
     margin-bottom: .5em;
 }
 
 #talkatv-comments a.comment-reply-link {
+    /* Give the reply a little breating room from the comment date */
     margin: 0 10px;
 }

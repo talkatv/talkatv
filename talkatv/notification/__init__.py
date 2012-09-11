@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import smtplib
+import time
 
 from email.mime.text import MIMEText
 
@@ -56,6 +57,9 @@ def send_mail(from_addr, to_addrs, subject, body):
     '''
     Send an email via the :py:data:`SERVER` SMTP connection.
 
+    TODO:
+        This should probably be offloaded to celery or similar
+
     :param string from_addr: From: address
     :param list to_addrs: destination addresses
     :param string subject: message subject
@@ -72,11 +76,14 @@ def send_mail(from_addr, to_addrs, subject, body):
     try:
         return SERVER.sendmail(from_addr, to_addrs, message.as_string())
     except smtplib.SMTPException as exc:
-        app.logger.error('Failed to send mail: {0}'.format(exc))
+        app.logger.error('{0} - Failed to send mail: {1}'.format(
+            to_addrs,
+            exc))
 
         app.logger.info('Trying to send mail again...')
         SERVER = get_smtp_connection()
-        SERVER.sendmail(from_addr, to_addrs, message.as_string())
+        time.sleep(1)
+        return send_mail(from_addr, to_addrs, subject, body)
 
 
 def send_comment_notification(email, user, comment, item):
