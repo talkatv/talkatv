@@ -34,7 +34,7 @@ HTML_CLEANER = Cleaner(
     annoying_tags=True,
     allow_tags=[
         'div', 'b', 'i', 'em', 'strong', 'p', 'ul', 'ol', 'li', 'a', 'br',
-        'pre', 'code'],
+        'pre', 'code', 'blockquote'],
     remove_unknown_tags=False,  # can't be used with allow_tags
     safe_attrs_only=True,
     add_nofollow=True,  # for now

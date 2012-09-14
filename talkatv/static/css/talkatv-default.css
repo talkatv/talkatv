@@ -30,3 +30,49 @@
     /* Give the reply a little breating room from the comment date */
     margin: 0 10px;
 }
+
+#talkatv-comments div.comment-text blockquote {
+    /* Fade quoted text slightly */
+    opacity: .7;
+    border-left: thin solid #ccc;
+}
+    #talkatv-comments div.comment-text blockquote blockquote {
+        /* Don't fade the text again if it's a quote within a quote */
+        opacity: 1;
+    }
+
+/**
+ * Additional
+ *
+ * if you don't have any specific styling for the element types talkatv
+ * introduces you might consider using these.
+ *
+#talkatv-comments div.comment-text blockquote {
+    padding-left: .5em;
+    margin-left: 0;
+}
+
+#talkatv-comments .talkatv-messages .alert {
+    padding: .5em 1.5em .5em 1em;
+    margin-bottom: 1.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px 4px 4px 4px;
+}
+
+#talkatv-comments .alert-warning {
+    background-color: NavajoWhite;
+}
+
+#talkatv-comments .alert-error {
+    background-color: tomato;
+}
+
+#talkatv-comments .alert-info {
+    background-color: DeepSkyBlue;
+}
+
+#talkatv-comments .alert-success {
+    background-color: LightGreen;
+}
+
+/* end */

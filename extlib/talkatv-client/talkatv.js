@@ -17,7 +17,7 @@
  * @licend
  */
 
-var desqus = new Object();
+var talkatvClient = new Object();
 
 (function (dq){
     /**
@@ -264,8 +264,8 @@ var desqus = new Object();
      *     - text: element textContent
      *     - html: element innerHTML
      *     - name: element name
-     *  - children: an Array() of DOM elements or a single DOM element that should
-     *    be appended to the new element
+     *  - children: an Array() of DOM elements or a single DOM element that
+     *    should be appended to the new element
      *
      *  Returns a DOM element
      */
@@ -335,7 +335,7 @@ var desqus = new Object();
             inner.setAttribute('data-id', comment.id);
 
             inner.appendChild(
-                    dq.makeElement('p', {
+                    dq.makeElement('div', {
                         html: comment.html,
                         class: 'comment-text'}));
             inner.appendChild(
@@ -361,6 +361,7 @@ var desqus = new Object();
 
 
             listElement.appendChild(container);
+
             if (comment.replies) {
                 dq.renderComments(comment.replies, container);
             }
@@ -617,7 +618,7 @@ var desqus = new Object();
             }
         }());
     };
-})(desqus);
+})(talkatvClient);
 
 if (window.Raven)
     window.onerror = Raven.process;
@@ -627,10 +628,10 @@ if (window.Raven)
  */
 if (window.Raven) {
     try {
-        desqus.render();
+        talkatvClient.render();
     } catch (err) {
         Raven.captureException(err);
     }
 } else {
-    desqus.render();
+    talkatvClient.render();
 }
