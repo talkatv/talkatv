@@ -1,12 +1,37 @@
-------------------------
-What may talkatv become?
-------------------------
+=========
+ talkatv
+=========
+:Spelling: talkatv
+:Pronounciation:  /ˈtôkətiv/ - like "talkative"
+:Author: talkatv contributors, see AUTHORS
+:License: AGPLv3 or later
 
-Primarily, talkatv will provide a way for people to embed comments on static pages. Secondarily, talkatv will investigate the possibilities to federate the comments via e.g. OStatus or XMPP.
+------------------
+ What is talkatv?
+------------------
+talkatv is a comment service much like DISQUS or IntenseDebate.
 
-------------
-Installation
-------------
+talkatv is open source and free to use.
+
+talkatv is embedded on any page and uses `XMLHttpRequest level 2`_ and
+`Cross-Origin Resource Sharing`_ to post the comment back to the server.
+
+.. _`XMLHttpRequest level 2`: http://www.w3.org/TR/XMLHttpRequest/
+.. _`Cross-Origin Resource Sharing`: http://www.w3.org/TR/cors/
+
+talkatv requires JavaScript, but has a non-javascript fallback which is a link
+to the talkatv server with an optional but recommended ``?uri={{ page_uri }}``
+argument. If the ``uri`` argument is not provided, talkatv will try to get the
+page URI from the `HTTP Referer`_ header.
+
+.. _`HTTP Referer`: http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.36
+
+talkatv supports OpenID authentication.
+
+
+--------------
+ Installation
+--------------
 
 To install talkatv, run::
 
