@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration
+END
+IMAP4_TLS.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/IMAP4_TLS.py
+END
+TLSAsyncDispatcherMixIn.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/TLSAsyncDispatcherMixIn.py
+END
+ClientHelper.py
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/ClientHelper.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/__init__.py
+END
+XMLRPCTransport.py
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/XMLRPCTransport.py
+END
+HTTPTLSConnection.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/HTTPTLSConnection.py
+END
+POP3_TLS.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/POP3_TLS.py
+END
+IntegrationHelper.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/IntegrationHelper.py
+END
+AsyncStateMachine.py
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/AsyncStateMachine.py
+END
+SMTP_TLS.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/SMTP_TLS.py
+END
+TLSSocketServerMixIn.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/TLSSocketServerMixIn.py
+END
+TLSTwistedProtocolWrapper.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/integration/TLSTwistedProtocolWrapper.py
+END

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Demo River Aggregator</title>
+  <link type="text/css" rel="stylesheet" href="/static/setup_proxy.css"/>
+  <style type="text/css">
+    .entries {border : solid 1px #000000; padding : 4px; height : 20em; overflow : auto;} 
+    .entry { margin-bottom: .8em; }
+    .replies { margin-left: 2em; }
+    .reply { margin-bottom: 0em; }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="header">
+  <div class="right"><a href="/oauth/revoke_token">logout</a></div>
+  <div class="left"><img src="/static/salmon.jpeg" style="float:left"> Demo River Aggregator</div>
+  <div id="status" class="hidden"><span class="text">blah blah</span></div>
+</div>
+    
+<em>What is this?</em>
+<p>This is a simple demonstration aggregator that shows items from all feeds from all users in a single river, with most recently active items at the top.  It displays comments below each item.  Salmon-enabled items are marked with [<img src="/static/salmon.jpeg" width=16 height=16> reply] link; reply by clicking the link.</p>
+<p>If you don't see enough Salmon enabled content, you may want to <a href="/setup_proxy">add your own Blogger blog</a> to the river.  You can also try your luck by adding arbitrary feeds that may be Salmon-enabled.</p>
+<div id="content">
+{% if not entries %}
+No feeds in the river.  Why don't you add one below?
+{% else %}
+<p>Latest Activity (<a href="#" onclick="javascript:recrawl()">Refresh</a>):</p>
+<div id="entries" class="entries">
+{% for entry in entries %}
+    <div class="entry">
+      <span>
+        <strong>
+        {% if entry.link %}<a href="{{entry.link}}">{% endif %}
+        {% if entry.title %}{{entry.title}}{% else %}(untitled){% endif %}
+        {% if entry.link %}</a>{% endif %}
+        </strong>
+        at <em>{{entry.updated}}</em>
+        {% if entry.author_uri %}
+          <span>by <a href="{{entry.author_uri}}">{{entry.author_name}}</a></span>
+        {% endif %}
+    
+        &nbsp;
+        {% if entry.salmonendpoint %}
+          <a href="/reply.do?inreplyto={{entry.entry_id}}">
+          [<img src="/static/salmon.jpeg" width=16 height=16> reply]</a>
+        {% endif %}
+        <a href="#" class="like-this-link">[like]</a>
+        {% if entry.replies %}
+        <div class="replies">
+            {% for reply in entry.replies %}
+            <div>
+                {% if reply.author_uri and reply.author_name %}
+                <span class="reply">
+                  <a href="{{reply.author_uri}}">{{reply.author_name}}</a> says: 
+                {% endif %}
+                {% if not reply.author_uri and reply.author_name %}
+                <span class="reply">
+                  <em>{{reply.author_name}}</em> says:
+                {% endif %}
+              &#8220;{{reply.content|striptags}}&#8221; at <em>{{reply.updated}}</em>
+              </span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+      </span>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+</div>
+<div id="adder">
+<p><a href="/setup_proxy">Add my Blogger blog</a> to the River of Salmon (testing only)</p>
+<p>Add a Arbitrary Feed:</p>
+<form action="javascript:subscribe(document.getElementById('feedUri'));" method="get">
+  <p>
+  <label for="feed">Feed URL: </label>
+  <input type="text" id="feedUri" name="feed">
+  <input type="submit" value="Subscribe">
+  </p>
+</form>
+</div>
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function() {
+  $('a.like-this-link').click(function() {
+    showStatusAndHideAfterFiveSecs('Item liked, source notified (not really).');
+  });
+});
+
+var http_request = false;
+function subscribe(feedField) {
+  var feeduri = escape(feedField.value);
+  http_request = new XMLHttpRequest();
+  http_request.onreadystatechange = alertContents;
+  http_request.open('GET', "/salmonize?feed="+feeduri, true);
+  http_request.send();
+}
+
+function recrawl() {
+  showStatus('Updating feeds...')
+  $.ajax({
+    type: "GET",
+    url: "/recrawl.do",
+    success: function(response){
+      window.location.reload();
+    },
+    error: function(xhr, statusText, errorThrown){
+      showStatus("Error "+xhr.status+": "+xhr.responseText);
+    },
+  });
+}
+
+function alertContents() {
+  if (http_request.readyState == 4) {
+      if (http_request.status == 200) {
+          window.location.reload();
+          //result = http_request.responseText;
+          //document.getElementById('myspan').innerHTML = result;            
+       } else {
+          alert('There was a problem with that URL or feed, but there are many fish in the sea; care to try another?');
+          // I should really put some kind of problem reporter in here...
+       }
+   }
+}
+
+function showStatus(msg) {
+  $('#status span.text').text(msg);
+  $('#status').fadeIn();
+}
+
+function hideStatus() {
+  $('#status').fadeOut();
+}
+
+function showStatusAndHideAfterFiveSecs(msg) {
+  showStatus(msg);
+  setTimeout(hideStatus, 5000);
+}
+
+</script>
+</body>
+</html>

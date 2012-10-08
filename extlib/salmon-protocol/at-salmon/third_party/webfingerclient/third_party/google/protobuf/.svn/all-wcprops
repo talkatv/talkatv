@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf
+END
+service.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/service.py
+END
+descriptor_pb2.py
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/descriptor_pb2.py
+END
+message.py
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/message.py
+END
+reflection.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/reflection.py
+END
+service_reflection.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/service_reflection.py
+END
+text_format.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/text_format.py
+END
+descriptor.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/descriptor.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/google/protobuf/__init__.py
+END

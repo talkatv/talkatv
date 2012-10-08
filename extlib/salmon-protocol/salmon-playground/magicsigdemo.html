@@ -1,0 +1,144 @@
+<html>
+<head>
+  <title>Magic Sig Demo</title>
+  <link type="text/css" rel="stylesheet" href="/static/setup_proxy.css"/>
+  <style type="text/css">
+    .entry { margin-bottom: .8em; }
+    .replies { margin-left: 2em; }
+    .reply { margin-bottom: 0em; }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="header">
+  <div class="right"><a href="/oauth/revoke_token">logout</a></div>
+  <div class="left"><img src="/static/salmon.jpeg" style="float:left"> Magic Signature Demo</div>
+  <div id="status" class="hidden"><span class="text">blah blah</span></div>
+</div>
+
+<div id="content">
+  <p>Input an (unsigned) Atom-formatted salmon:</p>
+  <form id="salmon">
+    <TEXTAREA id='salmonText' rows=12 cols=120 onChange="javascript:updatexml(document.getElementById('salmonText').value)">
+&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39;?&gt;
+&lt;entry xmlns=&#39;http://www.w3.org/2005/Atom&#39;&gt;
+  &lt;id&gt;tag:example.com,2009:cmt-0.44775718&lt;/id&gt;  
+  &lt;author&gt;&lt;name&gt;test@example.com&lt;/name&gt;&lt;uri&gt;acct:PUT_YOUR_USERID_HERE&lt;/uri&gt;&lt;/author&gt;
+  &lt;thr:in-reply-to xmlns:thr=&#39;http://purl.org/syndication/thread/1.0&#39;
+      ref=&#39;tag:blogger.com,1999:blog-893591374313312737.post-3861663258538857954&#39;&gt;tag:blogger.com,1999:blog-893591374313312737.post-3861663258538857954
+  &lt;/thr:in-reply-to&gt;
+  &lt;content&gt;Salmon swim upstream!&lt;/content&gt;
+  &lt;title&gt;Salmon swim upstream!&lt;/title&gt;
+  &lt;updated&gt;2009-12-18T20:04:03Z&lt;/updated&gt;
+&lt;/entry&gt;
+    </TEXTAREA>
+  </form>
+</div>
+<div>
+  <p>The application/magic-envelope format (to be sent upstream):</p>
+  <a title="Unfold magic envelope into signed Atom" href="javascript:unfoldatomxml($('#envelope').val())">Unfold into Atom</a> |
+  <a title="Send salmon to server to verify signature" href="javascript:verifyxml($('#envelope').val())">Verify signature</a><BR>
+  <TEXTAREA id='envelope' rows=6 cols=120></TEXTAREA>
+</div>
+<div id="output">
+  <p>The application/atom format (to be used for re-syndication):</p>
+  <a title="Send salmon to server to verify signature" href="javascript:verifyxml($('#signedAtom').val())">Verify signature</a><BR>
+  <TEXTAREA id='signedAtom' rows=6 cols=120></TEXTAREA>
+</div>
+<script>
+
+// Grab user input and create a signed magic envelope from it:
+function updatexml(text) {
+  showStatus("Signing...");
+  $('#envelope').val('working...');
+  $.ajax({
+    type: "POST",
+    url: "/magicsigdemo?format=magic-envelope",
+    data: "data="+encodeURIComponent(text),
+    success: function(response){
+      $('#envelope').val(response); 
+      $('#output').fadeOut();
+      $('#signedAtom').val('')
+      showStatusAndHideAfterFiveSecs("Updated the signed magic envelope.");
+    },
+    error: function(xhr, statusText, errorThrown){
+      showStatus("Error "+xhr.status+": "+xhr.responseText);
+    },
+  });
+}
+
+// Unfold a magic envelope into an Atom entry with provenance:
+function unfoldatomxml(text) {
+  showStatus("Unfolding envelope...");
+  $.ajax({
+    type: "POST",
+    url: "/magicsigdemo?format=atom",
+    data: "env="+encodeURIComponent(text),
+    success: function(response){
+      $('#signedAtom').val(response); 
+      $('#output').fadeIn();
+      showStatusAndHideAfterFiveSecs("Unfolded envelope into signed Atom");
+    },
+    error: function(xhr, statusText, errorThrown){
+      showStatus("Error "+xhr.status+": "+xhr.responseText);
+    },
+  });
+}
+
+// Verify a (signed) Salmon and return yes or no:
+function verifyxml(text) {
+  showStatus("Verifying...")
+  $.ajax({
+    type: "POST",
+    url: "/magicsigdemoverify",
+    data: "data="+encodeURIComponent(text),
+    success: function(response){
+      if (response == "OK") {
+        showStatusAndHideAfterFiveSecs("Salmon signature verified!");
+      } else {
+        showStatusAndHideAfterFiveSecs("Oops: "+response);
+      }
+    },
+    error: function(xhr, statusText, errorThrown){
+      showStatus("Error "+xhr.status+": "+xhr.responseText);
+    },
+  });
+}
+  
+// Just some silly JS to do cool dynamic code generation
+var textarea = document.getElementById('salmonText');
+function dosignature() {
+  updatexml(textarea.value); 
+}
+textarea.keyDownTimeout = null;
+textarea.onkeydown = function () {
+  if (textarea.keyDownTimeout) clearTimeout(textarea.keyDownTimeout);
+  textarea.keyDownTimeout = setTimeout(dosignature, 200);
+};
+
+function showStatus(msg) {
+  // Move to visible portion of window 
+  $("#status span").css("position", "relative");
+  $("#status span").css("top", $("body").scrollTop());
+  $('#status span.text').text(msg);
+  $('#status').fadeIn();
+}
+
+function hideStatus() {
+  hideTimer = 0;
+  $('#status').fadeOut();
+}
+
+hideTimoutID = 0;
+function showStatusAndHideAfterFiveSecs(msg) {
+  showStatus(msg);
+  if (hideTimoutID) {clearTimeout(hideTimoutID);}
+  hideTimoutID = setTimeout(hideStatus, 5000);
+}
+
+// Kick things off at load time:
+dosignature();
+</script>
+</body>
+</html>

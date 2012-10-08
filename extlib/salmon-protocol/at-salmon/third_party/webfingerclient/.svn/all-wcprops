@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/95/trunk/at-salmon/third_party/webfingerclient
+END
+xrd.proto
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xrd.proto
+END
+webfinger.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/95/trunk/at-salmon/third_party/webfingerclient/webfinger.py
+END
+main.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/main.py
+END
+xfn_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xfn_test.py
+END
+app.yaml
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/app.yaml
+END
+NOTICE
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/NOTICE
+END
+xfn.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xfn.py
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/LICENSE
+END
+html5_pb2.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/html5_pb2.py
+END
+xrd_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xrd_test.py
+END
+xrd.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xrd.py
+END
+imports.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/imports.py
+END
+xfn_pb2.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xfn_pb2.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/__init__.py
+END
+xrd_pb2.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xrd_pb2.py
+END
+templatefilters.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/templatefilters.py
+END
+html5.proto
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/html5.proto
+END
+xfn.proto
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/xfn.proto
+END

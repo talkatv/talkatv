@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 6
+*.pyc
+
+K 13
+svn:mergeinfo
+V 0
+
+END

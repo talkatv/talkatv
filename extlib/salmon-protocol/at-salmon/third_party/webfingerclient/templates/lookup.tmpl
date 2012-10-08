@@ -1,0 +1,16 @@
+{% extends "layout.tmpl" %}
+
+{% block content %}
+<section>
+ <h1>Found the following services for {{ identifier }}:</h1>
+ <ul>
+ {% for description in descriptions %}
+   <pre class="description">{{ description|escape }}</pre>
+ {% endfor %}
+ </ul>
+</section>
+
+<p>
+  <a href="/">Try another</a> identifier.
+</p>
+{% endblock %}

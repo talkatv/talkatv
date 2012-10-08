@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<me:env xmlns:me='http://salmon-protocol.org/ns/magic-env'>
+  <me:encoding>base64url</me:encoding>
+  <me:data type='application/atom+xml'>
+    PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPGVudHJ5
+    IHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDA1L0F0b20nPgogIDxpZD50
+    YWc6ZXhhbXBsZS5jb20sMjAwOTpjbXQtMC40NDc3NTcxODwvaWQ-ICAKICA8
+    YXV0aG9yPjxuYW1lPnRlc3RAZXhhbXBsZS5jb208L25hbWU-PHVyaT5hY2N0
+    OmpwYW56ZXJAZ29vZ2xlLmNvbTwvdXJpPjwvYXV0aG9yPgogIDx0aHI6aW4t
+    cmVwbHktdG8geG1sbnM6dGhyPSdodHRwOi8vcHVybC5vcmcvc3luZGljYXRp
+    b24vdGhyZWFkLzEuMCcKICAgICAgcmVmPSd0YWc6YmxvZ2dlci5jb20sMTk5
+    OTpibG9nLTg5MzU5MTM3NDMxMzMxMjczNy5wb3N0LTM4NjE2NjMyNTg1Mzg4
+    NTc5NTQnPnRhZzpibG9nZ2VyLmNvbSwxOTk5OmJsb2ctODkzNTkxMzc0MzEz
+    MzEyNzM3LnBvc3QtMzg2MTY2MzI1ODUzODg1Nzk1NAogIDwvdGhyOmluLXJl
+    cGx5LXRvPgogIDxjb250ZW50PkhleSBAanBhbnplckBnb29nbGUuY29tLCBT
+    YWxtb24gc3dpbSB1cHN0cmVhbSE8L2NvbnRlbnQ-CiAgPHRpdGxlPlNhbG1v
+    biBzd2ltIHVwc3RyZWFtITwvdGl0bGU-CiAgPHVwZGF0ZWQ-MjAwOS0xMi0x
+    OFQyMDowNDowM1o8L3VwZGF0ZWQ-CjwvZW50cnk-CiAgICA=
+  </me:data>
+  <me:alg>RSA-SHA256</me:alg>
+  <me:sig>
+    CJRIXnp772XfdDw3vnOYfy54kE3OnVBTFc8N7RtFskP2IMLuAmzrzpVWBvZH
+    NI5rDZUsbdK226UuQ4RI3Njy8A==
+  </me:sig>
+</me:env>

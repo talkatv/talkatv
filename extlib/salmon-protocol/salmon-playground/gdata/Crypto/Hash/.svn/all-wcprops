@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Hash
+END
+MD5.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Hash/MD5.py
+END
+HMAC.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Hash/HMAC.py
+END
+SHA.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Hash/SHA.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Hash/__init__.py
+END

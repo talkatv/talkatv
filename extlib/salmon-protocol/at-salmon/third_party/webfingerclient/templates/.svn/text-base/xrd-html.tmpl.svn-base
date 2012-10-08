@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>{{ identifier }}</title>
+  </head>
+  <body>{% spaceless %}
+  {% for description in descriptions %}
+    <section class="description">
+
+      <p>
+        Found webfinger information for <strong><a href="/lookup?identifier={{ description.subject }}"><span class="subject">{{ description.subject }}</span></a></strong>{% if description.aliases %}, otherwise known as 
+      {% for alias in description.aliases %}<a href="{{ alias }}" class="alias">{{ alias }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}.
+      </p>
+      {% if description.links %}
+      <p>
+        More service endpoints related to {{ description.subject }}:
+        <ul>
+        {% for link in description.links %}
+        <li>
+          {% if relationships|get_from_dict:link.rel %}
+            <a href="{{ link.href }}" rel="link"><abbr title="{{ link.rel }}">{{ relationships|get_from_dict:link.rel }}</abbr>{% if link.title %} - {{ link.title }}{% endif %}</a>
+          {% else %}
+            <a href="{{ link.href }}" rel="link">{{ link.rel }}{% if link.title %} - {{ link.title }}{% endif %}</a>
+          {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
+      </p>
+      {% endif %}
+    </section>
+  {% endfor %}
+  {% endspaceless %}</body>
+</html>

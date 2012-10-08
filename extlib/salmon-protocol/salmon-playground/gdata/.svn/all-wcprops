@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/21/trunk/salmon-playground/gdata
+END
+sample_util.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/sample_util.py
+END
+client.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/client.py
+END
+test_config_template.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/test_config_template.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/__init__.py
+END
+service.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/service.py
+END
+auth.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/auth.py
+END
+test_config.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/test_config.py
+END
+test_data.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/test_data.py
+END
+gauth.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/gauth.py
+END
+data.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/data.py
+END
+urlfetch.py
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/urlfetch.py
+END

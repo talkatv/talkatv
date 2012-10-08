@@ -1,0 +1,42 @@
+{% extends "layout.tmpl" %}
+
+{% block content %}
+<h1>WebFinger client</h1>
+
+<p>
+  This <a href="http://code.google.com/p/webfinger/">WebFinger</a>
+  client implements account to service lookup.
+</p>
+
+<form action="/lookup" method="get">
+ <fieldset>
+  <legend>Account identifier to service lookup</legend>
+  {% if error %}
+  <p>
+   <label class="error">Error:</label>
+   <span class="error">{{ error }}</span>
+  </p>
+  {% endif %}
+  <p>
+   <label for="identifier">Identifier:</label> 
+   <input name="identifier" type="text"> <input type="submit" value="Lookup">
+   <br>
+   <span class="example">For example: dclinton&#64;gmail.com, acct:bradfitz&#64;gmail.com</span>
+  </p>
+  <p>
+    <label for="format">Format:</label>
+    <input name="format" type="radio" value="web" checked="">Web</input>
+    <input name="format" type="radio" value="html">HTML</input>
+    <input name="format" type="radio" value="protoa">Protobuf (ascii)</input>
+    <input name="format" type="radio" value="proto">Protobuf (binary)</input>
+    <input name="format" type="radio" value="json">JSON</input>
+    <br>
+    <span class="example">
+      Use 'callback=f' for JSONP callbacks.
+      Use 'pretty=true' for JSON debugging.
+    </span> 
+  </p>
+ </fieldset>
+</form>
+
+{% endblock %}

@@ -1,0 +1,4 @@
+cron:
+- description: Re-scans feeds
+  url: /recrawl.do
+  schedule: every 2 minutes

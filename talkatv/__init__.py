@@ -50,3 +50,4 @@ import talkatv.profile.views
 import talkatv.api.views
 import talkatv.comment.views
 import talkatv.site.views
+import talkatv.salmon.views

@@ -1,0 +1,129 @@
+<html>
+<head>
+  <title>Reply (with Salmon)</title>
+  <link type="text/css" rel="stylesheet" href="/static/setup_proxy.css"/>
+  <style type="text/css">
+    .entry { margin-bottom: .8em; }
+    .replies { margin-left: 2em; }
+    .reply { margin-bottom: 0em; }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="header">
+  <div class="right"><a href="/oauth/revoke_token">logout</a></div>
+  <div class="left"><img src="/static/salmon.jpeg" style="float:left"> Reply</div>
+  <div id="status" class="hidden"><span class="text">blah blah</span></div>
+</div>
+
+<div id="content">
+{% if not parent %}
+  Parent entry not found!
+{% else %}
+    <p>Your reply to "<em>{{parent.title}}</em>":</p>
+    <form id="replytext"">
+      <TEXTAREA id='commentText' rows=3 cols=80 onChange="javascript:updatexml(document.getElementById('commentText').value)"></TEXTAREA>
+    </form>
+    <div><form>
+      <input type="checkbox" name="postsalmon" value="postsalmon" checked> Keep the conversation going!</input> 
+        Also post this reply to "<a href=''{{parent.link}}''>{{parent.title}}"</a>.
+      <div><input type="button" value="Post Reply" onClick="postReply();"></div>
+    </form></div>
+    <p>Or, post the salmon yourself from the command line:</p>
+    <TEXTAREA id='cmdline' rows=18 cols=80></TEXTAREA>
+    <div id="log_div"></div>
+{% endif %}
+
+<div><a href="/ros">Back to River of Salmon</a></div>
+</body>
+<script>
+
+// The current Salmon entry in Atom/XML format:
+var salmonentry=null;
+
+// Grab user input and update the computed XML stuff:
+function updatexml(text) {
+  salmonentry = "\
+<\?xml version='1.0' encoding='UTF-8'\?>\n\
+<entry xmlns='http://www.w3.org/2005/Atom'>\n\
+  <id>{{newid}}</id>\n\
+  <author><name>{{user.nickname}}</name><uri>acct:{{user.email}}</uri></author>\n\
+  <thr:in-reply-to xmlns:thr='http://purl.org/syndication/thread/1.0'\n\
+      ref='{{parent.entry_id}}'>{{parent.entry_id}}</thr:in-reply-to>\n\
+  <content>"+text+"</content>\n\
+  <title/>\n\
+  <updated>{{timestamp}}</updated>\n\
+  <sal:signature xmlns:sal='http://salmonprotocol.org/ns/1.0'>\n\
+    {{signature}}\n\
+  </sal:signature>\n\
+</entry>";
+  
+  cmdline = "curl {{parent.salmonendpoint}} -H 'Content-Type: application/atom+xml'"
+  cmdline += " --data \""+salmonentry+"\""
+
+  document.getElementById('cmdline').value = cmdline;
+}
+
+// Just some silly JS to do cool dynamic code generation
+var textarea = document.getElementById('commentText');
+function docopy() {
+  updatexml(textarea.value); 
+}
+textarea.keyDownTimeout = null;
+textarea.onkeydown = function () {
+  if (textarea.keyDownTimeout) clearTimeout(textarea.keyDownTimeout);
+  textarea.keyDownTimeout = setTimeout(docopy, 200);
+};
+
+// Simple display / logging
+function log(s) {
+  showStatus(s)  
+}
+
+// Don't want to copy and paste?  Don't have curl?  OK, we'll do it for you
+var http_request = null;
+function postReply() {
+  showStatus("Posting reply...");
+  http_request = new XMLHttpRequest();
+  http_request.onreadystatechange = postTheSalmonCB;
+  http_request.open('POST', "{{parent.salmonendpoint}}", true);
+  http_request.setRequestHeader("Content-Type", "application/atom+xml");
+  http_request.setRequestHeader("Content-Length", salmonentry.length);
+  http_request.setRequestHeader("Connection", "close");
+  http_request.send(salmonentry);
+  log("Reply sent, waiting for response...");
+}
+
+function postTheSalmonCB() {
+  if (http_request.readyState == 4) {
+      log("Response code: "+http_request.status);
+      if (http_request.status == 200) {
+          log("Reply posted!  Go back to the River to see your salmon.");
+          //result = http_request.responseText;
+          //document.getElementById('myspan').innerHTML = result;            
+       } else {
+          log('There was a problem with posting the reply, sorry!');
+          // I should really put some kind of problem reporter in here...
+       }
+   }
+}
+
+updatexml("");
+
+function showStatus(msg) {
+  $('#status span.text').text(msg);
+  $('#status').fadeIn();
+}
+
+function hideStatus() {
+  $('#status').fadeOut();
+}
+
+function showStatusAndHideAfterFiveSecs(msg) {
+  showStatus(msg);
+  setTimeout(hideStatus, 5000);
+}
+
+</script>
+</html>

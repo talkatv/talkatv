@@ -1,0 +1,16 @@
+application: webfingerclient-dclinton
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+
+- url: /css/
+  static_dir: static/css/
+
+- url: /.*
+  script: main.py
+
+
+
+

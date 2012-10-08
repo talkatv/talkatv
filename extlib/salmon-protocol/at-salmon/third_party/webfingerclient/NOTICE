@@ -1,0 +1,17 @@
+NOTICE
+
+The html5lib library (http://code.google.com/p/html5lib/) is used
+under the terms of the MIT License and is copyright several authors.
+
+The httplib2 library (http://code.google.com/p/httplib2/) is used
+under the terms of the MIT Library and is copyright several authors.
+
+The Protocol Buffer library (http://code.google.com/p/protobuf/) is
+used under the terms of the New BSD License and is copyright Google.
+
+The simplejson library (http://code.google.com/p/simplejson/) is 
+used under the terms of the MIT License and is copyright Bob Ippolito.
+
+This code is made available under the Apache License 
+and is copyright DeWitt Clinton.
+

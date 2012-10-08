@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>{% block title %}Atollia{% endblock %}</title>
+    <link rel="stylesheet" href="/css/at-salmon.css"/>
+  </head>
+  <body>
+    <div id="header">
+      <div id="nav">
+        <a href="/">Home</a>
+        {% if user %}
+          <a href="/profile/@me">Your profile & mentions of you</a>
+        {% endif %}
+      </div>
+      <div id='user'>
+        {% if user %}
+          {{ user }} <a href="{{ logout_url }}">Log out</a>
+        {% else %}
+          <a href="{{ login_url }}">Log in</a>
+          {% endif %}
+      </div>
+      <div style="clear:both"></div>
+    </div>
+    <div id="main-content">
+      {% block content %}{% endblock %}
+    </div>
+    
+  </body>
+</html>

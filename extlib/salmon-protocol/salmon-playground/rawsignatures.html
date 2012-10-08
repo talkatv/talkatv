@@ -1,0 +1,75 @@
+<html>
+<head>
+  <title>Raw Signatures Test</title>
+  <link type="text/css" rel="stylesheet" href="/static/setup_proxy.css"/>
+  <style type="text/css">
+    .entry { margin-bottom: .8em; }
+    .replies { margin-left: 2em; }
+    .reply { margin-bottom: 0em; }
+  </style>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="header">
+  <div class="right"><a href="/oauth/revoke_token">logout</a></div>
+  <div class="left"><img src="/static/salmon.jpeg" style="float:left"> Raw
+    Signature Tester</div>
+  <div id="status" class="hidden"><span class="text">blah blah</span></div>
+</div>
+
+<div id="content">
+  <p>Input a raw string to sign (exact bytes entered will be signed):</p>
+  <form>
+    <TEXTAREA id='text' rows=12 cols=120></TEXTAREA>
+    <a title="Sign" href="javascript:sign_text($('#text').val())">Sign</a>
+  </form>
+</div>
+<div>
+  <p>Output:</p>
+  <TEXTAREA id='output' rows=6 cols=120></TEXTAREA>
+</div>
+<script>
+
+// Grab user input and create a signed magic envelope from it:
+function sign_text(text) {
+  showStatus("Signing...");
+  $('#output').val('working...');
+  $.ajax({
+    type: "POST",
+    url: "/rawsignatures",
+    data: "data="+encodeURIComponent(text),
+    success: function(response){
+      $('#output').val(response);
+      showStatusAndHideAfterFiveSecs("Signed!");
+    },
+    error: function(xhr, statusText, errorThrown){
+      $('#output').val("Error "+xhr.status+": "+xhr.responseText);
+      showStatusAndHideAfterFiveSecs("Error!");
+    },
+  });
+}
+
+function showStatus(msg) {
+  // Move to visible portion of window 
+  $("#status span").css("position", "relative");
+  $("#status span").css("top", $("body").scrollTop());
+  $('#status span.text').text(msg);
+  $('#status').fadeIn();
+}
+
+function hideStatus() {
+  hideTimer = 0;
+  $('#status').fadeOut();
+}
+
+hideTimoutID = 0;
+function showStatusAndHideAfterFiveSecs(msg) {
+  showStatus(msg);
+  if (hideTimoutID) {clearTimeout(hideTimoutID);}
+  hideTimoutID = setTimeout(hideStatus, 5000);
+}
+
+</script>
+</body>
+</html>

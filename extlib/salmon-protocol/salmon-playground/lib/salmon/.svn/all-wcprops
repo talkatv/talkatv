@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/73/trunk/lib/python/salmon
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/73/trunk/lib/python/salmon/__init__.py
+END
+test_salmon.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/73/trunk/lib/python/salmon/test_salmon.py
+END

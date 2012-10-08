@@ -1,0 +1,14 @@
+<ul>
+{% for entry in salmon %}
+<li>
+    {% if entry.link %}<a href="{{entry.link}}">{% endif %}
+    {% if entry.content %}{{entry.content}}{% else %}<em>(empty)</em>{% endif %}
+    {% if entry.link %}</a>{% endif %}
+    at <em>{{entry.updated}}</em>
+    {% if entry.author_uri %}
+      <span>by <a href="{{entry.author_uri}}">{{entry.author_name}}</a></span>
+    {% endif %}
+    <span>{% if entry.in_reply_to %}(a salmon reply){% else %}(a post){% endif %}</span>
+</li>
+{% endfor %}
+</ul>

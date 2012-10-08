@@ -1,0 +1,250 @@
+/* Section Elements */
+
+html {
+  background-color:  #FFF;
+}
+
+body {
+  font-family: Verdana, "Bitstream Vera Sans", sans-serif;
+  line-height: 1.5;
+  font-size: 100%;
+  background-color: #FFF;
+  color: #222;
+  margin: 0 auto;
+  padding: 10px;
+  max-width: 50em;
+}
+
+article {
+  text-align: left;
+}
+
+aside {
+  display: block;
+}
+
+section {
+  display: block;
+}
+
+header {
+  display: block;
+}
+
+footer {
+  display: block;
+}
+
+body>header {
+  display: block;
+  min-height: 2em;
+  font-size: 85%;
+  margin-bottom: 1em;
+}
+
+body>header nav {
+  float: left;
+}
+
+body>header nav ul
+{
+  margin: 0;
+}
+
+body>header nav li
+{
+  display: inline;
+  list-style-type: none;
+}
+
+body>header a
+{
+  color: #222;
+  text-decoration: none;
+}
+
+body>header a:visited
+{
+  color: #222;
+  text-decoration: none;
+}
+
+body>header a:hover
+{
+  color: #222;
+  text-decoration: underline;
+}
+
+body>header form
+{
+  display: inline;
+  float: right;
+}
+
+body>footer {
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+  font-size: 77%;
+  margin-top: 4em;
+  display: block;
+}
+
+body>footer:before {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+article header {
+  margin-bottom: 1em;
+}
+
+article header h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+  margin: 2em 0 0 0;
+}
+
+article header h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 108%;
+  color: #333;
+  font-weight: normal;
+  margin: 0;
+}
+
+article nav {
+  font-size: 77%;
+  font-family: "Times New Roman", Times, serif;
+}
+
+article nav:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/* Text-level Semantic Elements */
+
+a {
+  color: #555;
+}
+
+a:visited {
+  color: #555;
+}
+
+
+a:hover {
+  color: #999;
+  text-decoration: underline;
+}
+
+article header a {
+  text-decoration: none;
+  color: #222;
+}
+
+article header a:visited {
+  color: #222;
+}
+
+/* Grouping Elements */
+
+article p {
+  text-align: justify;
+}
+
+pre {
+  font-family: Inconsolata, Monaco, "Courier New", Courier, monospace;
+  background-color:#F9F9F9;
+  color: black;
+  line-height: 1em;
+  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 1em;
+  font-size: 100%;
+  width: 96%;
+}
+
+code {
+  font-family: Inconsolata, Monaco, "Courier New", Courier, monospace;
+}
+
+blockquote {
+  color: #666;
+  font-style: italic;
+}
+
+/* Text-Level Semantics */
+
+/* Obsolete Elements */
+
+/* Tabular Content */
+
+td {
+  border: thin none;
+  margin: 0;
+  padding: 0.2em;
+}
+
+/* Forms */
+
+fieldset {
+  border: 1px solid #999;
+  padding: 10px;
+}
+
+legend {
+  padding: 0.1em 0.3em;
+  color: #999;
+  font-size: 77%;
+  text-align: right;
+}
+
+label {
+  color: #222;  
+  float: left;
+  width: 15%;
+  margin-right: 0.5em;
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+  text-align: right;
+}
+
+form span.example {
+  color: #999;
+}
+
+form .error {
+  color: red;
+}
+
+input[type=text], input.text, input.title, textarea, select { 
+  background-color: #fff; 
+  border: 1px solid #bbb; 
+  padding-left: 3px;
+}
+
+input[name=identifier] {
+  width: 70%;
+}
+
+input[type=text]:focus,  input.text:focus, input.title:focus, textarea:focus, select:focus { 
+  border-color: #666; 
+}
+
+input[type=text], input.text, input.title, textarea, select {
+  margin: 0;
+}
+
+/* Non-semantic classes */
+
+.description {
+  border: thin solid #CCC;
+}

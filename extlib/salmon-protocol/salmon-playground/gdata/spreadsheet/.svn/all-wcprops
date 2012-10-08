@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/spreadsheet
+END
+text_db.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/spreadsheet/text_db.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/spreadsheet/__init__.py
+END
+service.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/spreadsheet/service.py
+END

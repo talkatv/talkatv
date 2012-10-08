@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/119/trunk/schema
+END
+magicsig.json
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/118/trunk/schema/magicsig.json
+END
+magicsig.rnc
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/119/trunk/schema/magicsig.rnc
+END

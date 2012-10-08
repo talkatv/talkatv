@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/__init__.py
+END
+Checker.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/Checker.py
+END
+X509.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/X509.py
+END
+FileObject.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/FileObject.py
+END
+messages.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/messages.py
+END
+SessionCache.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/SessionCache.py
+END
+HandshakeSettings.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/HandshakeSettings.py
+END
+api.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/api.py
+END
+mathtls.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/mathtls.py
+END
+errors.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/errors.py
+END
+constants.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/constants.py
+END
+BaseDB.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/BaseDB.py
+END
+VerifierDB.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/VerifierDB.py
+END
+TLSConnection.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/TLSConnection.py
+END
+Session.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/Session.py
+END
+SharedKeyDB.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/SharedKeyDB.py
+END
+X509CertChain.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/X509CertChain.py
+END
+TLSRecordLayer.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/tlslite/TLSRecordLayer.py
+END

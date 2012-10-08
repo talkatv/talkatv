@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>WebFinger client</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts/reset-fonts.css&amp;2.7.0/build/base/base-min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"/>
+    <script type="text/javascript">
+    //<![CDATA[
+      // Help IE style HTML5. This makes me sad.
+      // See http://remysharp.com/2009/01/07/html5-enabling-script/
+      (function(){if(!/*@cc_on!@*/0)return;var e = "abbr,article,aside,audio,bb,canvas,datagrid,datalist,details,dialog,eventsource,figure,footer,header,mark,menu,meter,nav,output,progress,section,time,video".split(','),i=e.length;while (i--){document.createElement(e[i])}})()
+    //]]>
+    </script>
+  </head>
+  
+  <body>
+
+    <header>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+      <p>
+	Copyright &copy; 2009 <a href="http://unto.net/">DeWitt Clinton</a>.
+        <br>
+        Content licensed under the
+	<a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons BY-SA 3.0 License</a>.
+        <br>
+        <a href="http://code.google.com/p/webfingerclient-dclinton/">Source code</a> licensed under the 
+        <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License</a>.
+      </p>
+    </footer>
+  </body>
+  <script text="text/javascript">
+    $(":input:first").focus();  
+  </script>
+</html>

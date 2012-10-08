@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>Salmonize a Blog</title>
+    <link type="text/css" rel="stylesheet" href="/static/setup_proxy.css"/>
+    <meta name="author" content="John Panzer">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+</head>
+<body>
+    
+{% if logged %}
+<div id="header">
+  <div class="right"><a href="/oauth/revoke_token">logout</a></div>
+  <div class="left"><img src="/static/salmon.jpeg" style="float:left">Blogger Salmon Proxy Service</div>
+  <div id="status" class="hidden"><span class="text">blah blah</span></div>
+</div>
+
+<div>
+    <p>This page lets you enable Salmon for any of your Blogger blogs.  This sets up a proxy feed service for your blog
+    and reconfigures your blog settings to point at the proxy.  The proxy feed looks a lot like the original, but
+    adds in the &lt;link rel="salmon"&gt; discovery link.  This lets clients discover that your blog supports Salmon.
+    When a new salmon is posted to the salmon link, the proxy works in reverse and forwards the comment back upstream
+    to your blog.</p>
+    <p><b>Caveats:</b> Please use only test blogs for this, as it does mess around with your settings and also posts
+    comments to your blog.  The comments will show up as authored by you, the owner, for the moment (a limitation of
+    the Blogger commenting API).  This is just for demonstration purposes; for a real deployment, Blogger will 
+    implement Salmon natively.
+</div>
+
+<p>Select a blog to Salmonize:</p>
+{% for blog in blogs %}
+  <div class="blog">
+    <div class="left">
+      <span class="title">
+        <a href="{{blog.link}}">{{ blog.title }}</a>
+      </span><br/>
+      <span class="date">created: {{ blog.published }}</span><br/>
+      <span class="date">last updated: {{ blog.updated }}</span>
+    </div>
+    <div class="left salmonizer">
+        <span class="hidden id">{{ blog.id }}</span>
+        <span class="hidden feed">{{ blog.link }}atom.xml</span>
+        <a href="#" class="salmonize-this-blog-link">Salmonize this!</a>
+        <div class="hidden salmonize-confirm" id="confirm-{{ blog.id }}">
+            Just for demo purposes, your blog {{ blog.title }} has been Salmonized!  
+            Its feed has been redirected to the Salmon Proxy Service, which adds a rel="salmon" 
+            link to the feed.  Any salmon sent to that link will be forwarded to your blog 
+            as comments.  Also, your blog has been added to the demo aggregator, 
+            <a href="/ros">River of Salmon</a>; go there to view or comment on posts.
+        </div>
+    </div>
+  </div>
+  <div class="clear"/>
+{% endfor %}    
+
+{% else %}
+
+Salmonizing your blog requires that you log in to Blogger and give salmon-playground permission to
+post comments to your blog as a proxy.
+
+<a href="/oauth/request_token">Log in now</a>
+
+{% endif %}
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+  
+  $('a.salmonize-this-blog-link').click(function() {
+   showStatus('Salmonizing blog...');
+   var id = $(this).prevAll('span.id').text();
+   var feed  = $(this).prevAll('span.feed').text();
+   $.post('/salmonize_blog', {
+     'feed': feed,
+     'id': id
+   }, function(data) {
+     showStatusAndHideAfterFiveSecs('Blog salmonized.')
+     $('#confirm-'+id).slideToggle();
+   }) 
+  });
+  
+  $(document).ajaxError(function(event, xhr) {
+    showStatusAndHideAfterFiveSecs('Something went wrong. Code: ' + xhr.status);
+    hideStatus();
+  });
+});
+
+function showStatus(msg) {
+  $('#status span.text').text(msg);
+  $('#status').fadeIn();
+}
+
+function hideStatus() {
+  $('#status').fadeOut();
+}
+
+function showStatusAndHideAfterFiveSecs(msg) {
+  showStatus(msg);
+  setTimeout(hideStatus, 5000);
+}
+</script>
+</body>
+</html>

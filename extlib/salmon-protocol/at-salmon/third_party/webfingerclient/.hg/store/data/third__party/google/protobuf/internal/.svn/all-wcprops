@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal
+END
+containers.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/containers.py.i
+END
+decoder.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/decoder.py.i
+END
+type__checkers.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/type__checkers.py.i
+END
+message__listener.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/message__listener.py.i
+END
+input__stream.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/input__stream.py.i
+END
+output__stream.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/output__stream.py.i
+END
+____init____.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/____init____.py.i
+END
+wire__format.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/wire__format.py.i
+END
+encoder.py.i
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/.hg/store/data/third__party/google/protobuf/internal/encoder.py.i
+END

@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>Latest Salmon</title>
+  <style type="text/css">
+    .entries {border : solid 2px #000000; padding : 4px; width : 60em; height : 20em; overflow : auto;} 
+    .entry { margin-bottom: .8em; }
+    .replies { margin-left: 2em; }
+    .reply { margin-bottom: 0em; }
+  </style>
+  <script type="text/javascript" charset="utf-8" src="/static/agg.js"></script>
+</head>
+<body>
+
+<h1><img src="/static/salmon.jpeg">Latest Salmon</h1>
+<em>Shows latest Salmon swimming in real time.
+(See go/salmon for background info.)</em>
+
+<div id="content"></div>
+</html>

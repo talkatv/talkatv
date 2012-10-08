@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson
+END
+decoder.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/decoder.py
+END
+scanner.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/scanner.py
+END
+LICENSE.txt
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/LICENSE.txt
+END
+jsonfilter.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/jsonfilter.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/__init__.py
+END
+encoder.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/simplejson/encoder.py
+END

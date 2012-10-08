@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util
+END
+randpool.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util/randpool.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util/__init__.py
+END
+test.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util/test.py
+END
+RFC1751.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util/RFC1751.py
+END
+number.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/Util/number.py
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/87/trunk/lib/python/magicsig
+END
+magicsig_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/86/trunk/lib/python/magicsig/magicsig_test.py
+END
+magicsigalg_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/75/trunk/lib/python/magicsig/magicsigalg_test.py
+END
+magicsigalg.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/78/trunk/lib/python/magicsig/magicsigalg.py
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/61/trunk/lib/python/magicsig/LICENSE
+END
+gentestsig.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/77/trunk/lib/python/magicsig/gentestsig.py
+END
+magicsig_example.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/87/trunk/lib/python/magicsig/magicsig_example.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/87/trunk/lib/python/magicsig/__init__.py
+END

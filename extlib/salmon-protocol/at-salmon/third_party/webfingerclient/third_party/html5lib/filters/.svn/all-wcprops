@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters
+END
+rfc3987.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/rfc3987.py
+END
+validator.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/validator.py
+END
+rfc2046.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/rfc2046.py
+END
+lint.py
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/lint.py
+END
+sanitizer.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/sanitizer.py
+END
+_base.py
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/_base.py
+END
+iso639codes.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/iso639codes.py
+END
+inject_meta_charset.py
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/inject_meta_charset.py
+END
+whitespace.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/whitespace.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/__init__.py
+END
+formfiller.py
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/formfiller.py
+END
+optionaltags.py
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/filters/optionaltags.py
+END

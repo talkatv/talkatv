@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/121/trunk/lib/python/magicsig_hjfreyer
+END
+genjsontoken.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/121/trunk/lib/python/magicsig_hjfreyer/genjsontoken.py
+END
+magicsigalg_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/100/trunk/lib/python/magicsig_hjfreyer/magicsigalg_test.py
+END
+magicsigalg.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/103/trunk/lib/python/magicsig_hjfreyer/magicsigalg.py
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/100/trunk/lib/python/magicsig_hjfreyer/LICENSE
+END
+gentestsig.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/100/trunk/lib/python/magicsig_hjfreyer/gentestsig.py
+END
+magicsig_example.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/100/trunk/lib/python/magicsig_hjfreyer/magicsig_example.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/105/trunk/lib/python/magicsig_hjfreyer/__init__.py
+END
+utils_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/105/trunk/lib/python/magicsig_hjfreyer/utils_test.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/105/trunk/lib/python/magicsig_hjfreyer/utils.py
+END
+exceptions.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/103/trunk/lib/python/magicsig_hjfreyer/exceptions.py
+END
+magicsig_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/105/trunk/lib/python/magicsig_hjfreyer/magicsig_test.py
+END

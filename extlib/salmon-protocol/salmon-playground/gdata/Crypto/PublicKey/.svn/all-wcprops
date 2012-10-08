@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey
+END
+qNEW.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/qNEW.py
+END
+pubkey.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/pubkey.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/__init__.py
+END
+ElGamal.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/ElGamal.py
+END
+RSA.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/RSA.py
+END
+DSA.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/Crypto/PublicKey/DSA.py
+END

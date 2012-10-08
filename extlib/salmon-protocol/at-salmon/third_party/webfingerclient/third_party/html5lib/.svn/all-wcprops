@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib
+END
+liberalxmlparser.py
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/liberalxmlparser.py
+END
+sanitizer.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/sanitizer.py
+END
+tokenizer.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/tokenizer.py
+END
+ihatexml.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/ihatexml.py
+END
+inputstream.py
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/inputstream.py
+END
+constants.py
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/constants.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/__init__.py
+END
+utils.py
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/utils.py
+END
+html5parser.py
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/html5parser.py
+END

@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+<!ENTITY RFC4648 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4648.xml">
+<!ENTITY RFC3447 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3447.xml">
+<!ENTITY RFC2045 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml">
+<!ENTITY RFC4627 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml">
+<!ENTITY RFC2104 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2104.xml">
+<!ENTITY RFC4287 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.4287.xml">
+<!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc strict="no" ?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<?rfc private="Draft" ?>
+<!-- Turn into html via:
+xml2rfc.tcl draft-panzer-magicsig-00.xml draft-panzer-magicsig-00.html -->
+<!-- To remove before final draft: Display internal comments/TODOs, inline -->
+<?rfc comments="no"?>
+<?rfc inline="no"?>
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="info" docName="draft-panzer-magicsig-00" >
+  <!-- ***** FRONT MATTER ***** -->
+  <front>
+    <title abbrev="Magic Signatures">Magic Signatures</title>
+    <author fullname="John Panzer" initials="J.P." role="editor" surname="Panzer">
+      <organization>Google Inc.</organization>
+      <address>
+        <postal>
+          <street>1600 Ampitheatre Parkway</street>
+          <!-- Reorder these if your country does things differently -->
+          <city>Mountain View</city>
+          <region>CA</region>
+          <code/>
+          <country>USA</country>
+        </postal>
+        <phone/>
+        <email>jpanzer@google.com</email>
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+    <author fullname="Ben Laurie" initials="B.L." surname="Laurie">
+      <organization>Google Inc.</organization>
+    </author>
+    <author fullname="Dirk Balfanz" initials="D.B." surname="Balfanz">
+      <organization>Google Inc.</organization>
+    </author>
+    <date month="January" year="2011"/>
+    <!-- Meta-data Declarations -->
+    <area>General</area>
+    <workgroup>Internet Engineering Task Force</workgroup>
+    <keyword>signatures</keyword>
+    <keyword>PKI</keyword>
+    <abstract>
+      <t>This document defines a lightweight, robust mechanism for digitally signing nearly 
+         arbitrary messages,
+         along with a simple public key infrastructure.</t>
+      <t>It is intended to be a building block in the construction of protocols, providing
+         a commonly agreed upon abstraction layer on top of lower level specifications such as 
+         <xref target="LRDD">Webfinger/LRDD</xref>, <xref target="XRD">XRD</xref>, 
+         and <xref target="RFC3447">PKCS</xref>.  It is not a complete protocol in 
+         itself, and requires that dependent protocols document the specific profile(s) used.</t>
+    </abstract>
+  </front>
+  <middle>
+
+    <section title="Introduction">
+      <t>The primary goal of Magic Signatures is to enable lightweight and robust public key signing 
+         for messages that may be transformed, converted, stored, and reconstituted in arbitrary ways.  
+         In order to make this mechanism useful, it also defines a public key discovery protocol that enables 
+         recipients to reliably map from URIs for signers to their public keys.  It also allows for
+         private key signatures, but leaves private key exchange mechanisms unspecified.</t>
+      <t>This mechanism is an alternative to XML Signature <xref target="XMLDSIG"/>.
+         Compared to XML Signature, Magic Signatures offers 
+         the following trade-offs:
+         <list style="numbers">
+           <t>Handles all payload data formats uniformly.</t>
+           <t>Does not require use of an XML processor for non-XML payloads.</t>
+           <t>Does not require any canonicalization beyond removal of whitespace, so it is much easier
+              to verify messages correctly.</t>
+           <t>Can survive message disassembly, storage into arbitrary systems, and 
+              re-constitution without invalidating the signature (but it is not possible to sign
+              only part of a message).</t>
+           <t>Significantly smaller and simpler specification.</t></list>
+         Magic Signatures does not attempt to address every XML Signature use case, so it is best
+         described as a lightweight, robust, and minimal form of digital signatures that can be used
+         and deployed where XML Signatures has proven problematic in the field, for example
+         feed syndication (see <xref target="RFC4287"/> section 5.1).  Note that it is possible to combine both 
+         signature mechanisms if desired.
+      </t>
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+    <section anchor="definitions" title="Definitions">
+      <t>
+        <list style="hanging">
+          <t hangText="Signature:">A digital signature that provably binds a message to a signer's secret key.</t>
+          <t hangText="Signer:">In this specification, an arbitrary URI used to determine a key
+              used to sign an envelope.  This specification does not dictate how signer URIs are to
+              be determined, but in the usual case they are embedded within the signed data and
+              extracted via a data format specific algorithm.</t>
+          <t hangText="Public Key Infrastructure (PKI)">A set of hardware, software, people, policies, and 
+              procedures needed to create, manage, distribute, use, store, and revoke digital certificates.
+              This specification uses a very simple, limited PKI.</t>
+        </list>
+      </t>
+    </section>
+    <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
+    <?rfc needLines="8" ?>
+    <section title="Magic Envelope Definition">
+      <t>A "Magic Envelope" comprises a message bundled along with signature(s) for that message, expressed
+      as a series of parameters, and serialized as a compact string, JSON, or XML.  The envelope specifies the data
+      to be signed, the MIME type of the data, the transfer encoding, and the signature.</t>
+      <section title="Magic Envelope Parameters" anchor="params">
+        <t>
+        This section describes the semantics of the parameters independent of the serialization used.
+        <list style="hanging"><t hangText="data:">The payload covered by the signature, encoded into an ASCII string.  
+          This string is guaranteed to be safe to include without escaping as XML text
+          and in JSON strings.  Appears exactly once.</t>
+          <t hangText="data_type:">The <xref target="RFC2045">MIME</xref> type of the payload prior to encoding.  Appears exactly once.</t>
+          <t hangText="encoding:">The encoding used to convert between the MIME type and the "data" string.
+          In this specification, encoding MUST be the string "base64url", indicating the url safe base64
+          encoding as described in <xref target="RFC4648">RFC 4648</xref>, sans any trailing padding
+          with equals (=) characters, and with the additional whitespace
+          normalization rules specified in <xref target="encoding_details"/>.  All
+          implementations MUST support this encoding.  Appears exactly once.</t>
+          <t hangText="alg:">The algorithm used for the signature.
+          This specification describes only one 
+          public key signature algorithm, "RSA-SHA256", and one private key signature algorithm,
+          "HMAC-SHA256".  Specifications relying on Magic Signatures MUST specify which of these MUST
+          be supported for a particular protocol.  Implementations of general Magic Signatures
+          SHOULD support both for maximum interoperability.  Appears exactly once.</t>
+        <t hangText="sig:">A generated signature.  This is a string in the base64url encoded format as described
+          above.  It is generated according to the rules for the "alg" in use.  A Magic Envelope has one or more
+          signatures.  Each signature has at most one associated "key_id"
+          parameter.</t>
+        <t hangText="key_id:">Optional hint indicating which specific key owned by the signer
+        should be used to verify the signature.  This allows signers to explicitly signal
+        a change of key to recipients.  Omitting this parameter is equivalent to setting it
+        to an empty string.  The format of this parameter is
+        unspecified except that all characters must be from the
+        base64url allowed character set.  Thus, "", "1", "AH478=",
+        "0x6EF37D", and "fred" are all legal key_ids.  The exact format
+        is up to the key issuer.  Note that any binary data can be converted
+        into an acceptable key_id by base64url encoding it.  One way to generate
+        a usable key_id is to base64url-encode the SHA256 hash of the public signing key's
+        magicsig representation; this allows a signer to provide usable ids without maintaining
+        a mapping table.</t>
+        </list>
+        </t>
+      </section>
+      
+      <section title="The Signature Base String" anchor="sbs">
+        <t>The Signature Base String used for both RSA-SHA256 and HMAC-SHA256 is described here.
+        It is used as input to the signature algorithms, as well as to create the <xref
+        target="compact">Compact Serialization</xref>, below.</t>
+        <t>Given a Magic Envelope with "data", "data_type", "encoding", and "alg" parameters, the
+        corresponding Signature Base String is produced by concatenating the following substrings
+        together, separated by periods (ASCII 0x2E):</t>
+        <t>
+        <list style="numbers">
+          <t>The armored string for "data" produced by <xref
+              target="encoding_details"/></t>
+          <t>The Base64url encoding of the "data_type" parameter</t>
+          <t>The Base64url encoding of the "encoding" parameter</t>
+          <t>The Base64url encoding of the "alg" parameter</t>
+        </list>
+        An omitted parameter is represented by a zero length placeholder string.
+        </t>
+      </section>
+
+      <section title="The Magic Envelope Compact Serialization" anchor="compact">
+        <t>The Magic Envelope Compact Serialization stores the envelope itself in a compact,
+        armored form suitable for storage as a simple string.  It is guaranteed to contain no
+        spaces and no URL unsafe characters, and allows for only a single signature.</t>
+        <t>Given a singly signed envelope with one "sig" and one "key_id", the Compact
+        Serialization is produced by concatenating the
+        following substrings together, separated by periods (ASCII 0x2E):</t>
+        <t>
+        <list style="numbers">
+          <t>The value of the "key_id" parameter</t>
+          <t>The value of the "sig" parameter</t>
+          <t>The Signature Base String as described in <xref target="sbs">The Signature Base
+          String</xref>, above.</t>
+        </list>
+        </t>
+        <t>
+        For example, if the key_id is "4k8ikoyC2Xh+8BiIeQ+ob7Hcd2J7/Vj3uM61dy9iRMI=",
+        the "sig" is "EvGSD2vi8qYcveHnb-rrlok07qnCXjn8YSeCDDXlbhILSabgvNsPpbe76up8w63i2fWHvLKJzeGLKfyHg8ZomQ",
+        and the armored data is "Tm90IHJlYWxseSBBdG9t" with MIME type
+        application/atom+xml, then the Compact Serialization would be the string:
+        "4k8ikoyC2Xh+8BiIeQ+ob7Hcd2J7/Vj3uM61dy9iRMI=.EvGSD2vi8qYcveHnb-rrlok07qn
+        CXjn8YSeCDDXlbhILSabgvNsPpbe76up8w63i2fWHvLKJzeGLKfyHg8ZomQ.Tm90IHJlYWxse
+        SBBdG9t.YXBwbGljYXRpb24vYXRvbSt4bWw=.YmFzZTY0dXJs.UlNBLVNIQTI1Ng"
+        </t>
+        <t>Any parameter MAY be omitted by leaving its slot empty, as indicated by two
+        consecutive periods.  When the "encoding" parameter is omitted, a recipient MUST
+        decode the envelope as if it had the value "base64url".  When the "alg" parameter
+        is omitted, a recipient MUST interpret the message as if the "alg" parameter 
+        had the value "RSA-SHA256".  The "data_type" parameter SHOULD NOT be omitted as it
+        provides a defense against content type masquerading attacks.</t>
+      </section>
+      <section title="The Magic Envelope XML Serialization">
+        <t>A Magic Envelope XML Document is defined in terms of the XML Information Set, 
+        serialized as XML 1.0 [W3C.REC-xml-20040204] and identified with the 
+        "application/magic-envelope+xml" media type. Magic Envelope XML Documents MUST be 
+        well-formed XML. This specification does not define a DTD, and thus does not require validity 
+        (in the sense used by XML).</t>
+        <t>The following XML elements are in the namespace 'http://salmon-protocol.org/ns/magic-env',
+        represented for brevity by the short prefix "me:" in the following definitions.</t>
+        <t>When used as a standalone XML document, the root element MUST be me:env.  When incorporated
+        as a subtree of another XML document, the root of the subtree MAY be an element specified
+        elsewhere, with semantics documented by a specification relying on this one.</t>
+        <t>The parameters are mapped to XML elements and attributes as follows.  Each parameter MUST appear
+        exactly once per envelope.</t>
+        <t><list style="hanging"><t hangText="The &lt;me:data&gt; element (REQUIRED):">Contains the "data" payload, an ASCII string, as 
+            described in
+            <xref target="params"/>.  The element contains one REQUIRED attribute, "type",
+            which contains the value of the "data_type" parameter.
+        </t><t hangText="The &lt;me:encoding&gt; element (REQUIRED):">Contains the value of the "encoding" parameter.</t><t hangText="The &lt;me:alg&gt; element (REQUIRED):">Contains the value of the "alg" parameter.</t>
+        <t hangText="The &lt;me:sig&gt; element (REQUIRED):">Contains the value
+          of the "sig" parameter, an ASCII string.  MAY be repeated multiple
+          times to record multiple signatures over the same text.  MAY have a key_id
+          attribute containing the "key_id" value for the signature.</t>
+      </list>
+        Additional elements not defined by this specification MAY appear as children of any elements
+        in this namespace. Processors MUST ignore
+        elements they do not understand.</t>
+        <t>Example:      
+          <figure><artwork><![CDATA[
+<?xml version='1.0' encoding='UTF-8'?>
+<me:env xmlns:me='http://salmon-protocol.org/ns/magic-env'>
+  <me:data type='application/atom+xml'>
+    PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPGVudHJ5IHhtbG5zPS
+    dodHRwOi8vd3d3LnczLm9yZy8yMDA1L0F0b20nPgogIDxpZD50YWc6ZXhhbXBsZS5jb20s
+    MjAwOTpjbXQtMC40NDc3NTcxODwvaWQ-ICAKICA8YXV0aG9yPjxuYW1lPnRlc3RAZXhhbX
+    BsZS5jb208L25hbWUPHVyaT5hY2N0OmpwYW56ZXJAZ29vZ2xlLmNvbTwvdXJpPjwvYXV0a
+    G9yPgogIDx0aHI6aW4tcmVwbHktdG8geG1sbnM6dGhyPSdodHRwOi8vcHVybC5vcmcvc3l
+    uZGljYXRpb24vdGhyZWFkLzEuMCcKICAgICAgcmVmPSd0YWc6YmxvZ2dlci5jb20sMTk5O
+    TpibG9nLTg5MzU5MTM3NDMxMzMxMjczNy5wb3N0LTM4NjE2NjMyNTg1Mzg4NTc5NTQnPnR
+    hZzpibG9nZ2VyLmNvbSwxOTk5OmJsb2ctODkzNTkxMzc0MzEzMzEyNzM3LnBvc3QtMzg2M
+    TY2MzI1ODUzODg1Nzk1NAogIDwvdGhyOmluLXJlcGx5LXRvPgogIDxjb250ZW50PlNhbG1
+    vbiBzd2ltIHVwc3RyZWFtITwvY29udGVudD4KICA8dGl0bGUU2FsbW9uIHN3aW0gdXBzdH
+    JlYW0hPC90aXRsZT4KICA8dXBkYXRlZD4yMDA5LTEyLTE4VDIwOjA0OjAzWjwvdXBkYXRl
+    ZD4KPC9lbnRyeT4KICAgIA
+  </me:data>
+  <me:encoding>base64url</me:encoding>
+  <me:alg>RSA-SHA256</me:alg>
+  <me:sig key_id="4k8ikoyC2Xh+8BiIeQ+ob7Hcd2J7/Vj3uM61dy9iRMI=">
+    EvGSD2vi8qYcveHnb-rrlok07qnCXjn8YSeCDDXlbhILSabgvNsPpbe76up8w63i2f
+    WHvLKJzeGLKfyHg8ZomQ
+  </me:sig>
+</me:env>
+]]></artwork></figure>
+        </t>
+      </section>
+      <section title="The Magic Envelope JSON Serialization">
+        <t>Magic Envelope JSON MUST be well formed JSON as defined in <xref target="RFC4627"/>.  The parameters are serialized into
+          a JSON object as a sequence of name/value pairs for the parameter names
+          "data", "data_type", "encoding", and "alg".  These values are
+          represented as JSON strings.
+          The "sig" parameter is represented as a "sigs" name whose value is an
+          array of objects; each object has a REQUIRED "value" with the
+          signature string, and MAY have a "key_id" with the associated
+          "key_id" parameter.</t>
+        <t>Additional name/value pairs MAY appear within the JSON object and
+         processors MUST ignore elements they
+         do not understand.</t>
+        <t>Example:      
+          <figure><artwork><![CDATA[
+{
+  "data": "
+    PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPGVudHJ5IHhtbG5zPS
+    dodHRwOi8vd3d3LnczLm9yZy8yMDA1L0F0b20nPgogIDxpZD50YWc6ZXhhbXBsZS5jb20s
+    MjAwOTpjbXQtMC40NDc3NTcxODwvaWQ-ICAKICA8YXV0aG9yPjxuYW1lPnRlc3RAZXhhbX
+    BsZS5jb208L25hbWUPHVyaT5hY2N0OmpwYW56ZXJAZ29vZ2xlLmNvbTwvdXJpPjwvYXV0a
+    G9yPgogIDx0aHI6aW4tcmVwbHktdG8geG1sbnM6dGhyPSdodHRwOi8vcHVybC5vcmcvc3l
+    uZGljYXRpb24vdGhyZWFkLzEuMCcKICAgICAgcmVmPSd0YWc6YmxvZ2dlci5jb20sMTk5O
+    TpibG9nLTg5MzU5MTM3NDMxMzMxMjczNy5wb3N0LTM4NjE2NjMyNTg1Mzg4NTc5NTQnPnR
+    hZzpibG9nZ2VyLmNvbSwxOTk5OmJsb2ctODkzNTkxMzc0MzEzMzEyNzM3LnBvc3QtMzg2M
+    TY2MzI1ODUzODg1Nzk1NAogIDwvdGhyOmluLXJlcGx5LXRvPgogIDxjb250ZW50PlNhbG1
+    vbiBzd2ltIHVwc3RyZWFtITwvY29udGVudD4KICA8dGl0bGUU2FsbW9uIHN3aW0gdXBzdH
+    JlYW0hPC90aXRsZT4KICA8dXBkYXRlZD4yMDA5LTEyLTE4VDIwOjA0OjAzWjwvdXBkYXRl
+    ZD4KPC9lbnRyeT4KICAgIA",
+  "data_type": "application/atom+xml",
+  "encoding": "base64url",
+  "alg": "RSA-SHA256",
+  "sigs": [
+    {
+    "value": "EvGSD2vi8qYcveHnb-rrlok07qnCXjn8YSeCDDXlbhILSabgvNsPpbe76
+    up8w63i2fWHvLKJzeGLKfyHg8ZomQ",
+    "key_id": "4k8ikoyC2Xh+8BiIeQ+ob7Hcd2J7/Vj3uM61dy9iRMI="
+    }
+  ]
+}
+          ]]></artwork></figure>
+        </t>
+      </section>
+    </section>
+
+    <section title="Standalone Magic Envelope Messages">
+      <t>The application/magic-envelope+{xml,json} data structures MAY be used standalone, as a drop-in replacement
+      for the data that is encoded in the data element.  This would be appropriate where the recipient understands 
+      the Magic Envelope specification and can automatically decode the data to recover the original format.
+      For example, instead of POSTing an application/atom+xml type entry to create a new blog post, a client
+      could POST an application/magic-envelope+xml with data of type application/atom+xml.</t>
+      <section title="Syndicating Magic Envelope Messages">
+        <t>It may be useful to syndicate Atom entries which have been enveloped and signed.  This can be done in
+        two ways:  By adding a me:provenance element to the existing Atom entry and essentially duplicating
+        its content in a signed me:data element, or by completely replacing each signed Atom entry with the
+        corresponding me:env element.</t>
+        <t>Feed processors who understand Magic Signatures SHOULD treat me:env elements which verify correctly
+        as if the underlying Atom entry had been sent.  The semantics of me:env elements whose signatures cannot
+        be verified are undefined by this specification; processors MAY ignore them, produce an error, attach a
+        warning, or perform other actions as required by their security model.  Specifications relying on this
+        one SHOULD specify specific security models appropriate to their respective domains.
+        </t>
+      </section>
+    </section>
+    <section title="Encoding of data and sig using base64url" anchor="encoding">
+      <t>The data and sig fields of a Magic Envelope are encoded as armored ASCII strings using
+      a procedure chosen to be robust in the face of various types of transports and storage systems.
+      Specifically, the encoded form is safe to include directly as text in XML, a string in JSON, 
+      a parameter in URLs, or as form data, without escaping.  This section defines the mapping between 
+      arbitrary binary data (a stream of octets) and the armored form (an ASCII string). 
+      The ASCII string is also chosen so as to be a valid and equivalent UTF-8 string.</t>
+      <section title="Encoding" anchor="encoding_details">
+        <t>
+          The basic procedure is to use the URL and Filename safe variant of the base64 encoding as described in
+          <xref target="RFC4648">RFC 4648</xref>, section 5, hereafter known as
+          "base64url" encoding.
+          The result is a string that consists only of the ASCII alphanumeric characters along with
+          '-' and '_', and possibly '='.  In regular expression form, this is
+          "^[A-Za-z0-9\-_]*=?=?=?$".  This is the normalized
+          form of the encoded data, and is the basis for the octet sequence that is used to generate the digital
+          signature.  Implementations and transports MAY add arbitrary whitespace (ASCII values 0x09-0x0D and 0x20) 
+          anywhere in this string after signing but before output so as to, e.g., comply with line length 
+          restrictions in certain environments.
+        </t>
+      </section>
+      <section title="Decoding">
+        <t>
+          The basic procedure is the reverse of encoding, with the additional step that whitespace from the
+          input should be ignored.  This is necessary for robustness because some transports may insert
+          whitespace, and is useful to allow for human readable formatting of documents in any case.
+          <list style="numbers">
+            <t>Normalize the string by removing all whitespace characters from input.</t>
+            <t>Base64url decode the resulting string to produce the original binary data.</t>
+          </list>
+        </t>
+      </section>
+    </section>
+    
+    <section title="The HMAC-SHA256 Private Key Signature Algorithm">
+      <t>This section defines a basic HMAC based private key signature algorithm.
+      HMAC key exchange and rotation is outside the scope of this specification, but
+      may be defined in specifications relying on this one.</t>
+      <section title="Calculating the HMAC-SHA256 signature string">
+        <t>First, create an HMAC-SHA256 signature using the algorithm described in 
+        <xref target="RFC2104">RFC 2104</xref>, using SHA-256 as the hash function H, base string
+        described in <xref target="sbs"/> as the input text, and the shared secret key K. 
+        The resulting array of bytes
+        is then base64url encoded to produce the "sig" parameter.</t>
+      </section>
+      <section title="Signing and Verifying Messages with HMAC-SHA256">
+        <t>Signing consists of calculating the "sig" parameter and serializing it along with the
+        other parameters to create a Magic Envelope.  Verifying consists of re-calculating the
+        expected "sig" parameter given the other parameters, and doing an exact string comparison
+        of the "sig" parameters after normalization (whitespace removal).</t>
+      </section>
+    </section>
+    
+    <section title="The RSA-SHA256 Public Key Signature Algorithm">
+    
+      <t>This section defines the default public key signature algorithm for Magic Signatures.
+      In addition to indicating the signing algorithm, use of RSA-SHA256 by default also implies
+      use of the Magic Public Key Infrastructure <xref target="mpki"/> to obtain public keys.
+      Specifications relying on Magic Signatures MAY specify other mechanisms for key retrieval.</t>
+      
+    <section title="Signing Messages with RSA-SHA256" anchor="signing">
+      <t>Signing a message consists of signing the contents of "data", 
+      "data_type", "encoding", and "alg" using the chosen algorithm.  This section
+      defines the "RSA-SHA256" algorithm, meaning the RSASSA-PKCS1-v1_5 signature algorithm from
+      <xref target="RFC3447">RFC 3447</xref> section 8.2, also known as PKCS#1, using SHA-256 as the hash
+      function for EMSA-PKCS1-v1_5.</t>
+      <t>Note: As best current crypto practices change, new algorithms
+      will become available and both extensions and future revisions of
+      this specification may include additional new public key algorithms (e.g.,
+      RSASSA-PSS).  When both clients and servers have sufficiently
+      widespread support for the latest algorithm, older algorithms
+      (e.g., RSASSA-PKCS1-v1_5) will be deprecated and removed in subsequent
+      revisions of this specification.</t>
+      <t>The signature is computed as signature_octets = RSASSA-PKCS1-V1_5-SIGN (K, M), where K is the
+        private signing key and M is the <xref target="sbs">Signature Base String</xref> defined
+        above.  Thus M is produced by concatenating the
+        following substrings together, separated by periods (ASCII 0x2E):
+        <list style="numbers">
+          <t>The armored string for "data" produced by <xref
+              target="encoding_details"/></t>
+          <t>The Base64url encoding of the "data_type" parameter</t>
+          <t>The Base64url encoding of the "encoding" parameter</t>
+          <t>The Base64url encoding of the "alg" parameter</t>
+        </list>
+        For example, if the
+        armored data is "Tm90IHJlYWxseSBBdG9t" with MIME type
+        application/atom+xml, then M would be the string:
+        "Tm90IHJlYWxseSBBdG9t.YXBwbGljYXRpb24vYXRvbSt4bWw=.YmFzZTY0dXJs.UlNBLVNIQTI1Ng"
+      </t>
+      <t>For convenience we
+        summarize the steps for the required EMSA-PKCS1-v1_5 with RSA-SHA256
+        algorithm here.  In
+        the following, '+' means string concatenation.
+        <list style="numbers">
+          <t>Let hash = the SHA256 hash digest of M</t>
+          <t>Let prefix = the constant byte sequence
+          <cref anchor="NOTE1" source="JP">The octets are Elvish, of an ancient
+          mode, but the language is that of ASN.1, which I will not utter here.
+          But this in the Common Tongue is what is said, close enough:</cref>
+            [0x30, 0x31,
+            0x30, 0xd, 0x6,
+            0x9, 0x60, 0x86, 0x48, 0x1, 0x65, 0x3, 0x4, 0x2, 0x1, 0x5, 0x0, 0x4,
+            0x20]</t>
+          <t>Let k = the number of bytes in the public key modulus</t>
+          <t>Let padding = '\xFF' repeated (k - length(prefix+hash) - 3)
+            times</t>
+          <t>Let emsa =  '\x00' + '\x01' + padding + '\x00' + prefix + hash</t>
+          <t>RSA sign the emsa byte sequence</t>
+      </list>
+    </t>
+    <t>The signature is then encoded as in <xref target="encoding_details"/> and the resulting ASCII armored string
+      stored as a "sig" signature.  The associated "key_id" is the key_id associated with that
+      signing key and published per <xref target="mpki"/>.  If the signer does not maintain
+      individual key_ids, it SHOULD output the base64url
+      encoded representation of the SHA-256 hash of public key's application/magic-key
+      representation.</t>
+    </section>
+    <section title="Verifying Messages with RSA-SHA256" anchor="verifying">
+      <t>Verifying a message signature consists of verifying that "sig" is a valid signature for "data" using "alg".
+      This specification defines only the "RSA-SHA256" verification algorithm, meaning the RSASSA-PKCS1-v1_5 
+      verification algorithm from <xref target="RFC3447">RFC 3447</xref> section 8.2.1.</t>
+      <t>The verification is performed by executing RSASSA-PKCS1-V1_5-VERIFY
+        ((n, e), M, S), where (n ,e)
+        comprise the public key, M is the message string
+        documented in <xref target="signing"/>,
+        and S is the decoded value of a selected "sig".  (Note that this
+        algorithm creates the emsa byte sequence as in <xref target="signing"/>
+        and then performs RSA verification using (n, e), emsa, and S.)</t>
+      <t>The scope of the verification covers only the contents of the Magic Envelope itself.  In some
+      cases, the information from the decoded "data" value
+      must be checked against or override the enclosing data.  The mechanisms for this are
+      specific to the kinds of data, but in general a secure if lossy mechanism
+      is to throw away the unverified information and replace it with the output of the decoded 
+      "data".
+      The correct mechanism depends on the
+      security model required by the processor
+      and is outside the scope of this specification.</t>
+      <t>It is RECOMMENDED that signed content contain expiration
+      information after which the signed data SHOULD NOT be verified or
+      used without additional confirmation.  Such confirmation is
+      outside the scope of this specification.  However, when this is
+      done and signing keys also expire on a predictable time in the
+      future, signers SHOULD ensure that the content expiration is not
+      after the known key expiration time.  That is, the signed content
+      should expire no later than the expiration date of the key used to
+      sign it.</t>
+      <t>Note that emergency key revocation is outside the
+      scope of this specification.  However, implementations SHOULD
+      honor HTTP cache control directives when retrieving key material
+      and SHOULD NOT use keys for verification without revalidating the
+      content as directed by the origin server.  This allows origin servers
+      to trade off performance for smaller periods of vulnerability.</t>
+      <t>Unless specified otherwise, the public key (n, e) is obtained using the 
+      simple public key infrastructure described by 
+      <xref target="mpki"/>.  Note that several candidate signing keys may be
+      retrieved, and in the worst case verifiers MUST try each one with equal key_id 
+      until at least one successfully verifies the signature.  Two key IDs are equal
+      if their individual octets are equal and they are of equal length.  A signature
+      with an empty (missing) key_id, which may have been signed by any key, MUST
+      be verified against all available keys.</t>
+    </section>
+    </section>
+    <section title="Magic Public Key Infrastructure" anchor="mpki">
+      <t>This section defines a public key infrastructure based on URIs.  It uses LRDD discovery
+      plus direct retrieval via secure URLs. 
+      Specifically, given a signer URI such as "acct:bob@example.com" or "http://example.com/bob",
+      the corresponding 
+      public key(s) for that identifier can be found discovery as defined below.  The result
+      is a set of RSA public keys in a simple string format.</t>
+      <section title="The application/magic-key MIME type">
+        <t>The application/magic-key format is a very minimal format for representing public key data.
+        It consists of a string of ASCII text, separated into 3 components, with components separated 
+        by a "." (0x2E) character.  The first component is the key type; this specification only defines
+        the "RSA" key type for future upgradeability.  Thus a magic key consists of the string 
+        "RSA.modulus(n).exponent(e)"; for example:
+<figure><artwork><![CDATA[
+RSA.mVgY8RN6URBTstndvmUUPb4UZTdwvwmddSKE5z_jvKUEK6yk1u3rrC9yN8k6FilGj9K0eeUPe2hf4Pj-5CmHww.AQAB
+]]></artwork></figure>        
+        The pair (n, e) is used as input to RSASSA-PKCS1-V1_5-VERIFY.</t>
+        <t>Each of the components is first represented as an integer in network byte order (big endian),
+        with no leading zero bytes, and
+        encoded via the "base64url" mechanism described in <xref target="params"/>.
+        </t>
+        <t>This specification defines only a public key format, and anticipates that keypairs may be stored
+        securely in other formats (e.g., DER encoded X.509 certificates) and that the application/magic-key
+        data will be generated via tools.</t>
+      </section>
+      <section title="Discovery">
+        <t>This section defines how to map from a signer URI identifier to a set of public signing keys 
+        for that identifier.  The exact mechanism for a verifier to determine the
+        signer URI is outside the scope of this specification, and MUST be specified by the
+        particular protocol or application of Magic Signatures.  The URI identifier MUST appear
+        within, or be derived from, information within the "data" parameter and therefore be covered
+        by the signature.</t>
+        <t>Many existing formats contain authorship, sender, or issuer
+        fields and these SHOULD be used or extended where possible.  Protocols which rely 
+        on Magic Signatures for digital
+        signatures MUST specify a format-dependent model for determining
+        potential signer URIs given the signed data.
+        This section describes the subsequent discovery step:
+        How to take a general URI and securely map it to a set of public signing keys
+        with optional key ids.</t>
+        <t>The end result of discovery will be a collection of magic keys.  Each magic key 
+        has a "data" parameter, a string in application/magic-key format; and an optional
+        "key_id" parameter, a string as defined below.  If the key_id is omitted from
+        a key, it defaults to the Base64url encoding of the SHA-256 hash of the "value"
+        parameter.  That is, when doing discovery, processors MUST assume that an omitted key_id is
+        equivalent to specifying key_id = Base64url(SHA-256(value)).  A signer MAY then use
+        this value as a key_id on a signature in order to signal use of that key.</t>
+        <t>There are two standard serializations
+        of this collection, one for JSON and one for XML.  Both are intended to be embeddable
+        within general discovery metadata.</t>
+        <section title="The JSON Serialization of Magic Keys">
+          <t>The keys are stored within an array named "magic_keys".  The array's values are
+          objects, each of which MUST have a string "value" element containing the application/magic-key
+          string, and which MAY have a string "key_id" element containing the id of that key.</t>
+          <t>Example:
+          <figure><artwork><![CDATA[
+{        
+  "magic_keys": [
+    {"value": "RSA.mVgY8RN6URBTstndvmUUPb4UZTdwvwmddSKE5z_jvKUEK6yk1u3rrC9yN8k6FilGj9K0eeUPe2hf4Pj-5CmHww.AQAB",
+     "key_id": "1"},
+    {"value": "RSA.wvwmdK0eeUPe2hURBTstndvmUUPb4UZTd6wvwmddSrrC89yN8k6FilGwvwmddSKE5z_jvKUEKj9f4Pj-5CmHww.AQAB",
+     "key_id": "2"}
+  ]
+}
+]]></artwork></figure>
+          </t>
+        </section>
+        <section title="The XRD XML Serialialization of Magic Keys">
+          <t>The keys are stored as XRD Property elements within the XRD document.  The type of
+          the Property element is "http://salmon-protocol.org/ns/magic-key" and this is also
+          the XML namespace of dependent elements and attributes.
+          Each one has an optional mk:key_id
+          attribute containing the key's id; the body of the Property element contains the
+          application/magic-key string data.</t>
+          <t>Example:
+<figure><artwork><![CDATA[
+<Property xmlns:mk="http://salmon-protocol.org/ns/magic-key" 
+          type="http://salmon-protocol.org/ns/magic-key" 
+          mk:key_id="1">
+  RSA.mVgY8RN6URBTstndvmUUPb4UZTdwvwmddSKE5z_jvKUEK6yk1u3rrC9yN8k6FilGj9K0eeUPe2hf4Pj-5CmHww.AQAB
+</Property>
+<Property xmlns:mk="http://salmon-protocol.org/ns/magic-key"
+          type="http://salmon-protocol.org/ns/magic-key"
+          mk:key_id="2">
+  RSA.wvwmdK0eeUPe2hURBTstndvmUUPb4UZTd6wvwmddSrrC89yN8k6FilGwvwmddSKE5z_jvKUEKj9f4Pj-5CmHww.AQAB
+</Property>
+]]></artwork></figure>          
+          </t>
+        </section>
+                
+        <section title="Discovery Flow">
+          <t>Given a URI U, first perform discovery on U per 
+          <xref target="LRDD">Webfinger/LRDD</xref> and interpret the result per the XRD
+          XML Serialization.  If this step produces a set of keys, stop.  Otherwise,
+          if U is an https URL, directly retrieve the resource U via SSL, performing necessary
+          certificate checks, and see if the resulting data is of type 
+          application/metadata+json.  If so, look for the "magic_public_keys" array as per
+          the JSON Serialization.  If both of these steps fail to produce a set of keys, stop.</t>
+          </section>
+          <section title="Key Selection">
+          <t>Once a set of possible key candidates have been determined, via discovery or alternatively
+          via an extension mechanism outside the scope of this specification, a verifier must
+          then determine whether a given signature is valid.  This section details how to do so
+          in an interoperable way.</t>
+          <t>Among the available keys, select the key for verification by matching the key_id
+          against the key_id specified in the signature.  In this context an empty string key_id
+          matches everything.  This produces a smaller set of possible keys to use for verification.
+          Verification succeeds if any one of these keys successfully verifies the signature.</t>
+          <t>Note that in the case of multiple signatures, it is possible for one signature to be
+          verified but for others to fail.  Specifications relying on Magic Signatures MUST specify
+          the semantics in these cases.</t>       
+          </section>
+
+      </section>
+    </section>
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>This document is the outcome of meetings and feedback from a large number of people.
+      In particular, feedback from the Federated Social Web, Webfinger, OAuth, Activity Streams,
+      and Salmon Protocol 
+      communities has been invaluable.  Some of the people who contributed
+      to this effort are:</t>
+      <t>
+      Bob Aman,
+      Darren Bounds,
+      Charlie Cauthen,
+      DeWitt Clinton,
+      George Fletcher,
+      Hunter Freyer,
+      Eran Hammer-Lahav,
+      Timothy Jordan,
+      Mike Macgirvin,
+      James Manger,
+      Sean McCullough,
+      Breno de Medeiros,
+      Chris Messina,
+      Will Norris,
+      Ade Oshineye,
+      NeilFred Piccolo,
+      Evan Prodromou,
+      Arne Roomann-Kurrik,
+      Brett Slatkin,
+      Joseph Smarr,
+      James Snell,
+      Brian Stoler,
+      James Walker,
+      Stephen Paul Weber,
+      Bob Wyman.
+      </t>
+      <t>The authors apologize for any omissions from this list, which are certainly unintentional.</t>
+    </section>
+    <!-- Possibly a 'Contributors' section ... -->
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This specification introduces three new media types.</t>
+      <t>The MIME media type for the XML serialization of a Magic Envelope is application/magic-env+xml.</t>
+      <t>Type name: application</t>
+      <t>Subtype name: magic-env+xml</t>
+      <t>Required parameters: n/a</t>
+      <t>Optional parameters: n/a</t>
+      <t>The MIME media type for the unique JSON serialization of a Magic Envelope is application/magic-env+json, though
+         application/json is also appropriate.</t>
+      <t>Type name: application</t>
+      <t>Subtype name: magic-env+json</t>
+      <t>Required parameters: n/a</t>
+      <t>Optional parameters: n/a</t>
+      <t>The MIME media type for key(pairs) is application/magic-key.</t>
+      <t>Type name: application</t>
+      <t>Subtype name: magic-key</t>
+      <t>Required parameters: n/a</t>
+      <t>Optional parameters: n/a</t>
+    </section>
+    <section anchor="Security" title="Security Considerations">
+      <t>Specific security considerations are embedded in the relevant functional sections above.
+      In general, with reference to
+      <xref target="RFC3552"/>, Magic Signatures is a message oriented security protocol
+      that provides object level data integrity and data origin (sender) authentication.
+      It leaves other security considerations, and specific
+      threat models, to relying specifications.  In particular, note that:
+      <list style="numbers">
+        <t>Core Magic Signatures
+        addresses neither confidentiality nor replay attacks.  Relying specifications SHOULD address
+        these issues as appropriate, e.g., by ensuring that messages are idempotent.</t>
+        <t>Magic Signatures defines only a basic set of key validity checks.  A key which passes these
+        checks may still be invalid for other reasons (e.g., if it has been revoked by some
+        mechanism outside the scope of this specification).  Specifications relying on Magic Signatures
+        SHOULD specify additional validity checks as appropriate.</t>
+        <t>Magic Signatures relies on the existence of a reliable domain name service and TLS
+        for bootstrapping domain-level discovery information, and is dependent on the proper
+        end-to-end implementation of TLS, including operational security of web servers, avoiding
+        non-TLS redirects, honoring certificate revocation lists, and maintaining an appropriate set 
+        of trusted root CAs.  Leveraging DNSSEC, when available, to reduce the CA attack
+        surface is RECOMMENDED.</t>
+        <t>Magic Signatures leaves other security issues
+        for relying specifications.</t>
+      </list>
+      </t>
+    </section>
+
+  </middle>
+  <!--  *****BACK MATTER ***** -->
+  <back>
+    <!-- References split into informative and normative -->
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+    <references title="Normative References"><!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      &RFC2119;
+
+      &RFC3552;
+
+      &RFC4648;
+
+      &RFC3447;
+
+      &RFC2045;
+
+      &RFC4627;
+      
+      &RFC2104;
+      
+      &RFC4287;
+     
+      <reference anchor="LRDD"
+        target="http://tools.ietf.org/html/draft-hammer-discovery-04">
+        <front><title>LRDD: Link-based Resource Descriptor Discovery</title>
+          <author initials="E" surname="Eran" fullname="Hammer-Lahav">
+            <organization/>
+          </author>
+        </front>
+      </reference>
+      
+      <reference anchor="XMLDSIG"
+        target="http://www.w3.org/TR/xmldsig-core">
+        <front><title>XML Signature Syntax and Processing (Second Edition)</title>
+        </front>
+      </reference>
+
+      <reference anchor="XRD" target="http://tools.oasis-open.org/version-control/browse/wsvn/xri/xrd/1.0/drafts/wd13/xrd-1.0-wd13.html"><front><title>Extensible Resource Descriptor (XRD) Version 1.0, Working Draft 13</title><author initials="EHL" surname="Eran" fullname="Hammer-Lahav"><organization/></author><author initials="WN" surname="Will" fullname="Norris"><organization/></author></front></reference>
+
+    </references>
+    <references title="Informative References"><!-- Here we use entities that we defined at the beginning. -->
+
+      &I-D.narten-iana-considerations-rfc2434bis;
+
+http://lists.openid.net/pipermail/openid-specs/2009-June/005831.html
+
+    </references>
+    <section title="Specification Feedback">
+      <t>The primary driver of this specification is the Salmon protocol.
+      Feedback on this specification is thus welcomed via the salmon-discuss mailing
+      list, salmon-protocol@googlegroups.com.  For more information, see 
+      <eref target="http://groups.google.com/group/salmon-protocol">the Salmon discussion
+      group</eref>.  Bugs and errata may also be reported via
+      <eref target="http://code.google.com/p/salmon-protocol/issues/list">the Salmon bug tracker
+      </eref>.</t>
+    </section>
+    <!-- Change Log
+
+  -->
+  </back>
+</rfc>

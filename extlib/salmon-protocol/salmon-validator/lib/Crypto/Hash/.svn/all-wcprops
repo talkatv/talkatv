@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Hash
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Hash/__init__.py
+END
+MD5.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Hash/MD5.py
+END
+HMAC.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Hash/HMAC.py
+END
+SHA.py
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Hash/SHA.py
+END

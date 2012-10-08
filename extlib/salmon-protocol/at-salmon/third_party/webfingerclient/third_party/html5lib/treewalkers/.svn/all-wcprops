@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers
+END
+lxmletree.py
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/lxmletree.py
+END
+etree.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/etree.py
+END
+soup.py
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/soup.py
+END
+_base.py
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/_base.py
+END
+simpletree.py
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/simpletree.py
+END
+genshistream.py
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/genshistream.py
+END
+pulldom.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/pulldom.py
+END
+dom.py
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/dom.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/treewalkers/__init__.py
+END

@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "string",
+      "description": "The payload covered by the signature, encoded into an ASCII string."
+    },
+    "data_type": {
+      "type": "string",
+      "description": "The MIME type of the 'data' payload prior to encoding."
+    },
+    "encoding": {
+      "type": "string",
+      "description": "The encoding used to convert between the MIME type and the 'data' string."
+    },
+    "alg": {
+      "type": "string",
+      "description": "The algorithm used for the signature."
+    },
+    "sigs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "description": "A generated signature. This is a base64url encoded string, generated according to the rules for the 'alg' in use.",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "The generated signature."
+          },
+          "key_id": {
+            "type": "string",
+            "optional": true,
+            "description": "Optional hint indicating which specific key owned by the signer should be used to verify the signature."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/69/trunk/lib/python/Crypto/Util
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Util/__init__.py
+END
+RFC1751.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Util/RFC1751.py
+END
+number.py
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Util/number.py
+END
+broken_t_e_s_t.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/69/trunk/lib/python/Crypto/Util/broken_t_e_s_t.py
+END
+randpool.py
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/65/trunk/lib/python/Crypto/Util/randpool.py
+END

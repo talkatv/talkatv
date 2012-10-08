@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/serializer
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/serializer/__init__.py
+END
+xhtmlserializer.py
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/serializer/xhtmlserializer.py
+END
+htmlserializer.py
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/!svn/ver/80/trunk/at-salmon/third_party/webfingerclient/third_party/html5lib/serializer/htmlserializer.py
+END

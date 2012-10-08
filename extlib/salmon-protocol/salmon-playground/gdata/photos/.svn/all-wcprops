@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/photos
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/photos/__init__.py
+END
+service.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/photos/service.py
+END

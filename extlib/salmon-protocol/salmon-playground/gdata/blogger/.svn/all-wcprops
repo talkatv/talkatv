@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/blogger
+END
+data.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/blogger/data.py
+END
+client.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/blogger/client.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/blogger/__init__.py
+END
+service.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/21/trunk/salmon-playground/gdata/blogger/service.py
+END
