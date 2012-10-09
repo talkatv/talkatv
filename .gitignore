@@ -33,6 +33,10 @@ pip-log.txt
 .coverage
 .tox
 
+# Lesser VCSes
+.svn
+.hg
+
 #Translations
 *.mo
 
