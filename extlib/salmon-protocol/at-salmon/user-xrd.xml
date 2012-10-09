@@ -1,6 +1,0 @@
-<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <Subject>{{subject}}</Subject>
-    <Link rel="magic-public-key" href="{{keyuri}}"/>
-    <Link rel="http://salmon-protocol.org/ns/salmon-mention" href="http://{{host}}/salmon-slap" />
-</XRD>
