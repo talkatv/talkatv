@@ -62,10 +62,11 @@
     // use /talkatv.js instead of /static/js...
     var talkatv_shortcut = true;
 
-    document.write(unescape('%3Cscript src="'
-    + talkatv_home + (window.talkatv_shortcut
-    ? '/talkatv.js' : '/static/js/talkatv.js')
-    + '" type="text/javascript"%3E%3C/script%3E'));
+    script = document.createElement('script');
+    script.src = talkatv_home + '/talkatv.js';
+    script.type = 'text/javascript';
+
+    document.body.appendChild(script);
 &lt;/script&gt;</pre>
         <p>If you want to account for non-js-enabled browsers too you may add this <code>&lt;noscript&gt;</code> tag right after the <code>&lt;script&gt;</code> tag.</p>
         <pre class="pre-scrollable">&lt;noscript&gt;
@@ -96,10 +97,11 @@
             var talkatv_ordered = true;
             var talkatv_shortcut = true;
 
-            document.write(unescape('%3Cscript src="'
-            + talkatv_home + (window.talkatv_shortcut
-            ? '/talkatv.js' : '/static/js/talkatv.js')
-            + '" type="text/javascript"%3E%3C/script%3E'));
+            script = document.createElement('script');
+            script.src = talkatv_home + '/talkatv.js';
+            script.type = 'text/javascript';
+
+            document.body.appendChild(script);
         </script>
         <noscript>
             <p>
