@@ -41,4 +41,5 @@ pip-log.txt
 *.mo
 
 #Mr Developer
+config.py
 .mr.developer.cfg
