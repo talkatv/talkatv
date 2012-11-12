@@ -63,7 +63,7 @@
     var talkatv_shortcut = true;
 
     script = document.createElement('script');
-    script.src = talkatv_home + '/talkatv.js';
+    script.src = talkatv_home + (talkatv_shortcut ? '/talkatv.js' : '/static/js/talkatv.js');
     script.type = 'text/javascript';
 
     document.body.appendChild(script);
@@ -98,7 +98,7 @@
             var talkatv_shortcut = true;
 
             script = document.createElement('script');
-            script.src = talkatv_home + '/talkatv.js';
+            script.src = talkatv_home + (talkatv_shortcut ? '/talkatv.js' : '/static/js/talkatv.js');
             script.type = 'text/javascript';
 
             document.body.appendChild(script);
